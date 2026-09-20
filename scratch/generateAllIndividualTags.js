@@ -10,23 +10,29 @@ if (!fs.existsSync(outputDir)) {
 }
 
 const rawTags = JSON.parse(fs.readFileSync(tagsJsonPath, "utf-8"));
-const tagKeys = Object.keys(rawTags).filter(k => k !== "$schema");
+const tagKeys = Object.keys(rawTags).filter(k => k !== "$schema").sort();
 
 const TABLE_TAGS = ["table", "colgroup", "col", "thead", "tbody", "tfoot", "tr", "th", "td"];
 const FORM_TAGS = ["form", "input", "checkbox", "label", "select", "option", "datalist", "button"];
-const TYPO_TAGS = ["p", "h1", "h2", "span"];
+const TYPO_TAGS = ["p", "h1", "h2", "span", "small"];
+const LIST_TAGS = ["ul", "li"];
+const INLINE_TAGS = ["a", "i"];
 
 function getCategory(tag) {
     if (TABLE_TAGS.includes(tag)) return { name: "Table Tag", badgeClass: "bg-primary-subtle text-primary border border-primary-subtle" };
     if (FORM_TAGS.includes(tag)) return { name: "Form & Input", badgeClass: "bg-success-subtle text-success border border-success-subtle" };
     if (TYPO_TAGS.includes(tag)) return { name: "Typography", badgeClass: "bg-info-subtle text-info-emphasis border border-info-subtle" };
+    if (LIST_TAGS.includes(tag)) return { name: "List Element", badgeClass: "bg-primary-subtle text-primary border border-primary-subtle" };
+    if (INLINE_TAGS.includes(tag)) return { name: "Inline & Navigation", badgeClass: "bg-info-subtle text-info-emphasis border border-info-subtle" };
     if (tag === "img") return { name: "Media", badgeClass: "bg-warning-subtle text-warning-emphasis border border-warning-subtle" };
+    if (tag === "header") return { name: "Semantic Structure", badgeClass: "bg-secondary-subtle text-secondary border" };
     return { name: "Container", badgeClass: "bg-secondary-subtle text-secondary border" };
 }
 
 function getTagDescription(tag) {
     const map = {
         div: "Universal generic block container element for layout, grouping, and styling wrappers.",
+        header: "Semantic landmark element representing introductory content or navigational aids.",
         input: "Interactive user data entry control supporting various HTML input types.",
         checkbox: "Specialized Boolean check control for toggle selections and forms.",
         colgroup: "Specifies column groupings within a data table to manage widths and styles.",
@@ -48,16 +54,28 @@ function getTagDescription(tag) {
         h1: "Top-level section heading representing the primary subject.",
         h2: "Secondary section heading for structuring content sections.",
         span: "Generic inline container for phrasing content and styling.",
-        img: "Embeds an image into the document with src and alt attributes."
+        img: "Embeds an image into the document with src and alt attributes.",
+        a: "Hyperlink anchor element providing navigation to URLs, fragments, or download triggers.",
+        i: "Inline idiomatic text or icon container commonly used for vector/font glyphs.",
+        small: "Inline element representing side-comments, secondary notes, and small print.",
+        ul: "Unordered list container for bulleted collections of list items (li).",
+        li: "List item element representing an individual entry within a list structure."
     };
     return map[tag] || `Standard HTML <${tag}> element specification.`;
 }
 
-tagKeys.forEach(tag => {
+tagKeys.forEach((tag, idx) => {
     const category = getCategory(tag);
     const desc = getTagDescription(tag);
     const sample = sampleSpecificationTemplates[tag] || { tagName: tag };
     const sampleJson = JSON.stringify(sample, null, 2);
+
+    const prevTag = tagKeys[(idx - 1 + tagKeys.length) % tagKeys.length];
+    const nextTag = tagKeys[(idx + 1) % tagKeys.length];
+
+    const optionsHtml = tagKeys
+        .map(t => `<option value="${t}" ${t === tag ? "selected" : ""}>&lt;${t}&gt;</option>`)
+        .join("\n            ");
 
     const htmlContent = `<!DOCTYPE html>
 <html lang="en">
@@ -116,7 +134,7 @@ tagKeys.forEach(tag => {
         <div class="navbar-nav d-flex flex-row gap-1 flex-wrap">
           <a class="nav-link px-2" href="../../index.html">Home</a>
           <a class="nav-link px-2 text-info" href="../index.html">Tags Catalog</a>
-          <a class="nav-link px-2" href="../../summary/index.html">Spec Review</a>
+          <a class="nav-link px-2" href="../../summary/index.html"><i class="bi bi-cloud-arrow-up me-1"></i>Upload JSON (Review)</a>
           <a class="nav-link px-2 text-warning" href="../../playground/index.html"><i class="bi bi-play-circle me-1"></i>Playground</a>
         </div>
       </div>
@@ -128,16 +146,19 @@ tagKeys.forEach(tag => {
         <div class="d-flex align-items-center gap-2">
           <label for="selectTag" class="form-label small fw-bold text-muted mb-0 text-uppercase">Jump to Tag:</label>
           <select id="selectTag" class="form-select form-select-sm font-monospace" style="width: 170px;">
-            <option value="${tag}">&lt;${tag}&gt;</option>
+            ${optionsHtml}
           </select>
         </div>
         <div class="btn-group btn-group-sm" role="group">
-          <button type="button" class="btn btn-outline-secondary" id="btnPrevTag">
-            <i class="bi bi-chevron-left me-1"></i> Previous
-          </button>
-          <button type="button" class="btn btn-outline-secondary" id="btnNextTag">
-            Next <i class="bi bi-chevron-right ms-1"></i>
-          </button>
+          <a href="./${prevTag}.html" class="btn btn-outline-secondary" id="btnPrevTag">
+            <i class="bi bi-chevron-left me-1"></i> Previous (${prevTag})
+          </a>
+          <a href="./index.html" class="btn btn-outline-primary">
+            <i class="bi bi-grid me-1"></i> All Tags
+          </a>
+          <a href="./${nextTag}.html" class="btn btn-outline-secondary" id="btnNextTag">
+            Next (${nextTag}) <i class="bi bi-chevron-right ms-1"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -151,7 +172,10 @@ tagKeys.forEach(tag => {
         </div>
         <p class="text-muted small mb-0">${desc}</p>
       </div>
-      <div>
+      <div class="d-flex gap-2">
+        <a href="../../summary/index.html" class="btn btn-warning text-dark btn-sm fw-semibold">
+          <i class="bi bi-cloud-arrow-up me-1"></i> Upload JSON Spec
+        </a>
         <a href="../tags.json" target="_blank" class="btn btn-outline-secondary btn-sm">
           <i class="bi bi-filetype-json me-1"></i> tags.json (SSOT)
         </a>
@@ -229,7 +253,7 @@ tagKeys.forEach(tag => {
         Powered by <strong>@keshavsoft/json-to-tag</strong> • 
         <a href="../../index.html" class="text-secondary text-decoration-none">Docs Home</a> • 
         <a href="../index.html" class="text-secondary text-decoration-none">Tags Catalog</a> • 
-        <a href="../../summary/index.html" class="text-secondary text-decoration-none">Spec Review</a> • 
+        <a href="../../summary/index.html" class="text-secondary text-decoration-none">Upload JSON (Review)</a> • 
         <a href="../../playground/index.html" class="text-secondary text-decoration-none">Playground</a> • 
         <a href="../tags.json" class="text-secondary text-decoration-none">tags.json (SSOT)</a>
       </p>
@@ -241,6 +265,22 @@ tagKeys.forEach(tag => {
   <script type="module">
     import { loadTagSchemaFromCatalog } from "./js/loadTagSchemaFromCatalog.js";
     loadTagSchemaFromCatalog({ inTagName: "${tag}", inCatalogUrl: "../tags.json" });
+
+    document.getElementById("selectTag").addEventListener("change", (e) => {
+      if (e.target.value) {
+        window.location.href = "./" + e.target.value + ".html";
+      }
+    });
+
+    document.getElementById("btnCopySample").addEventListener("click", async () => {
+      const code = document.getElementById("sampleSpecCode").textContent;
+      await navigator.clipboard.writeText(code);
+      const btn = document.getElementById("btnCopySample");
+      btn.innerHTML = '<i class="bi bi-check-lg me-1 text-success"></i> Copied!';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="bi bi-clipboard me-1"></i> Copy Sample JSON';
+      }, 1800);
+    });
   </script>
 </body>
 </html>

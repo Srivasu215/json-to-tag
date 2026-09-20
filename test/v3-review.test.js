@@ -72,3 +72,23 @@ test("reviewSpec (v2) successfully reviews samples/form/review/spec.json", async
     assert.equal(review.tagCounts.span, 2);
     assert.equal(review.tagCounts.select, 1);
 });
+
+test("reviewSpec (v2) successfully reviews docs/tags/menu.json with 0 unrecognized tags", async () => {
+    const { default: menuSpec } = await import("../docs/tags/menu.json", { with: { type: "json" } });
+    const review = reviewSpecV2({ inSpec: menuSpec });
+
+    assert.equal(review.totalTags, 48);
+    assert.equal(review.areAllTagsPresent, true);
+    assert.deepEqual(review.unrecognizedTags, []);
+    assert.equal(review.tagCounts.i, 11);
+    assert.equal(review.tagCounts.div, 10);
+    assert.equal(review.tagCounts.span, 9);
+    assert.equal(review.tagCounts.a, 7);
+    assert.equal(review.tagCounts.li, 3);
+    assert.equal(review.tagCounts.button, 3);
+    assert.equal(review.tagCounts.header, 1);
+    assert.equal(review.tagCounts.small, 1);
+    assert.equal(review.tagCounts.ul, 1);
+    assert.equal(review.tagCounts.form, 1);
+    assert.equal(review.tagCounts.input, 1);
+});
