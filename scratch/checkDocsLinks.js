@@ -40,7 +40,8 @@ htmlFiles.forEach(file => {
             url.startsWith("//") ||
             url.startsWith("data:") ||
             url.startsWith("mailto:") ||
-            url.startsWith("#")
+            url.startsWith("#") ||
+            url.includes("${")
         ) {
             continue;
         }
