@@ -1,0 +1,57 @@
+{
+  "name": "@keshavsoft/json-to-tag",
+  "version": "1.1.0",
+  "description": "Zero-dependency Custom HTML Web Components and Tailwind CSS tokens for high-performance forms and tables.",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "index.js",
+  "module": "./src/v1/index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./v1": "./src/v1/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "json-to-tag": "bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "index.js",
+    "src/v40",
+    "LICENSE",
+    "README.md",
+    "DETAILS.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "test": "node --test \"test/*.test.js\"",
+    "build": "vite build",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keshavsoft/json-to-tag.git"
+  },
+  "keywords": [
+    "web-components",
+    "table-cell-content",
+    "tailwind-tokens",
+    "custom-elements"
+  ],
+  "author": "KeshavSoft",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/keshavsoft/json-to-tag/issues"
+  },
+  "homepage": "https://keshavsoft.github.io/json-to-tag/",
+  "devDependencies": {
+    "vite": "^8.2.1",
+    "jsdom": "^29.1.1"
+  },
+  "dependencies": {}
+}
