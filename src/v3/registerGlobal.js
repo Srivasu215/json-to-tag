@@ -11,11 +11,12 @@ export const registerGlobal = (inArgs) => {
     if (typeof globalThis === "undefined" || !localFuncDefinition) return;
 
     globalThis.ks ??= {};
-    globalThis.ks["json-to-dom"] = {
+    globalThis.ks["json-to-tag"] = {
         meta,
         buildSpecElement: localFuncDefinition,
         reviewSpec: localReviewSpec
     };
+    globalThis.ks["json-to-dom"] = globalThis.ks["json-to-tag"];
 };
 
 export default registerGlobal;

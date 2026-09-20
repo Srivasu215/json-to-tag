@@ -15,35 +15,35 @@ const args = process.argv.slice(2);
 
 if (args.includes("--help") || args.includes("-h")) {
     console.log(`
-json-to-dom CLI - Zero-Dependency Declarative DOM Compiler
+json-to-tag CLI - Zero-Dependency Declarative DOM Compiler
 
 Usage:
-  npx json-to-dom [destination-directory] [options]
+  npx json-to-tag [destination-directory] [options]
 
 Arguments:
-  destination-directory   Folder to copy the latest engine to (default: ./json-to-dom)
+  destination-directory   Folder to copy the latest engine to (default: ./json-to-tag)
 
 Options:
   -v, --version           Display package and engine version
   -h, --help              Show this help message
-  --version-target=<ver>  Specify an explicit version to copy (e.g. --version-target=v10)
+  --version-target=<ver>  Specify an explicit version to copy (e.g. --version-target=v3)
 
 Examples:
-  npx json-to-dom
-  npx json-to-dom ./src/lib/json-to-dom
-  npx json-to-dom ./components/dom-builder --version-target=v10
+  npx json-to-tag
+  npx json-to-tag ./src/lib/json-to-tag
+  npx json-to-tag ./components/dom-builder --version-target=v3
 `);
     process.exit(0);
 }
 
 if (args.includes("--version") || args.includes("-v")) {
-    console.log(`json-to-dom CLI v${packageJson.version}`);
+    console.log(`json-to-tag CLI v${packageJson.version}`);
     process.exit(0);
 }
 
 // 2. Discover Versions in src/
 if (!existsSync(srcDir)) {
-    console.error("❌ Error: Could not locate 'src' directory in json-to-dom package.");
+    console.error("❌ Error: Could not locate 'src' directory in json-to-tag package.");
     process.exit(1);
 }
 
@@ -73,9 +73,9 @@ if (explicitVersionArg) {
 
 // 4. Determine Destination Directory
 const customDest = args.find(arg => !arg.startsWith("-"));
-const destinationPath = resolve(process.cwd(), customDest || "./json-to-dom");
+const destinationPath = resolve(process.cwd(), customDest || "./json-to-tag");
 
-console.log(`\n⚡ json-to-dom CLI`);
+console.log(`\n⚡ json-to-tag CLI`);
 console.log(`📦 Discovered highest version: ${selectedVersion}`);
 console.log(`📂 Copying engine to: ${destinationPath} ...`);
 
@@ -96,7 +96,7 @@ try {
 
     console.log(`✅ Successfully copied ${selectedVersion} to ${destinationPath}`);
     console.log(`\n🚀 Getting Started:`);
-    console.log(`   import { buildSpecElement } from "${customDest || "./json-to-dom"}/index.js";`);
+    console.log(`   import { buildSpecElement } from "${customDest || "./json-to-tag"}/index.js";`);
     console.log(`   const dom = buildSpecElement({ inSpec: { tagName: "button", textContent: "Hello" } });\n`);
 } catch (error) {
     console.error(`❌ Failed to copy version:`, error.message);

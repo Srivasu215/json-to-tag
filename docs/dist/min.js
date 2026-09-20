@@ -4,11 +4,11 @@ var e = {
 	description: "Pure DOM engine with JSON review and tags.json catalog verification"
 }, t = (t) => {
 	let n = t, r = typeof n == "function" ? n : n?.inFuncDefinition, i = n?.inReviewSpec;
-	typeof globalThis > "u" || !r || (globalThis.ks ??= {}, globalThis.ks["json-to-dom"] = {
+	typeof globalThis > "u" || !r || (globalThis.ks ??= {}, globalThis.ks["json-to-tag"] = {
 		meta: e,
 		buildSpecElement: r,
 		reviewSpec: i
-	});
+	}, globalThis.ks["json-to-dom"] = globalThis.ks["json-to-tag"]);
 }, n = ({ inSpec: e }) => e == null, r = ({ inSpec: e }) => typeof Node < "u" && e instanceof Node, i = ({ inSpec: e }) => {
 	let t = e;
 	return Array.isArray(t);
@@ -28,7 +28,7 @@ var e = {
 	return document.createElement(t);
 }, s = ({ inElement: e, inTextContent: t, inAllowsTextContent: n = !0, inTagName: r, inShowLog: i = !1 }) => {
 	let a = e, o = t;
-	return !a || o == null ? a : n ? (a.textContent = o, a) : (i && console.warn(`[json-to-dom v40] textContent is not allowed on <${r}>; discarded "${o}"`), a);
+	return !a || o == null ? a : n ? (a.textContent = o, a) : (i && console.warn(`[json-to-tag v3] textContent is not allowed on <${r}>; discarded "${o}"`), a);
 }, c = ({ inElement: e, inProperties: t }) => {
 	let n = e, r = t;
 	return n && r && typeof r == "object" && Object.assign(n, r), n;
@@ -46,7 +46,7 @@ var e = {
 	let a = e, o = t, s = n, c = r, l = i;
 	return !a || !Array.isArray(o) || o.length === 0 ? a : s ? (o.forEach((e) => {
 		typeof Node < "u" && e instanceof Node ? a.appendChild(e) : (typeof e == "string" || typeof e == "number") && a.appendChild(document.createTextNode(String(e)));
-	}), a) : (l && console.warn(`[json-to-dom v40] Children are not allowed on void tag <${c}>; discarded ${o.length} child nodes.`), a);
+	}), a) : (l && console.warn(`[json-to-tag v3] Children are not allowed on void tag <${c}>; discarded ${o.length} child nodes.`), a);
 }, f = ({ inSpec: e, inClassList: t }) => {
 	let n = e, r = t || n?.classList;
 	if (!n || !n.tagName) return null;
