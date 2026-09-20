@@ -289,6 +289,48 @@ var e = {
 			"selected",
 			"disabled"
 		]
+	},
+	header: {
+		allowsTextContent: !1,
+		allowsChildren: !0,
+		allowedAttributes: ["role"],
+		childTags: []
+	},
+	a: {
+		allowsTextContent: !0,
+		allowsChildren: !0,
+		allowedAttributes: [
+			"href",
+			"target",
+			"rel",
+			"title",
+			"download"
+		],
+		childTags: []
+	},
+	i: {
+		allowsTextContent: !0,
+		allowsChildren: !0,
+		allowedAttributes: ["aria-hidden"],
+		childTags: []
+	},
+	small: {
+		allowsTextContent: !0,
+		allowsChildren: !0,
+		allowedAttributes: [],
+		childTags: []
+	},
+	ul: {
+		allowsTextContent: !1,
+		allowsChildren: !0,
+		allowedAttributes: ["type"],
+		childTags: ["li"]
+	},
+	li: {
+		allowsTextContent: !0,
+		allowsChildren: !0,
+		allowedAttributes: ["value"],
+		childTags: []
 	}
 }, _ = ({ inSpec: e }) => {
 	let t = e;
