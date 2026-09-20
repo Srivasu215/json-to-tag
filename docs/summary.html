@@ -240,9 +240,20 @@
       ]
     };
 
-    function processSpec(spec) {
+    async function getLiveTags() {
       try {
-        const review = reviewSpec({ inSpec: spec });
+        const res = await fetch("./tags/tags.json?t=" + Date.now(), { cache: "no-store" });
+        if (res.ok) return await res.json();
+      } catch (e) {
+        console.warn("Using bundled tags catalog fallback", e);
+      }
+      return null;
+    }
+
+    async function processSpec(spec) {
+      try {
+        const liveTags = await getLiveTags();
+        const review = reviewSpec({ inSpec: spec, inTags: liveTags || undefined });
 
         // Update metrics
         mTotalTags.textContent = review.totalTags ?? 0;

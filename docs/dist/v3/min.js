@@ -124,6 +124,21 @@ var e = {
 			"required"
 		]
 	},
+	colgroup: {
+		allowsTextContent: !1,
+		allowsChildren: !0,
+		allowedAttributes: ["span"],
+		childTags: ["col"]
+	},
+	col: {
+		allowsTextContent: !1,
+		allowsChildren: !1,
+		allowedAttributes: [
+			"span",
+			"style",
+			"width"
+		]
+	},
 	label: {
 		allowsTextContent: !0,
 		allowsChildren: !0,

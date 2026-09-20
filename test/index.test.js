@@ -47,3 +47,25 @@ test("root buildSpecElement creates native DOM elements", () => {
     assert.equal(element.children[1].tagName.toLowerCase(), "button");
     assert.equal(element.children[1].textContent, "Click Me");
 });
+
+test("reviewSpec recognizes colgroup and col from SSOT docs/tags/tags.json", () => {
+    const tableSpec = {
+        tagName: "table",
+        children: [
+            {
+                tagName: "colgroup",
+                children: [
+                    { tagName: "col", attributes: { style: "width: 20%" } },
+                    { tagName: "col", attributes: { style: "width: 80%" } }
+                ]
+            }
+        ]
+    };
+
+    const review = reviewSpec({ inSpec: tableSpec });
+    assert.equal(review.totalTags, 4);
+    assert.equal(review.areAllTagsPresent, true);
+    assert.deepEqual(review.unrecognizedTags, []);
+    assert.ok(review.recognizedTags.includes("colgroup"));
+    assert.ok(review.recognizedTags.includes("col"));
+});

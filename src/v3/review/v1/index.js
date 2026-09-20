@@ -1,4 +1,4 @@
-import defaultTags from "./tags.json" with { type: "json" };
+import defaultTags from "../../../../docs/tags/tags.json" with { type: "json" };
 import extractTags from "./extractTags.js";
 import checkTags from "./checkTags.js";
 

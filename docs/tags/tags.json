@@ -35,6 +35,25 @@
             "required"
         ]
     },
+    "colgroup": {
+        "allowsTextContent": false,
+        "allowsChildren": true,
+        "allowedAttributes": [
+            "span"
+        ],
+        "childTags": [
+            "col"
+        ]
+    },
+    "col": {
+        "allowsTextContent": false,
+        "allowsChildren": false,
+        "allowedAttributes": [
+            "span",
+            "style",
+            "width"
+        ]
+    },
     "label": {
         "allowsTextContent": true,
         "allowsChildren": true,
