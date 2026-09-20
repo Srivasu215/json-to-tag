@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Summary Hub • @keshavsoft/json-to-tag</title>
-  <meta name="description" content="Specification Summary & Review Hub for @keshavsoft/json-to-tag" />
-
+  <title>JSON Spec Review & Summary • @keshavsoft/json-to-tag</title>
+  <meta name="description" content="Select a JSON element specification to inspect tag count, tag frequency breakdown, and verify tags against tags.json catalog." />
+  <meta http-equiv="refresh" content="0; url=./summary/index.html" />
+  <script>location.replace("./summary/index.html");</script>
+  <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
@@ -19,16 +21,11 @@
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 0.5rem;
-      padding: 1.25rem;
+      padding: 1rem;
       text-align: center;
-      transition: all 0.2s;
-    }
-    .metric-card:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      border-color: #cbd5e1;
     }
     .metric-val {
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 700;
     }
     .metric-lbl {
@@ -37,23 +34,6 @@
       letter-spacing: 0.05em;
       color: #64748b;
       font-weight: 600;
-    }
-    .feature-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.75rem;
-      padding: 1.5rem;
-      height: 100%;
-      transition: all 0.2s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .feature-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
-      border-color: #94a3b8;
-      color: inherit;
     }
     .tag-badge {
       font-family: monospace;
@@ -78,92 +58,43 @@
   </style>
 </head>
 <body class="p-3 p-md-4">
-  <div class="container" style="max-width: 960px;">
+  <div class="container" style="max-width: 900px;">
     
-    <!-- Top Navigation Bar -->
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3 py-2 rounded-3 mb-4 shadow-sm">
-      <div class="container-fluid p-0">
-        <a class="navbar-brand fw-bold fs-6 d-flex align-items-center gap-2" href="../index.html">
-          <i class="bi bi-tag-fill text-primary"></i> json-to-tag
-        </a>
-        <div class="navbar-nav d-flex flex-row gap-1 flex-wrap">
-          <a class="nav-link active px-2 fw-semibold" href="./index.html">Overview</a>
-          <a class="nav-link px-2" href="./tags-only.html">Tags Only</a>
-          <a class="nav-link px-2" href="./not-present.html">Not Present</a>
-          <a class="nav-link px-2" href="./present.html">Present</a>
-          <a class="nav-link px-2 text-info" href="../tagsAnalysis/index.html"><i class="bi bi-journal-code me-1"></i>Tags Catalog</a>
-          <a class="nav-link px-2 text-info" href="../tagsAnalysis/tag.html"><i class="bi bi-book me-1"></i>Tag Story</a>
-          <a class="nav-link px-2 text-warning" href="../playground/index.html"><i class="bi bi-play-circle me-1"></i>Playground</a>
-        </div>
+    <!-- Navigation / Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom flex-wrap gap-2">
+      <div>
+        <h1 class="h4 fw-bold mb-1">
+          <i class="bi bi-file-earmark-code text-primary me-2"></i>JSON Spec Summary & Review
+        </h1>
+        <p class="text-muted small mb-0">Select any JSON specification file to analyze its tags, counts, and catalog compliance.</p>
       </div>
-    </nav>
-
-    <!-- Header -->
-    <div class="mb-4">
-      <h1 class="h3 fw-bold mb-1">
-        <i class="bi bi-pie-chart-fill text-primary me-2"></i>Specification Summary Hub
-      </h1>
-      <p class="text-muted small mb-0">Select any JSON spec once to inspect across all views (Tags Only, Present, Not Present).</p>
+      <div>
+        <a href="./index.html" class="btn btn-outline-secondary btn-sm me-2">
+          <i class="bi bi-play-circle me-1"></i> Live Playground
+        </a>
+        <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" class="btn btn-outline-dark btn-sm">
+          <i class="bi bi-github me-1"></i> GitHub
+        </a>
+      </div>
     </div>
 
     <!-- File Selector Card -->
     <div class="card shadow-sm border-0 mb-4">
       <div class="card-body p-4">
         <label for="jsonFileInput" class="form-label fw-bold mb-2">Select JSON Specification File:</label>
-        <div class="input-group mb-2">
+        <div class="input-group mb-3">
           <input type="file" id="jsonFileInput" class="form-control" accept=".json,application/json" />
           <button class="btn btn-outline-primary" type="button" id="btnSampleSpec">
             <i class="bi bi-file-earmark-arrow-down me-1"></i> Load Sample Spec
           </button>
         </div>
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <span class="text-muted small">Select a JSON file or use the active spec already loaded.</span>
-          <span class="badge bg-light text-secondary border" id="activeFileNameBadge">No file loaded</span>
+        <div class="form-text text-muted">
+          Choose any <code>.json</code> file or click "Load Sample Spec" to view immediate summary analysis.
         </div>
       </div>
     </div>
 
-    <!-- Quick Navigation to Views -->
-    <div class="row g-3 mb-4">
-      <div class="col-6 col-md-3">
-        <a href="./tags-only.html" class="feature-card h-100">
-          <div class="d-flex align-items-center gap-2 mb-2 text-primary">
-            <i class="bi bi-list-ul fs-4"></i>
-            <h2 class="h6 fw-bold mb-0">Tags Only</h2>
-          </div>
-          <p class="text-muted small mb-0">Clean list of all unique tags, frequency counts, percentages, and copyable list.</p>
-        </a>
-      </div>
-      <div class="col-6 col-md-3">
-        <a href="./not-present.html" class="feature-card h-100">
-          <div class="d-flex align-items-center gap-2 mb-2 text-danger">
-            <i class="bi bi-x-circle fs-4"></i>
-            <h2 class="h6 fw-bold mb-0">Not Present</h2>
-          </div>
-          <p class="text-muted small mb-0">Focuses strictly on unknown or unsupported tags that need catalog definitions.</p>
-        </a>
-      </div>
-      <div class="col-6 col-md-3">
-        <a href="./present.html" class="feature-card h-100">
-          <div class="d-flex align-items-center gap-2 mb-2 text-success">
-            <i class="bi bi-check-circle fs-4"></i>
-            <h2 class="h6 fw-bold mb-0">Present</h2>
-          </div>
-          <p class="text-muted small mb-0">Inspect catalog-compliant tags, allowed attributes, and text/children rules.</p>
-        </a>
-      </div>
-      <div class="col-6 col-md-3">
-        <a href="../tagsAnalysis/index.html" class="feature-card h-100 border-info">
-          <div class="d-flex align-items-center gap-2 mb-2 text-info">
-            <i class="bi bi-journal-code fs-4"></i>
-            <h2 class="h6 fw-bold mb-0">Tags Analysis</h2>
-          </div>
-          <p class="text-muted small mb-0">Explore all 23 supported tags, attributes, matrix, and rules directly from tags.json.</p>
-        </a>
-      </div>
-    </div>
-
-    <!-- Summary Output Section -->
+    <!-- Summary Output Section (hidden until loaded) -->
     <div id="summarySection" style="display: none;">
       
       <!-- Status Banner -->
@@ -203,7 +134,7 @@
         </div>
       </div>
 
-      <!-- Tag Frequency Breakdown -->
+      <!-- Tag Breakdown -->
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-white py-3">
           <h2 class="h6 fw-bold mb-0 text-uppercase text-secondary">
@@ -215,11 +146,11 @@
         </div>
       </div>
 
-      <!-- Raw reviewSpec JSON -->
+      <!-- Raw JSON Summary -->
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
           <h2 class="h6 fw-bold mb-0 text-uppercase text-secondary">
-            <i class="bi bi-braces me-1"></i> Raw Report
+            <i class="bi bi-braces me-1"></i> Raw reviewSpec Summary Output
           </h2>
           <span class="badge bg-light text-secondary border">reviewSpec Report</span>
         </div>
@@ -228,11 +159,11 @@
         </div>
       </div>
 
-      <!-- Rendered Preview -->
+      <!-- Live DOM Preview -->
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-white py-3">
           <h2 class="h6 fw-bold mb-0 text-uppercase text-secondary">
-            <i class="bi bi-display me-1"></i> Live DOM Preview
+            <i class="bi bi-display me-1"></i> Rendered Live DOM Preview
           </h2>
         </div>
         <div class="card-body p-4 bg-light" id="previewContainer"></div>
@@ -244,7 +175,7 @@
     <footer class="text-center text-muted small py-4 border-top">
       <p class="mb-0">
         Powered by <strong>@keshavsoft/json-to-tag</strong> (v3 Engine) • 
-        <a href="../index.html" class="text-secondary text-decoration-none">Playground</a> • 
+        <a href="./index.html" class="text-secondary text-decoration-none">Playground</a> • 
         <a href="https://github.com/keshavsoft/json-to-tag" class="text-secondary text-decoration-none">GitHub</a>
       </p>
     </footer>
@@ -252,12 +183,11 @@
   </div>
 
   <script type="module">
-    import { reviewSpec, buildSpecElement } from "../dist/min.js";
+    import { reviewSpec, buildSpecElement } from "./dist/min.js";
 
     const fileInput = document.getElementById("jsonFileInput");
     const btnSampleSpec = document.getElementById("btnSampleSpec");
     const summarySection = document.getElementById("summarySection");
-    const activeFileNameBadge = document.getElementById("activeFileNameBadge");
 
     const statusBanner = document.getElementById("statusBanner");
     const statusIcon = document.getElementById("statusIcon");
@@ -313,7 +243,7 @@
 
     async function getLiveTags() {
       try {
-        const res = await fetch("../tags/tags.json?t=" + Date.now(), { cache: "no-store" });
+        const res = await fetch("./tags/tags.json?t=" + Date.now(), { cache: "no-store" });
         if (res.ok) return await res.json();
       } catch (e) {
         console.warn("Using bundled tags catalog fallback", e);
@@ -321,15 +251,12 @@
       return null;
     }
 
-    async function processSpec(spec, fileName = "Custom Spec") {
+    async function processSpec(spec) {
       try {
-        sessionStorage.setItem("json_to_tag_active_spec", JSON.stringify(spec));
-        sessionStorage.setItem("json_to_tag_active_name", fileName);
-        activeFileNameBadge.textContent = fileName;
-
         const liveTags = await getLiveTags();
         const review = reviewSpec({ inSpec: spec, inTags: liveTags || undefined });
 
+        // Update metrics
         mTotalTags.textContent = review.totalTags ?? 0;
         mUniqueTags.textContent = review.uniqueTags?.length ?? 0;
         mRecognizedTags.textContent = review.recognizedTags?.length ?? 0;
@@ -349,6 +276,7 @@
           statusDesc.textContent = `All ${review.totalTags} tags are catalog-compliant and recognized.`;
         }
 
+        // Tag breakdown pills
         tagPillsContainer.innerHTML = "";
         const tagCounts = review.tagCounts || {};
         const sortedTags = Object.entries(tagCounts).sort(([, a], [, b]) => b - a);
@@ -361,8 +289,10 @@
           tagPillsContainer.appendChild(badge);
         }
 
+        // Raw summary JSON
         rawSummaryJson.textContent = JSON.stringify(review, null, 2);
 
+        // Render DOM preview
         previewContainer.innerHTML = "";
         const rendered = buildSpecElement({ inSpec: spec });
         if (rendered) {
@@ -387,7 +317,7 @@
       reader.onload = (event) => {
         try {
           const json = JSON.parse(event.target.result);
-          processSpec(json, file.name);
+          processSpec(json);
         } catch (err) {
           alert("Invalid JSON file: " + err.message);
         }
@@ -396,17 +326,8 @@
     });
 
     btnSampleSpec.addEventListener("click", () => {
-      processSpec(SAMPLE_SPEC, "Sample Spec");
+      processSpec(SAMPLE_SPEC);
     });
-
-    // Auto-restore previously selected spec from sessionStorage if present
-    const savedSpec = sessionStorage.getItem("json_to_tag_active_spec");
-    const savedName = sessionStorage.getItem("json_to_tag_active_name");
-    if (savedSpec) {
-      try {
-        processSpec(JSON.parse(savedSpec), savedName || "Loaded Spec");
-      } catch (e) {}
-    }
   </script>
 </body>
 </html>

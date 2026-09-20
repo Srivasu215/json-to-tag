@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;label&gt; Element Story &amp; Rules • @keshavsoft/json-to-tag</title>
+  <meta name="description" content="Detailed guide and catalog rules for the HTML label element in @keshavsoft/json-to-tag." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: #1e293b;
+    }
+    .story-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .attr-pill {
+      font-family: monospace;
+      font-size: 0.85rem;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      display: inline-block;
+      margin: 0.15rem;
+    }
+    .code-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: monospace;
+      font-size: 0.825rem;
+      padding: 1rem;
+      border-radius: 0.375rem;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body class="p-3 p-md-4">
+  <div class="container" style="max-width: 860px;">
+    
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3 py-2 rounded-3 mb-4 shadow-sm">
+      <div class="container-fluid p-0">
+        <a class="navbar-brand fw-bold fs-6 d-flex align-items-center gap-2" href="../../index.html">
+          <i class="bi bi-tag-fill text-primary"></i> json-to-tag
+        </a>
+        <div class="navbar-nav d-flex flex-row gap-2 flex-wrap">
+          <a class="nav-link px-2" href="../index.html"><i class="bi bi-arrow-left me-1"></i>Back to Tags Analysis</a>
+          <a class="nav-link px-2 text-info" href="../tag.html?tag=label"><i class="bi bi-book me-1"></i>All Tags (tag.html)</a>
+          <a class="nav-link px-2 text-warning" href="./input.html">Inspect &lt;input&gt; <i class="bi bi-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="pb-3 mb-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <span class="badge bg-primary fs-5 font-monospace px-3 py-1">&lt;label&gt;</span>
+          <span class="badge bg-success-subtle text-success border border-success-subtle">Form &amp; Input Category</span>
+        </div>
+        <p class="text-muted small mb-0">Semantic text caption element for form controls and interactive inputs.</p>
+      </div>
+      <div>
+        <a href="../../tags/tags.json" target="_blank" class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-filetype-json me-1"></i> tags.json (SSOT)
+        </a>
+      </div>
+    </div>
+
+    <!-- Error Notice (hidden unless fetch fails) -->
+    <div id="catalogErrorNotice" class="alert alert-danger" style="display: none;"></div>
+
+    <!-- Section 1: Live Catalog Rules (Loaded from tags.json SSOT) -->
+    <div class="story-card border-primary-subtle">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h6 fw-bold mb-0 text-uppercase text-secondary" style="letter-spacing: 0.05em;">
+          <i class="bi bi-database-check text-primary me-1"></i> Live Rules from <code>tags.json</code> (SSOT)
+        </h2>
+        <span class="badge bg-primary-subtle text-primary">Dynamically Loaded</span>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-sm-6">
+          <span class="small text-muted d-block mb-1">Allows Direct Text Content:</span>
+          <span id="badgeAllowsText" class="badge bg-light text-muted border px-2 py-1">Loading...</span>
+        </div>
+        <div class="col-sm-6">
+          <span class="small text-muted d-block mb-1">Allows Child Elements:</span>
+          <span id="badgeAllowsChildren" class="badge bg-light text-muted border px-2 py-1">Loading...</span>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <span class="small text-muted fw-bold d-block mb-1">Allowed Attributes Defined in Catalog:</span>
+        <div id="catalogAllowedAttributes" class="d-flex flex-wrap gap-1">
+          <span class="text-muted small">Loading allowed attributes...</span>
+        </div>
+      </div>
+
+      <div>
+        <span class="small text-muted fw-bold d-block mb-1">Permitted Child Tags:</span>
+        <div id="catalogPermittedChildren" class="small">
+          <span class="text-muted">Loading permitted children...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Semantic Story & Best Practices (Meta Content) -->
+    <div class="story-card">
+      <h2 class="h6 fw-bold mb-3 text-uppercase text-secondary" style="letter-spacing: 0.05em;">
+        <i class="bi bi-book me-1"></i> Tag Semantic Story &amp; Purpose
+      </h2>
+      <p>
+        The <strong><code>&lt;label&gt;</code></strong> tag provides a usable and accessible caption for interactive form elements. It serves two crucial purposes in web development:
+      </p>
+      <ul>
+        <li>
+          <strong>Accessibility (a11y)</strong>: Assistive technologies (such as screen readers) read out the label text when the associated input receives focus.
+        </li>
+        <li>
+          <strong>Increased Hit Area</strong>: Clicking anywhere on the label text automatically shifts focus to or toggles the linked input control, improving usability on touch devices.
+        </li>
+      </ul>
+
+      <h3 class="h6 fw-bold mt-4 mb-2">The <code>for</code> Attribute Association</h3>
+      <p class="small text-muted mb-0">
+        In <code>@keshavsoft/json-to-tag</code>, the <code>for</code> attribute is explicitly validated and permitted in <code>tags.json</code>. Set <code>for</code> to match the target <code>input</code> element's <code>id</code>.
+      </p>
+    </div>
+
+    <!-- Section 3: Authoring in json-to-tag (JSON Specs) -->
+    <div class="story-card">
+      <h2 class="h6 fw-bold mb-3 text-uppercase text-secondary" style="letter-spacing: 0.05em;">
+        <i class="bi bi-code-square me-1"></i> Authoring Specifications in <code>json-to-tag</code>
+      </h2>
+
+      <!-- Pattern A -->
+      <h3 class="h6 fw-semibold mb-1">Pattern A: Explicit Association via <code>for</code></h3>
+      <p class="small text-muted mb-2">Pairs with an adjacent <code>&lt;input id="user-email"&gt;</code>:</p>
+      <div class="code-box mb-4">
+        <code>{<br />
+&nbsp;&nbsp;"tagName": "label",<br />
+&nbsp;&nbsp;"classList": "form-label fw-bold",<br />
+&nbsp;&nbsp;"textContent": "Email Address",<br />
+&nbsp;&nbsp;"attributes": {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"for": "user-email"<br />
+&nbsp;&nbsp;}<br />
+}</code>
+      </div>
+
+      <!-- Pattern B -->
+      <h3 class="h6 fw-semibold mb-1">Pattern B: Nested Children Wrapper (e.g. Checkbox + Text)</h3>
+      <p class="small text-muted mb-2">Because <code>allowsChildren: true</code>, you can nest an input and text inside:</p>
+      <div class="code-box mb-0">
+        <code>{<br />
+&nbsp;&nbsp;"tagName": "label",<br />
+&nbsp;&nbsp;"classList": "form-check d-flex align-items-center gap-2",<br />
+&nbsp;&nbsp;"children": [<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"tagName": "checkbox",<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attributes": { "id": "remember-opt", "checked": true }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;},<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"tagName": "span",<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"textContent": "Keep me logged in"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;]<br />
+}</code>
+      </div>
+    </div>
+
+    <!-- Section 4: Raw SSOT Slice -->
+    <div class="story-card">
+      <h2 class="h6 fw-bold mb-2 text-uppercase text-secondary" style="letter-spacing: 0.05em;">
+        <i class="bi bi-braces me-1"></i> Exact <code>tags.json</code> Definition Slice
+      </h2>
+      <pre class="code-box mb-0"><code id="rawCatalogSlice">Loading slice from tags.json...</code></pre>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-muted small py-4 border-top">
+      <p class="mb-0">
+        Powered by <strong>@keshavsoft/json-to-tag</strong> • 
+        <a href="../index.html" class="text-secondary text-decoration-none">Tags Analysis</a> • 
+        <a href="./input.html" class="text-secondary text-decoration-none">&lt;input&gt; Specification</a> • 
+        <a href="../../tags/tags.json" class="text-secondary text-decoration-none">tags.json</a>
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Modular Script Loading SSOT data -->
+  <script type="module">
+    import { loadTagSchemaFromCatalog } from "./js/loadTagSchemaFromCatalog.js";
+    loadTagSchemaFromCatalog({ inTagName: "label", inCatalogUrl: "../../tags/tags.json" });
+  </script>
+</body>
+</html>
