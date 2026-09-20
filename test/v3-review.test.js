@@ -92,3 +92,28 @@ test("reviewSpec (v2) successfully reviews docs/tags/menu.json with 0 unrecogniz
     assert.equal(review.tagCounts.form, 1);
     assert.equal(review.tagCounts.input, 1);
 });
+
+test("reviewSpec (v2) successfully reviews all 9 header variants in docs/menu/menu.json with 0 unrecognized tags", async () => {
+    const { default: menuCatalog } = await import("../docs/menu/menu.json", { with: { type: "json" } });
+    const expectedKeys = [
+        "simpleHeader",
+        "centeredNav",
+        "headerWithButtons",
+        "darkHeaderWithSearch",
+        "searchAndProfileDropdown",
+        "gridHeaderWithDropdown",
+        "doubleHeaderWithSearch",
+        "iconNavDoubleHeader",
+        "purchasesMenu"
+    ];
+
+    assert.equal(Object.keys(menuCatalog).length, 9);
+    for (const key of expectedKeys) {
+        assert.ok(menuCatalog[key], `Missing header variant: ${key}`);
+        const review = reviewSpecV2({ inSpec: menuCatalog[key] });
+        assert.equal(review.areAllTagsPresent, true, `${key} has unrecognized tags: ${JSON.stringify(review.unrecognizedTags)}`);
+        assert.deepEqual(review.unrecognizedTags, [], `${key} unrecognized tags`);
+        assert.ok(review.totalTags > 0, `${key} should have totalTags > 0`);
+    }
+});
+

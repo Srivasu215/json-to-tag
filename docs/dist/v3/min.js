@@ -331,6 +331,11 @@ var e = {
 		allowsChildren: !0,
 		allowedAttributes: ["value"],
 		childTags: []
+	},
+	hr: {
+		allowsTextContent: !1,
+		allowsChildren: !1,
+		allowedAttributes: []
 	}
 }, _ = ({ inSpec: e }) => {
 	let t = e;

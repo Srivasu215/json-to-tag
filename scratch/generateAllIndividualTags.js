@@ -26,6 +26,7 @@ function getCategory(tag) {
     if (INLINE_TAGS.includes(tag)) return { name: "Inline & Navigation", badgeClass: "bg-info-subtle text-info-emphasis border border-info-subtle" };
     if (tag === "img") return { name: "Media", badgeClass: "bg-warning-subtle text-warning-emphasis border border-warning-subtle" };
     if (tag === "header") return { name: "Semantic Structure", badgeClass: "bg-secondary-subtle text-secondary border" };
+    if (tag === "hr") return { name: "Divider & Structure", badgeClass: "bg-secondary-subtle text-secondary border" };
     return { name: "Container", badgeClass: "bg-secondary-subtle text-secondary border" };
 }
 
@@ -59,7 +60,8 @@ function getTagDescription(tag) {
         i: "Inline idiomatic text or icon container commonly used for vector/font glyphs.",
         small: "Inline element representing side-comments, secondary notes, and small print.",
         ul: "Unordered list container for bulleted collections of list items (li).",
-        li: "List item element representing an individual entry within a list structure."
+        li: "List item element representing an individual entry within a list structure.",
+        hr: "Horizontal rule element representing a thematic break between paragraph-level elements or dropdown divider."
     };
     return map[tag] || `Standard HTML <${tag}> element specification.`;
 }
