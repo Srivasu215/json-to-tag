@@ -7,7 +7,8 @@
 [![npm](https://img.shields.io/npm/v/@keshavsoft/json-to-tag?style=for-the-badge&color=2563eb)](https://www.npmjs.com/package/@keshavsoft/json-to-tag)
 
 🌐 **Documentation & Directory Hub**: [https://keshavsoft.github.io/json-to-tag/](https://keshavsoft.github.io/json-to-tag/)  
-🏷️ **Tags Catalog & Rules Analysis**: [https://keshavsoft.github.io/json-to-tag/tagsAnalysis/index.html](https://keshavsoft.github.io/json-to-tag/tagsAnalysis/index.html)  
+🏷️ **Tags Catalog & Rules Analysis**: [https://keshavsoft.github.io/json-to-tag/tags/index.html](https://keshavsoft.github.io/json-to-tag/tags/index.html)  
+📖 **Tag Story & Interactive Rules**: [https://keshavsoft.github.io/json-to-tag/tags/tag.html](https://keshavsoft.github.io/json-to-tag/tags/tag.html)  
 🎛️ **Live Interactive Playground**: [https://keshavsoft.github.io/json-to-tag/playground/index.html](https://keshavsoft.github.io/json-to-tag/playground/index.html)  
 📊 **Specification Summary Hub**: [https://keshavsoft.github.io/json-to-tag/summary/index.html](https://keshavsoft.github.io/json-to-tag/summary/index.html)  
   - 📋 [Tags Only & Frequency Lists](https://keshavsoft.github.io/json-to-tag/summary/tags-only.html)
