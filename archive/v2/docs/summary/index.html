@@ -91,8 +91,8 @@
           <a class="nav-link px-2" href="./tags-only.html">Tags Only</a>
           <a class="nav-link px-2" href="./not-present.html">Not Present</a>
           <a class="nav-link px-2" href="./present.html">Present</a>
-          <a class="nav-link px-2 text-info" href="../tagsAnalysis/index.html"><i class="bi bi-journal-code me-1"></i>Tags Analysis</a>
-          <a class="nav-link px-2 text-warning" href="../playground/index.html"><i class="bi bi-play-circle me-1"></i>Playground</a>
+          <a class="nav-link px-2 text-info" href="../tags/index.html"><i class="bi bi-journal-code me-1"></i>Catalog</a>
+          <a class="nav-link px-2 text-warning" href="../index.html"><i class="bi bi-play-circle me-1"></i>Playground</a>
         </div>
       </div>
     </nav>
@@ -116,7 +116,9 @@
           </button>
         </div>
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <span class="text-muted small">Select a JSON file or use the active spec already loaded.</span>
+          <div class="form-text text-muted" id="fileStatusText">
+            Choose any <code>.json</code> file or click "Load Sample Spec".
+          </div>
           <span class="badge bg-light text-secondary border" id="activeFileNameBadge">No file loaded</span>
         </div>
       </div>
@@ -152,10 +154,10 @@
         </a>
       </div>
       <div class="col-6 col-md-3">
-        <a href="../tagsAnalysis/index.html" class="feature-card h-100 border-info">
+        <a href="../tags/index.html" class="feature-card h-100 border-info">
           <div class="d-flex align-items-center gap-2 mb-2 text-info">
             <i class="bi bi-journal-code fs-4"></i>
-            <h2 class="h6 fw-bold mb-0">Tags Analysis</h2>
+            <h2 class="h6 fw-bold mb-0">tags.json Catalog</h2>
           </div>
           <p class="text-muted small mb-0">Explore all 23 supported tags, attributes, matrix, and rules directly from tags.json.</p>
         </a>
