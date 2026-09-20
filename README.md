@@ -7,7 +7,10 @@
 [![npm](https://img.shields.io/npm/v/@keshavsoft/json-to-tag?style=for-the-badge&color=2563eb)](https://www.npmjs.com/package/@keshavsoft/json-to-tag)
 
 🌐 **Live Interactive Playground**: [https://keshavsoft.github.io/json-to-tag/](https://keshavsoft.github.io/json-to-tag/)  
-📊 **JSON Spec Review & Summary Tool**: [https://keshavsoft.github.io/json-to-tag/summary.html](https://keshavsoft.github.io/json-to-tag/summary.html)
+📊 **Specification Summary Hub**: [https://keshavsoft.github.io/json-to-tag/summary/index.html](https://keshavsoft.github.io/json-to-tag/summary/index.html)
+  - 📋 [Tags Only & Frequency Lists](https://keshavsoft.github.io/json-to-tag/summary/tags-only.html)
+  - ⚠️ [Not Present (Unrecognized Tags Audit)](https://keshavsoft.github.io/json-to-tag/summary/not-present.html)
+  - ✅ [Present (Catalog Verified Tags)](https://keshavsoft.github.io/json-to-tag/summary/present.html)
 
 ---
 
