@@ -1,0 +1,370 @@
+{
+    "tagName": "header",
+    "attributes": {
+        "class": "mb-4 shadow-sm"
+    },
+    "children": [
+        {
+            "tagName": "div",
+            "attributes": {
+                "class": "px-3 py-2 text-bg-dark border-bottom"
+            },
+            "children": [
+                {
+                    "tagName": "div",
+                    "attributes": {
+                        "class": "container-fluid px-2 px-md-4 d-flex flex-wrap align-items-center justify-content-between"
+                    },
+                    "children": [
+                        {
+                            "tagName": "a",
+                            "attributes": {
+                                "href": "./",
+                                "class": "d-flex align-items-center text-white text-decoration-none my-1"
+                            },
+                            "children": [
+                                {
+                                    "tagName": "i",
+                                    "attributes": {
+                                        "class": "bi bi-bootstrap-fill fs-2 me-2 text-white"
+                                    }
+                                },
+                                {
+                                    "tagName": "div",
+                                    "attributes": {
+                                        "class": "d-flex flex-column"
+                                    },
+                                    "children": [
+                                        {
+                                            "tagName": "span",
+                                            "attributes": {
+                                                "class": "fs-5 fw-bold lh-1"
+                                            },
+                                            "textContent": "Purchases"
+                                        },
+                                        {
+                                            "tagName": "small",
+                                            "attributes": {
+                                                "class": "text-secondary",
+                                                "style": "font-size: 0.72rem;"
+                                            },
+                                            "textContent": "Hybrid Search & Table"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tagName": "ul",
+                            "attributes": {
+                                "class": "nav d-none d-md-flex align-items-center my-1 text-small text-center"
+                            },
+                            "children": [
+                                {
+                                    "tagName": "li",
+                                    "children": [
+                                        {
+                                            "tagName": "a",
+                                            "attributes": {
+                                                "id": "menu-desktop-home",
+                                                "data-item-id": "home",
+                                                "href": "#/",
+                                                "class": "nav-link px-3 active text-primary"
+                                            },
+                                            "children": [
+                                                {
+                                                    "tagName": "i",
+                                                    "attributes": {
+                                                        "class": "bi bi-house d-block mx-auto mb-1 fs-5 text-primary"
+                                                    }
+                                                },
+                                                {
+                                                    "tagName": "span",
+                                                    "textContent": "Home"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "tagName": "li",
+                                    "children": [
+                                        {
+                                            "tagName": "a",
+                                            "attributes": {
+                                                "id": "menu-desktop-orders",
+                                                "data-item-id": "orders",
+                                                "href": "#/orders",
+                                                "class": "nav-link px-3 text-white"
+                                            },
+                                            "children": [
+                                                {
+                                                    "tagName": "i",
+                                                    "attributes": {
+                                                        "class": "bi bi-table d-block mx-auto mb-1 fs-5 "
+                                                    }
+                                                },
+                                                {
+                                                    "tagName": "span",
+                                                    "textContent": "Orders"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "tagName": "li",
+                                    "children": [
+                                        {
+                                            "tagName": "a",
+                                            "attributes": {
+                                                "id": "menu-desktop-reset",
+                                                "data-item-id": "reset",
+                                                "href": "#",
+                                                "class": "nav-link px-3 text-info"
+                                            },
+                                            "children": [
+                                                {
+                                                    "tagName": "i",
+                                                    "attributes": {
+                                                        "class": "bi bi-arrow-clockwise d-block mx-auto mb-1 fs-5 "
+                                                    }
+                                                },
+                                                {
+                                                    "tagName": "span",
+                                                    "textContent": "Reset"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tagName": "button",
+                            "attributes": {
+                                "type": "button",
+                                "class": "btn btn-outline-secondary text-white border-secondary d-md-none my-1 px-2 py-1",
+                                "data-bs-toggle": "collapse",
+                                "data-bs-target": "#mobileNavCollapse",
+                                "aria-controls": "mobileNavCollapse",
+                                "aria-expanded": "false",
+                                "aria-label": "Toggle navigation"
+                            },
+                            "children": [
+                                {
+                                    "tagName": "i",
+                                    "attributes": {
+                                        "class": "bi bi-list fs-3 lh-1 pe-none"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tagName": "div",
+                    "attributes": {
+                        "id": "mobileNavCollapse",
+                        "class": "collapse d-md-none w-100"
+                    },
+                    "children": [
+                        {
+                            "tagName": "div",
+                            "attributes": {
+                                "class": "container-fluid px-2 pt-3 pb-2 border-top border-secondary mt-2"
+                            },
+                            "children": [
+                                {
+                                    "tagName": "div",
+                                    "attributes": {
+                                        "class": "list-group list-group-flush bg-transparent"
+                                    },
+                                    "children": [
+                                        {
+                                            "tagName": "a",
+                                            "attributes": {
+                                                "id": "menu-mobile-home",
+                                                "data-item-id": "home",
+                                                "href": "#/",
+                                                "class": "list-group-item list-group-item-action d-flex align-items-center py-2 px-3 mb-1 rounded border bg-primary text-white fw-bold shadow-sm"
+                                            },
+                                            "children": [
+                                                {
+                                                    "tagName": "i",
+                                                    "attributes": {
+                                                        "class": "bi bi-house fs-5 me-3 text-white",
+                                                        "style": "width: 24px; text-align: center;"
+                                                    }
+                                                },
+                                                {
+                                                    "tagName": "span",
+                                                    "attributes": {
+                                                        "class": "text-white flex-grow-1"
+                                                    },
+                                                    "textContent": "Home"
+                                                },
+                                                {
+                                                    "tagName": "i",
+                                                    "attributes": {
+                                                        "class": "bi bi-chevron-right text-secondary small"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tagName": "a",
+                                            "attributes": {
+                                                "id": "menu-mobile-orders",
+                                                "data-item-id": "orders",
+                                                "href": "#/orders",
+                                                "class": "list-group-item list-group-item-action d-flex align-items-center py-2 px-3 mb-1 rounded border bg-dark text-white-50 border-secondary"
+                                            },
+                                            "children": [
+                                                {
+                                                    "tagName": "i",
+                                                    "attributes": {
+                                                        "class": "bi bi-table fs-5 me-3 text-light",
+                                                        "style": "width: 24px; text-align: center;"
+                                                    }
+                                                },
+                                                {
+                                                    "tagName": "span",
+                                                    "attributes": {
+                                                        "class": "text-light flex-grow-1"
+                                                    },
+                                                    "textContent": "Orders"
+                                                },
+                                                {
+                                                    "tagName": "i",
+                                                    "attributes": {
+                                                        "class": "bi bi-chevron-right text-secondary small"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tagName": "a",
+                                            "attributes": {
+                                                "id": "menu-mobile-reset",
+                                                "data-item-id": "reset",
+                                                "href": "#",
+                                                "class": "list-group-item list-group-item-action d-flex align-items-center py-2 px-3 mb-1 rounded border bg-dark text-info border-secondary"
+                                            },
+                                            "children": [
+                                                {
+                                                    "tagName": "i",
+                                                    "attributes": {
+                                                        "class": "bi bi-arrow-clockwise fs-5 me-3 text-info",
+                                                        "style": "width: 24px; text-align: center;"
+                                                    }
+                                                },
+                                                {
+                                                    "tagName": "span",
+                                                    "attributes": {
+                                                        "class": "text-info flex-grow-1"
+                                                    },
+                                                    "textContent": "Reset"
+                                                },
+                                                {
+                                                    "tagName": "i",
+                                                    "attributes": {
+                                                        "class": "bi bi-chevron-right text-secondary small"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "tagName": "div",
+            "attributes": {
+                "class": "px-3 py-2 border-bottom bg-white"
+            },
+            "children": [
+                {
+                    "tagName": "div",
+                    "attributes": {
+                        "class": "container-fluid px-2 px-md-4 d-flex flex-wrap align-items-center justify-content-between gap-2"
+                    },
+                    "children": [
+                        {
+                            "tagName": "form",
+                            "attributes": {
+                                "class": "col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto",
+                                "role": "search"
+                            },
+                            "children": [
+                                {
+                                    "tagName": "input",
+                                    "attributes": {
+                                        "type": "search",
+                                        "id": "nav-search",
+                                        "class": "form-control form-control-sm",
+                                        "placeholder": "Search...",
+                                        "aria-label": "Search..."
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "tagName": "div",
+                            "attributes": {
+                                "class": "d-flex align-items-center"
+                            },
+                            "children": [
+                                {
+                                    "tagName": "span",
+                                    "attributes": {
+                                        "class": "text-secondary small me-2"
+                                    },
+                                    "textContent": "Status:"
+                                },
+                                {
+                                    "tagName": "span",
+                                    "attributes": {
+                                        "id": "record-count-badge",
+                                        "class": "badge bg-secondary"
+                                    },
+                                    "textContent": "Ready"
+                                }
+                            ]
+                        },
+                        {
+                            "tagName": "div",
+                            "attributes": {
+                                "class": "d-flex gap-2"
+                            },
+                            "children": [
+                                {
+                                    "tagName": "button",
+                                    "attributes": {
+                                        "type": "button",
+                                        "id": "login",
+                                        "class": "btn btn-sm btn-light text-dark me-2"
+                                    },
+                                    "textContent": "Login"
+                                },
+                                {
+                                    "tagName": "button",
+                                    "attributes": {
+                                        "type": "button",
+                                        "id": "signup",
+                                        "class": "btn btn-sm btn-primary"
+                                    },
+                                    "textContent": "Sign-up"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
