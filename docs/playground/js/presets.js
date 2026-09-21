@@ -156,6 +156,65 @@ export const playgroundPresets = {
             { tagName: "span", classList: "badge bg-warning text-dark", textContent: "Warning" },
             { tagName: "span", classList: "badge bg-info text-dark", textContent: "Info" }
         ]
+    },
+    header: {
+        tagName: "header",
+        classList: "p-3 mb-3 border-bottom bg-white shadow-sm rounded",
+        children: [
+            {
+                tagName: "div",
+                classList: "d-flex flex-wrap align-items-center justify-content-between",
+                children: [
+                    {
+                        tagName: "a",
+                        classList: "d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none fw-bold fs-5 gap-2",
+                        attributes: { href: "#" },
+                        children: [
+                            { tagName: "i", classList: "bi bi-bootstrap-fill text-primary fs-3" },
+                            { tagName: "span", textContent: "App Header" }
+                        ]
+                    },
+                    {
+                        tagName: "ul",
+                        classList: "nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-lg-4",
+                        children: [
+                            {
+                                tagName: "li",
+                                children: [
+                                    { tagName: "a", classList: "nav-link px-2 link-secondary active fw-semibold", attributes: { href: "#" }, textContent: "Overview" }
+                                ]
+                            },
+                            {
+                                tagName: "li",
+                                children: [
+                                    { tagName: "a", classList: "nav-link px-2 link-body-emphasis", attributes: { href: "#" }, textContent: "Inventory" }
+                                ]
+                            },
+                            {
+                                tagName: "li",
+                                children: [
+                                    { tagName: "a", classList: "nav-link px-2 link-body-emphasis", attributes: { href: "#" }, textContent: "Orders" }
+                                ]
+                            },
+                            {
+                                tagName: "li",
+                                children: [
+                                    { tagName: "a", classList: "nav-link px-2 link-body-emphasis", attributes: { href: "#" }, textContent: "Reports" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        tagName: "div",
+                        classList: "d-flex gap-2",
+                        children: [
+                            { tagName: "button", classList: "btn btn-outline-primary btn-sm", attributes: { type: "button" }, textContent: "Login" },
+                            { tagName: "button", classList: "btn btn-primary btn-sm", attributes: { type: "button" }, textContent: "Sign-up" }
+                        ]
+                    }
+                ]
+            }
+        ]
     }
 };
 

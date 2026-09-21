@@ -1,4 +1,4 @@
-import { buildSpecElement } from "../../src/v3/index.js";
+import { buildSpecElement } from "../../dist/v3/min.js";
 import { playgroundPresets } from "./presets.js";
 
 const specInput = document.getElementById("spec-input");
@@ -12,9 +12,20 @@ const htmlView = document.getElementById("html-view");
 const btnFormat = document.getElementById("btn-format");
 const btnCompile = document.getElementById("btn-compile");
 const presetButtons = document.querySelectorAll(".preset-btn");
+const fileInput = document.getElementById("playgroundFileInput");
+const btnUploadJson = document.getElementById("btnUploadJson");
+const activeSpecBadge = document.getElementById("activeSpecBadge");
 
-export const compileCurrentSpec = ({ inSpecString }) => {
+const updateActiveBadge = ({ inName }) => {
+    const localName = inName;
+    if (activeSpecBadge) {
+        activeSpecBadge.textContent = localName;
+    }
+};
+
+export const compileCurrentSpec = ({ inSpecString, inSourceName }) => {
     const localSpecString = inSpecString ?? "";
+    const localSourceName = inSourceName;
 
     if (!renderTarget || !rawHtml) return;
 
@@ -38,6 +49,13 @@ export const compileCurrentSpec = ({ inSpecString }) => {
             statusMsg.textContent = "Valid Spec";
             statusMsg.className = "badge bg-success-subtle text-success border border-success-subtle small py-1";
         }
+
+        // Keep sessionStorage in sync so user can navigate to Summary Hub seamlessly
+        sessionStorage.setItem("json_to_tag_active_spec", JSON.stringify(parsedSpec));
+        if (localSourceName) {
+            sessionStorage.setItem("json_to_tag_active_name", localSourceName);
+            updateActiveBadge({ inName: localSourceName });
+        }
     } catch (err) {
         if (statusMsg) {
             statusMsg.textContent = "JSON Error: " + err.message;
@@ -53,7 +71,9 @@ export const loadPresetSpec = ({ inPresetName }) => {
     if (specInput) {
         specInput.value = JSON.stringify(selectedPreset, null, 2);
     }
-    compileCurrentSpec({ inSpecString: specInput ? specInput.value : "" });
+    const presetLabel = `Preset: ${localPresetName}`;
+    updateActiveBadge({ inName: presetLabel });
+    compileCurrentSpec({ inSpecString: specInput ? specInput.value : "", inSourceName: presetLabel });
 };
 
 export const formatInputJson = () => {
@@ -66,10 +86,47 @@ export const formatInputJson = () => {
     }
 };
 
+export const loadSpecFromFile = ({ inFile }) => {
+    const localFile = inFile;
+    if (!localFile) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const content = event.target.result;
+            const parsed = JSON.parse(content);
+            if (specInput) {
+                specInput.value = JSON.stringify(parsed, null, 2);
+            }
+            compileCurrentSpec({ inSpecString: specInput.value, inSourceName: localFile.name });
+        } catch (err) {
+            alert("Invalid JSON file: " + err.message);
+        }
+    };
+    reader.readAsText(localFile);
+};
+
 // Event Listeners
 if (specInput) {
     specInput.addEventListener("input", () => {
         compileCurrentSpec({ inSpecString: specInput.value });
+    });
+
+    // Drag and drop JSON file support
+    specInput.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        specInput.classList.add("border-primary");
+    });
+    specInput.addEventListener("dragleave", () => {
+        specInput.classList.remove("border-primary");
+    });
+    specInput.addEventListener("drop", (e) => {
+        e.preventDefault();
+        specInput.classList.remove("border-primary");
+        const file = e.dataTransfer?.files?.[0];
+        if (file && (file.type === "application/json" || file.name.endsWith(".json"))) {
+            loadSpecFromFile({ inFile: file });
+        }
     });
 }
 
@@ -81,6 +138,21 @@ if (btnCompile) {
 
 if (btnFormat) {
     btnFormat.addEventListener("click", formatInputJson);
+}
+
+if (btnUploadJson && fileInput) {
+    btnUploadJson.addEventListener("click", () => {
+        fileInput.click();
+    });
+}
+
+if (fileInput) {
+    fileInput.addEventListener("change", (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            loadSpecFromFile({ inFile: file });
+        }
+    });
 }
 
 presetButtons.forEach(btn => {
@@ -106,5 +178,22 @@ if (tabVisual && tabHtml && previewCanvas && htmlView) {
     });
 }
 
-// Initial load
-loadPresetSpec({ inPresetName: "card" });
+// Check if an active spec was already loaded in Summary Hub or earlier session
+const savedSpec = sessionStorage.getItem("json_to_tag_active_spec");
+const savedName = sessionStorage.getItem("json_to_tag_active_name");
+if (savedSpec) {
+    try {
+        const parsed = JSON.parse(savedSpec);
+        if (specInput) {
+            specInput.value = JSON.stringify(parsed, null, 2);
+        }
+        const label = savedName || "Active Spec";
+        updateActiveBadge({ inName: label });
+        compileCurrentSpec({ inSpecString: specInput.value, inSourceName: label });
+    } catch {
+        loadPresetSpec({ inPresetName: "card" });
+    }
+} else {
+    // Default initial load
+    loadPresetSpec({ inPresetName: "card" });
+}

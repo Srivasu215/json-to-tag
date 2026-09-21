@@ -85,7 +85,6 @@
       overflow-y: auto;
     }
   </style>
-  <base href="/docs/summary/">
 </head>
 
 <body class="p-3 p-md-4">
@@ -280,7 +279,7 @@
   </div>
 
   <script type="module">
-    import { reviewSpec, buildSpecElement } from "../dist/v3/min.js";
+    import { reviewSpec, buildSpecElement } from "/docs/dist/v3/min.js";
 
     const fileInput = document.getElementById("jsonFileInput");
     const btnSampleSpec = document.getElementById("btnSampleSpec");
@@ -426,6 +425,15 @@
     btnSampleSpec.addEventListener("click", () => {
       processSpec(SAMPLE_SPEC, "Sample Spec");
     });
+
+    // Auto-restore previously selected spec from sessionStorage if present
+    const savedSpec = sessionStorage.getItem("json_to_tag_active_spec");
+    const savedName = sessionStorage.getItem("json_to_tag_active_name");
+    if (savedSpec) {
+      try {
+        processSpec(JSON.parse(savedSpec), savedName || "Loaded Spec");
+      } catch (e) { }
+    }
   </script>
 </body>
 
