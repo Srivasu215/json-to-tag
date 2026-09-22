@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Sample (v4 Direct Spec) • @keshavsoft/json-to-tag</title>
+  <meta name="description" content="Interactive Voucher Entry Form sample demonstrating @keshavsoft/json-to-tag v4 direct spec input via window.ks.jsonToTag.buildSpecElement(spec)." />
+
+  <!-- Bootstrap 5.3 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: #1e293b;
+    }
+    .section-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+    }
+    .code-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      padding: 1rem 1.25rem;
+      border-radius: 0.375rem;
+      overflow-x: auto;
+    }
+    .nav-tabs .nav-link {
+      color: #64748b;
+      font-weight: 500;
+    }
+    .nav-tabs .nav-link.active {
+      color: #0d6efd;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body class="p-3 p-md-4">
+  <div class="container" style="max-width: 1040px;">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3 py-2 rounded-3 mb-4 shadow-sm">
+      <div class="container-fluid p-0">
+        <a class="navbar-brand fw-bold fs-6 d-flex align-items-center gap-2" href="../index.html">
+          <i class="bi bi-tag-fill text-primary"></i> json-to-tag
+        </a>
+        <div class="navbar-nav d-flex flex-row gap-1 flex-wrap">
+          <a class="nav-link px-2" href="../index.html">Home</a>
+          <a class="nav-link px-2 text-info" href="../tags/index.html">Tags Catalog</a>
+          <a class="nav-link px-2 text-light" href="../menu/index.html"><i class="bi bi-layout-text-window-reverse me-1"></i>Headers</a>
+          <a class="nav-link px-2" href="../summary/index.html"><i class="bi bi-cloud-arrow-up me-1"></i>Upload JSON</a>
+          <a class="nav-link px-2 text-warning" href="../playground/index.html"><i class="bi bi-play-circle me-1"></i>Playground</a>
+          <a class="nav-link active px-2 fw-semibold text-success" href="./index.html"><i class="bi bi-ui-checks me-1"></i>Form Sample</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header / Feature Banner -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 pb-3 border-bottom">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <i class="bi bi-ui-checks text-success fs-3"></i>
+          <h1 class="h3 fw-bold mb-0">Voucher Entry Form Sample</h1>
+          <span class="badge bg-success-subtle text-success border border-success-subtle">v4 Feature</span>
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Direct Spec Input</span>
+        </div>
+        <p class="text-muted small mb-0">
+          Compiled dynamically using <code>window.ks.jsonToTag.buildSpecElement(spec)</code> — passing the JSON specification directly as a single argument without wrapper objects.
+        </p>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="./spec.json" target="_blank" class="btn btn-outline-primary btn-sm">
+          <i class="bi bi-filetype-json me-1"></i> Raw spec.json
+        </a>
+        <a href="../index.html" class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-arrow-left me-1"></i> Docs Home
+        </a>
+      </div>
+    </div>
+
+    <!-- API Highlights Card -->
+    <div class="section-card border-start border-4 border-success">
+      <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+        <div>
+          <h2 class="h6 fw-bold text-success text-uppercase mb-1" style="letter-spacing: 0.05em; font-size: 0.8rem;">
+            <i class="bi bi-lightning-charge-fill me-1"></i> v4 Breakthrough: Direct Spec Passing
+          </h2>
+          <p class="text-secondary small mb-2">
+            In <strong>v4</strong>, <code>buildSpecElement</code> accepts the specification object directly as a single positional parameter. No wrapper configuration object (<code>{ inSpec: spec }</code>) is required.
+          </p>
+        </div>
+        <div id="render-status" class="small text-muted py-1 px-2 bg-light rounded border">
+          <div class="spinner-border spinner-border-sm text-primary me-1" role="status"></div> Initializing compiler...
+        </div>
+      </div>
+
+      <div class="code-box my-2">
+<code><span class="text-secondary">// 1. Import or load the v4 bundle into browser / SSR global:</span>
+<span class="text-info">&lt;script</span> <span class="text-warning">type</span>=<span class="text-success">"module"</span> <span class="text-warning">src</span>=<span class="text-success">"/src/v4/index.js"</span><span class="text-info">&gt;&lt;/script&gt;</span>
+
+<span class="text-secondary">// 2. Compile directly — pass the raw spec object as a single input:</span>
+<span class="text-primary">const</span> <span class="text-white">domElement</span> = <span class="text-warning">window</span>.<span class="text-warning">ks</span>.<span class="text-info">jsonToTag</span>.<span class="text-primary">buildSpecElement</span>(<span class="text-white">spec</span>);
+
+<span class="text-secondary">// 3. Mount native DOM node to the document:</span>
+<span class="text-warning">document</span>.<span class="text-info">getElementById</span>(<span class="text-success">"form-container"</span>).<span class="text-info">append</span>(<span class="text-white">domElement</span>);</code>
+      </div>
+    </div>
+
+    <!-- Main Content Tabs -->
+    <ul class="nav nav-tabs mb-3" id="sampleTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="rendered-tab" data-bs-toggle="tab" data-bs-target="#rendered-pane" type="button" role="tab">
+          <i class="bi bi-eye-fill me-1"></i> Live Rendered Form
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="code-tab" data-bs-toggle="tab" data-bs-target="#code-pane" type="button" role="tab">
+          <i class="bi bi-code-slash me-1"></i> Usage Comparison
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="json-tab" data-bs-toggle="tab" data-bs-target="#json-pane" type="button" role="tab">
+          <i class="bi bi-braces me-1"></i> JSON Spec (spec.json)
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="sampleTabContent">
+      <!-- Tab 1: Live Rendered Output -->
+      <div class="tab-pane fade show active" id="rendered-pane" role="tabpanel">
+        <div class="section-card p-0 overflow-hidden">
+          <div class="bg-light p-3 border-bottom d-flex justify-content-between align-items-center">
+            <span class="fw-semibold small text-secondary">
+              <i class="bi bi-display me-1"></i> Render Target: <code>#form-container</code>
+            </span>
+            <span class="badge bg-secondary-subtle text-secondary">Native DOM Output</span>
+          </div>
+          <div class="p-3 p-md-4">
+            <!-- Dynamic form will be appended here -->
+            <div id="form-container">
+              <div class="text-center py-5 text-muted">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2 small">Compiling JSON specification...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Usage Comparison -->
+      <div class="tab-pane fade" id="code-pane" role="tabpanel">
+        <div class="section-card">
+          <h3 class="h6 fw-bold mb-3 text-secondary text-uppercase" style="letter-spacing: 0.05em; font-size: 0.8rem;">
+            Both Calling Conventions Supported
+          </h3>
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <div class="border rounded p-3 bg-light h-100">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-success text-white">New in v4</span>
+                  <span class="small text-muted">Positional Spec Input</span>
+                </div>
+                <h4 class="h6 fw-bold mb-2">Direct Spec (Single Input)</h4>
+                <p class="small text-muted mb-2">Clean, minimal syntax when compiling an individual specification.</p>
+                <div class="code-box">
+<code><span class="text-secondary">// Global browser namespace:</span>
+<span class="text-warning">window</span>.ks.jsonToTag.<span class="text-primary">buildSpecElement</span>(spec);
+
+<span class="text-secondary">// ES Module import:</span>
+<span class="text-primary">import</span> { buildSpecElement } <span class="text-primary">from</span> <span class="text-success">"@keshavsoft/json-to-tag"</span>;
+<span class="text-primary">const</span> el = <span class="text-primary">buildSpecElement</span>(spec);</code>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="border rounded p-3 bg-light h-100">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-secondary text-white">Classic Convention</span>
+                  <span class="small text-muted">Named Parameter Object</span>
+                </div>
+                <h4 class="h6 fw-bold mb-2">Named Configuration Object</h4>
+                <p class="small text-muted mb-2">Standard codebase object parameter passing with <code>inSpec</code> or <code>spec</code>.</p>
+                <div class="code-box">
+<code><span class="text-secondary">// Recommended named parameter:</span>
+<span class="text-primary">buildSpecElement</span>({ <span class="text-info">inSpec</span>: spec });
+
+<span class="text-secondary">// Also supported:</span>
+<span class="text-primary">buildSpecElement</span>({ <span class="text-info">spec</span>: spec });</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: JSON Spec Viewer -->
+      <div class="tab-pane fade" id="json-pane" role="tabpanel">
+        <div class="section-card">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="h6 fw-bold mb-0 text-secondary text-uppercase" style="letter-spacing: 0.05em; font-size: 0.8rem;">
+              Voucher Entry Form Spec (spec.json)
+            </h3>
+            <button class="btn btn-outline-secondary btn-sm" id="copy-json-btn">
+              <i class="bi bi-clipboard me-1"></i> Copy JSON
+            </button>
+          </div>
+          <div class="code-box" style="max-height: 500px; overflow-y: auto;">
+            <pre id="raw-spec-viewer" class="mb-0 text-light" style="font-family: inherit;">Loading spec.json...</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-muted small py-4 border-top mt-4">
+      <p class="mb-0">
+        <strong>@keshavsoft/json-to-tag</strong> • 
+        <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" class="text-secondary text-decoration-none">GitHub Repository</a> • 
+        <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" class="text-secondary text-decoration-none">NPM Package</a>
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Bootstrap 5.3 JS Bundle for tabs -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Load v4 Engine onto window.ks.jsonToTag -->
+  <script type="module" src="/src/v4/index.js"></script>
+  <!-- Load sample controller -->
+  <script type="module" src="./index.js"></script>
+
+  <script>
+    document.getElementById("copy-json-btn")?.addEventListener("click", () => {
+      const text = document.getElementById("raw-spec-viewer")?.textContent;
+      if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = document.getElementById("copy-json-btn");
+          btn.innerHTML = '<i class="bi bi-check2 text-success me-1"></i> Copied!';
+          setTimeout(() => {
+            btn.innerHTML = '<i class="bi bi-clipboard me-1"></i> Copy JSON';
+          }, 2000);
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

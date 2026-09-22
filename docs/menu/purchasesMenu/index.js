@@ -1,4 +1,4 @@
-import { buildSpecElement } from "../../dist/min.js";
+import { buildSpecElement } from "../../dist/v4/min.js";
 
 const render = async ({ inVariantKey, inMountId }) => {
     const localVariantKey = inVariantKey;
