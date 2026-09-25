@@ -11,6 +11,7 @@
 📑 **Individual Tag Specifications**: [https://keshavsoft.github.io/json-to-tag/tags/individualTags/label.html](https://keshavsoft.github.io/json-to-tag/tags/individualTags/label.html)  
 🎛️ **Live Interactive Playground**: [https://keshavsoft.github.io/json-to-tag/playground/index.html](https://keshavsoft.github.io/json-to-tag/playground/index.html)  
 📊 **Specification Summary Hub**: [https://keshavsoft.github.io/json-to-tag/summary/index.html](https://keshavsoft.github.io/json-to-tag/summary/index.html)  
+📑 **Table Guide**: [https://keshavsoft.github.io/json-to-tag/table-guide.html](https://keshavsoft.github.io/table-guide.html)
   - 📋 [Tags Only & Frequency Lists](https://keshavsoft.github.io/json-to-tag/summary/tags-only.html)
   - ⚠️ [Not Present (Unrecognized Tags Audit)](https://keshavsoft.github.io/json-to-tag/summary/not-present.html)
   - ✅ [Present (Catalog Verified Tags)](https://keshavsoft.github.io/json-to-tag/summary/present.html)

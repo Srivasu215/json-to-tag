@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beginner's Guide: Create HTML Tables with CDNs, structure.json & data.json | json-to-spec</title>
+    <meta name="description" content="A crystal-clear, zero-coding-experience-required guide on how to build responsive HTML tables using ready-made CDN links, structure.json blueprint, and data.json payload.">
+
+    <!-- Bootstrap 5 for Table Styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS for Modern Layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca'
+                        },
+                        emerald: {
+                            50: '#ecfdf5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857'
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            scroll-behavior: smooth;
+        }
+        code, pre, .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .code-container {
+            position: relative;
+        }
+        .copy-badge {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            z-index: 10;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .step-circle {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+        .analogy-card {
+            transition: all 0.25s ease-in-out;
+        }
+        .analogy-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Sticky Navigation -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="./index.html" class="flex items-center space-x-2 font-black text-lg text-slate-900 hover:text-indigo-600 transition">
+                    <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-sm">JS</span>
+                    <span>json-to-spec</span>
+                </a>
+                <span class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    Beginner's Guide
+                </span>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600">
+                <a href="#the-big-picture" class="hover:text-indigo-600 transition">1. The Big Picture</a>
+                <a href="#the-3-files" class="hover:text-indigo-600 transition">2. The 3 Files</a>
+                <a href="#step-by-step" class="hover:text-indigo-600 transition">3. Step-by-Step</a>
+                <a href="#live-playground" class="hover:text-indigo-600 text-indigo-600 transition flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Live Playground
+                </a>
+                <a href="#troubleshooting" class="hover:text-indigo-600 transition">4. FAQ & Fixes</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <a href="./index.html" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-slate-50 transition">
+                    &larr; Docs Hub
+                </a>
+                <a href="#live-playground" class="px-3.5 py-1.5 text-xs font-bold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 shadow-xs transition">
+                    Try Live Demo
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- Hero Section -->
+        <section class="text-center max-w-4xl mx-auto space-y-5 pt-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold">
+                <span>🌟 Zero Coding Experience Required</span>
+                <span class="text-slate-300">&bull;</span>
+                <span>5-Minute Visual Guide</span>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                How to Build Beautiful Tables Using <br class="hidden sm:inline">
+                <span class="gradient-text">CDNs, structure.json & data.json</span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+                Ever wanted to display your data in an elegant, modern table without writing confusing web code? 
+                Learn how <strong>2 simple files</strong> and <strong>1 magic web link (CDN)</strong> do all the heavy lifting for you!
+            </p>
+
+            <!-- Quick Action Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-3">
+                <a href="#step-by-step" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>🚀</span> Start Simple Steps
+                </a>
+                <a href="#live-playground" class="px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-sm rounded-xl shadow-xs transition flex items-center gap-2">
+                    <span>⚡</span> Jump to Live Playground
+                </a>
+                <button id="btn-download-starter" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>📥</span> Download 1-Click Starter HTML
+                </button>
+            </div>
+        </section>
+
+        <!-- The 3-Part Formula Banner -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="analogy-card p-6 rounded-2xl bg-white border border-indigo-100 shadow-sm relative overflow-hidden">
+                <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl font-bold mb-4">
+                    📊
+                </div>
+                <span class="text-[11px] font-mono uppercase font-bold text-indigo-600 tracking-wider">File #1 &bull; The Ingredients</span>
+                <h2 class="text-xl font-bold text-slate-900 mt-1 mb-2">data.json</h2>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    This is your <strong>raw information</strong>. Just the text, numbers, names, and items you want to show. Like the rows in an Excel spreadsheet or list of contacts.
+                </p>
+            </div>
+
+            <div class="analogy-card p-6 rounded-2xl bg-white border border-teal-100 shadow-sm relative overflow-hidden">
+                <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-2xl font-bold mb-4">
+                    📐
+                </div>
+                <span class="text-[11px] font-mono uppercase font-bold text-teal-600 tracking-wider">File #2 &bull; The Blueprint</span>
+                <h2 class="text-xl font-bold text-slate-900 mt-1 mb-2">structure.json</h2>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    This is the <strong>empty frame</strong> or mold. It says: <em>"Make a table with top headers, zebra stripes, and repeat a row for each item in the data."</em>
+                </p>
+            </div>
+
+            <div class="analogy-card p-6 rounded-2xl bg-white border border-emerald-100 shadow-sm relative overflow-hidden">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold mb-4">
+                    🌐
+                </div>
+                <span class="text-[11px] font-mono uppercase font-bold text-emerald-600 tracking-wider">The Engine &bull; Zero Install</span>
+                <h2 class="text-xl font-bold text-slate-900 mt-1 mb-2">The CDN Links</h2>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    A <strong>ready-made tool on the internet</strong>. You don't need to install anything on your computer. You just paste a link, and the browser builds the table!
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 1: The Big Picture (Analogy) -->
+        <section id="the-big-picture" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8">
+            <div class="space-y-2">
+                <span class="text-xs font-mono uppercase font-bold text-indigo-600 tracking-wider">Chapter 1</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">The Big Picture: How It Works in Everyday Life</h2>
+                <p class="text-sm text-slate-600 max-w-2xl">
+                    If you don't know code, think of this like baking waffles or putting pictures in a photo album.
+                </p>
+            </div>
+
+            <!-- Analogy Visual Diagram -->
+            <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-indigo-50/70 via-slate-50 to-emerald-50/70 border border-indigo-100">
+                <div class="grid grid-cols-1 md:grid-cols-7 gap-4 items-center text-center">
+                    
+                    <!-- Box 1 -->
+                    <div class="md:col-span-2 p-5 bg-white rounded-xl shadow-xs border border-slate-200">
+                        <div class="text-3xl mb-2">📋</div>
+                        <div class="font-bold text-sm text-slate-900">data.json</div>
+                        <div class="text-xs text-slate-500 mt-1">Your Ingredients (Names, Roles, Prices)</div>
+                    </div>
+
+                    <!-- Plus -->
+                    <div class="md:col-span-1 text-2xl font-black text-indigo-400">+</div>
+
+                    <!-- Box 2 -->
+                    <div class="md:col-span-2 p-5 bg-white rounded-xl shadow-xs border border-slate-200">
+                        <div class="text-3xl mb-2">🧇</div>
+                        <div class="font-bold text-sm text-slate-900">structure.json</div>
+                        <div class="text-xs text-slate-500 mt-1">The Waffle Mold (Columns, Rows, Design)</div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="md:col-span-1 text-2xl font-black text-emerald-500">&rarr;</div>
+
+                    <!-- Result Box -->
+                    <div class="md:col-span-1 p-5 bg-emerald-600 text-white rounded-xl shadow-md">
+                        <div class="text-3xl mb-2">✨</div>
+                        <div class="font-bold text-sm">Live Table</div>
+                        <div class="text-xs text-emerald-100 mt-1">Rendered on Web Page</div>
+                    </div>
+
+                </div>
+                <div class="mt-6 text-center text-xs font-mono text-slate-500">
+                    The <strong>CDN Link</strong> acts like the waffle iron: it pours the ingredients into the mold and bakes your final HTML table!
+                </div>
+            </div>
+
+            <!-- Jargon Buster Accordion / Grid -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <span>💡</span> Jargon Buster (Terms Explained in Human English)
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <strong class="text-indigo-600 text-sm block mb-1">What is a CDN?</strong>
+                        <p class="text-slate-600">
+                            CDN stands for <em>Content Delivery Network</em>. In simple words: it is a web address (URL) where pre-built programs live. Instead of downloading heavy software, your web browser downloads the tool instantly in 0.1 seconds from the web link.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <strong class="text-teal-600 text-sm block mb-1">What is a JSON file?</strong>
+                        <p class="text-slate-600">
+                            JSON is just plain text structured with brackets <code>{ }</code> and labels like <code>"name": "Alex"</code>. It is the world's most popular way to save lists and tables because any computer can read it instantly.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <strong class="text-emerald-600 text-sm block mb-1">What is &lt;thead&gt; and &lt;tbody&gt;?</strong>
+                        <p class="text-slate-600">
+                            In a table, <code>&lt;thead&gt;</code> is the top "Header" row (e.g., Name, Age, Country). <code>&lt;tbody&gt;</code> is the "Body" where all the actual rows of people or products sit.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <strong class="text-amber-600 text-sm block mb-1">What does ${title} or ${value} mean?</strong>
+                        <p class="text-slate-600">
+                            It is a <strong>placeholder</strong> (like a fill-in-the-blank on a form). When the table is created, the computer replaces <code>${title}</code> with the real column name, and <code>${value}</code> with your actual data.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The 3 Core Files -->
+        <section id="the-3-files" class="space-y-8">
+            <div class="space-y-2">
+                <span class="text-xs font-mono uppercase font-bold text-indigo-600 tracking-wider">Chapter 2</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">The 3 Simple Files You Need</h2>
+                <p class="text-sm text-slate-600 max-w-2xl">
+                    Take a look at each file. You can copy and paste them directly into your project!
+                </p>
+            </div>
+
+            <!-- Tab Navigation for the 3 Files -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+                <div class="p-4 bg-slate-100 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                        <button id="file-tab-1" onclick="switchFileTab(1)" class="px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-xs transition">
+                            1. data.json (The Data)
+                        </button>
+                        <button id="file-tab-2" onclick="switchFileTab(2)" class="px-4 py-2 text-xs font-bold rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 transition">
+                            2. structure.json (The Blueprint)
+                        </button>
+                        <button id="file-tab-3" onclick="switchFileTab(3)" class="px-4 py-2 text-xs font-bold rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 transition">
+                            3. index.html (The Page)
+                        </button>
+                    </div>
+                    <button id="copy-active-file" onclick="copyCurrentCode()" class="px-3.5 py-1.5 text-xs font-mono font-semibold bg-white border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5">
+                        <span id="copy-icon">📋</span> <span id="copy-text">Copy This File</span>
+                    </button>
+                </div>
+
+                <!-- File 1: data.json -->
+                <div id="file-content-1" class="p-6 space-y-6">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">File 1: <code>data.json</code></h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Contains two things: the list of column titles (<code>columns</code>) and the list of rows (<code>data</code>).</p>
+                        </div>
+                        <span class="px-2.5 py-1 text-xs font-mono bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">Payload</span>
+                    </div>
+
+                    <div class="code-container bg-slate-900 rounded-2xl p-5 overflow-x-auto text-xs text-indigo-200 leading-relaxed font-mono">
+<pre id="code-block-1">{
+  "columns": [
+    { "title": "#", "field": "id" },
+    { "title": "Employee Name", "field": "name" },
+    { "title": "Department", "field": "department" },
+    { "title": "Role", "field": "role" }
+  ],
+  "data": [
+    { "id": "1", "name": "Karthik Raja", "department": "Engineering", "role": "Architect" },
+    { "id": "2", "name": "Praveen Kumar", "department": "Design", "role": "UI Lead" },
+    { "id": "3", "name": "Srinivas Rao", "department": "Product", "role": "Manager" }
+  ]
+}</pre>
+                    </div>
+
+                    <!-- Human Explanation -->
+                    <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-100 space-y-2 text-xs text-slate-700">
+                        <strong class="text-indigo-900 text-sm block">🔍 Plain English Explanation:</strong>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li><strong><code>columns</code></strong>: Tells the table what headers to print across the top row (e.g. "#", "Employee Name", "Department", "Role").</li>
+                            <li><strong><code>data</code></strong>: An array of people. Each person has an <code>id</code>, <code>name</code>, <code>department</code>, and <code>role</code>.</li>
+                            <li>Want to add another employee? Simply add another line inside <code>data</code>!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- File 2: structure.json -->
+                <div id="file-content-2" class="p-6 space-y-6 hidden">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">File 2: <code>structure.json</code></h3>
+                            <p class="text-xs text-slate-500 mt-0.5">The visual blueprint. It tells the compiler to create a <code>table</code>, loop the columns, and loop the rows.</p>
+                        </div>
+                        <span class="px-2.5 py-1 text-xs font-mono bg-teal-50 text-teal-700 rounded-full border border-teal-200">Blueprint</span>
+                    </div>
+
+                    <div class="code-container bg-slate-900 rounded-2xl p-5 overflow-x-auto text-xs text-teal-200 leading-relaxed font-mono">
+<pre id="code-block-2">{
+  "tagName": "table",
+  "attributes": {
+    "class": "table table-striped table-hover table-bordered mb-0"
+  },
+  "children": [
+    {
+      "tagName": "thead",
+      "attributes": { "class": "table-dark" },
+      "children": [
+        {
+          "tagName": "tr",
+          "jsonToSpec": {
+            "operation": "loopArray",
+            "source": "columns",
+            "template": {
+              "tagName": "th",
+              "textContent": "${title}"
+            }
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "tagName": "tbody",
+      "jsonToSpec": {
+        "operation": "loopArray",
+        "source": "data",
+        "template": {
+          "tagName": "tr",
+          "jsonToSpec": {
+            "operation": "loopObject",
+            "source": "data",
+            "template": {
+              "tagName": "td",
+              "textContent": "${value}"
+            }
+          },
+          "children": []
+        }
+      },
+      "children": []
+    }
+  ]
+}</pre>
+                    </div>
+
+                    <!-- Human Explanation -->
+                    <div class="p-4 rounded-xl bg-teal-50/70 border border-teal-100 space-y-2 text-xs text-slate-700">
+                        <strong class="text-teal-900 text-sm block">🔍 Plain English Explanation:</strong>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li><strong><code>tagName: "table"</code></strong>: Says "create an HTML table".</li>
+                            <li><strong><code>class: "table table-striped..."</code></strong>: Uses Bootstrap styling for professional zebra stripes and hover highlights.</li>
+                            <li><strong><code>loopArray</code> with <code>source: "columns"</code></strong>: Takes each column in your data and automatically makes a header cell <code>&lt;th&gt;</code> with its title!</li>
+                            <li><strong><code>loopArray</code> with <code>source: "data"</code></strong>: Takes each person in your data and creates a new row <code>&lt;tr&gt;</code>!</li>
+                            <li><strong><code>loopObject</code> with <code>template: &lt;td&gt;${value}&lt;/td&gt;</code></strong>: Fills each cell in the row with the person's values!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- File 3: index.html -->
+                <div id="file-content-3" class="p-6 space-y-6 hidden">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">File 3: <code>index.html</code></h3>
+                            <p class="text-xs text-slate-500 mt-0.5">The web page that brings everything together using CDN links. No node_modules, no npm install!</p>
+                        </div>
+                        <span class="px-2.5 py-1 text-xs font-mono bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">Main HTML</span>
+                    </div>
+
+                    <div class="code-container bg-slate-900 rounded-2xl p-5 overflow-x-auto text-xs text-emerald-200 leading-relaxed font-mono">
+<pre id="code-block-3">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;My Table from JSON&lt;/title&gt;
+
+  &lt;!-- 1. Bootstrap CDN for styling --&gt;
+  &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body class="bg-light p-4"&gt;
+
+  &lt;div class="container py-4"&gt;
+    &lt;h2 class="mb-3 font-bold"&gt;Employee Directory&lt;/h2&gt;
+
+    &lt;!-- Placeholder where our table will appear --&gt;
+    &lt;div id="table-container" class="card shadow-sm p-3"&gt;
+      &lt;div class="text-muted text-center py-4"&gt;Loading table...&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- 2. JavaScript to fetch and render via CDNs --&gt;
+  &lt;script type="module"&gt;
+    // Import compiler & renderer directly from CDNs
+    import buildSpecElement from "https://keshavsoft.github.io/json-to-spec/dist/v23/min.js";
+    import "https://keshavsoft.github.io/json-to-tag/dist/v4/min.js";
+
+    async function init() {
+      // Step A: Load the 2 JSON files
+      const [structure, data] = await Promise.all([
+        fetch('./structure.json').then(r =&gt; r.json()),
+        fetch('./data.json').then(r =&gt; r.json())
+      ]);
+
+      // Step B: Merge structure + data into a spec
+      const spec = buildSpecElement({ specJson: structure, dataJson: data });
+
+      // Step C: Render it directly onto the webpage!
+      const tableHtml = window.ks.jsonToTag.buildSpecElement(spec);
+      const container = document.getElementById('table-container');
+      container.innerHTML = '';
+      container.appendChild(tableHtml);
+    }
+
+    init();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+
+                    <!-- Human Explanation -->
+                    <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-100 space-y-2 text-xs text-slate-700">
+                        <strong class="text-emerald-900 text-sm block">🔍 Plain English Explanation:</strong>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li><strong>Bootstrap CSS Link</strong>: Gives your table clean borders, padding, and fonts automatically.</li>
+                            <li><strong><code>import buildSpecElement from "..."</code></strong>: Loads the compiler tool from the web in 1 line.</li>
+                            <li><strong><code>fetch('./structure.json')</code></strong>: Reads your blueprint.</li>
+                            <li><strong><code>buildSpecElement(...)</code></strong>: Merges your data with the blueprint.</li>
+                            <li><strong><code>container.appendChild(...)</code></strong>: Inserts the generated table right into your webpage!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Step-by-Step Instructions -->
+        <section id="step-by-step" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8">
+            <div class="space-y-2">
+                <span class="text-xs font-mono uppercase font-bold text-indigo-600 tracking-wider">Chapter 3</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">5 Simple Steps to Run It on Your Computer</h2>
+                <p class="text-sm text-slate-600 max-w-2xl">
+                    Follow these 5 easy steps. You don't need terminal commands or complicated installs!
+                </p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Step 1 -->
+                <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                    <div class="step-circle bg-indigo-600 text-white shadow-sm">1</div>
+                    <div class="space-y-1 flex-1">
+                        <h3 class="text-base font-bold text-slate-900">Create a New Folder</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Create a new folder anywhere on your computer (for example on your Desktop) and name it <code>my-table-project</code>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                    <div class="step-circle bg-teal-600 text-white shadow-sm">2</div>
+                    <div class="space-y-1 flex-1">
+                        <h3 class="text-base font-bold text-slate-900">Create <code>data.json</code></h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Open Notepad (or VS Code), copy the code from <strong>File 1 (data.json)</strong> above, and save it as <code>data.json</code> inside your new folder.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                    <div class="step-circle bg-emerald-600 text-white shadow-sm">3</div>
+                    <div class="space-y-1 flex-1">
+                        <h3 class="text-base font-bold text-slate-900">Create <code>structure.json</code></h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            In Notepad, copy the code from <strong>File 2 (structure.json)</strong> above, and save it as <code>structure.json</code> inside the same folder.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                    <div class="step-circle bg-amber-600 text-white shadow-sm">4</div>
+                    <div class="space-y-1 flex-1">
+                        <h3 class="text-base font-bold text-slate-900">Create <code>index.html</code></h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            In Notepad, copy the code from <strong>File 3 (index.html)</strong> above, and save it as <code>index.html</code> inside the same folder.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="flex items-start gap-4 p-5 rounded-2xl bg-indigo-50 border border-indigo-200">
+                    <div class="step-circle bg-indigo-700 text-white shadow-sm">5</div>
+                    <div class="space-y-2 flex-1">
+                        <h3 class="text-base font-bold text-indigo-950">Open in Your Web Browser & Enjoy!</h3>
+                        <p class="text-xs text-indigo-900 leading-relaxed">
+                            Because browsers protect files from reading local JSON files when opened with a direct double-click (due to browser security called CORS), you have <strong>2 super easy options</strong>:
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs">
+                            <div class="p-3 bg-white rounded-xl border border-indigo-100 shadow-xs">
+                                <strong class="text-indigo-600 block mb-1">Option A: 1-Click Standalone File</strong>
+                                <span class="text-slate-600">Click the <em>"Download 1-Click Starter HTML"</em> button below! It bundles structure and data directly into one file so you can double-click and open it anywhere with zero setup.</span>
+                            </div>
+                            <div class="p-3 bg-white rounded-xl border border-indigo-100 shadow-xs">
+                                <strong class="text-emerald-600 block mb-1">Option B: VS Code Live Server</strong>
+                                <span class="text-slate-600">If using VS Code, install the free <em>"Live Server"</em> extension, right-click <code>index.html</code> and click <em>"Open with Live Server"</em>.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: LIVE Interactive Playground -->
+        <section id="live-playground" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                    <span class="text-xs font-mono uppercase font-bold text-indigo-600 tracking-wider">Chapter 4 &bull; Interactive Lab</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Try It Live Right Here!</h2>
+                    <p class="text-sm text-slate-600">
+                        Edit the data below, select different presets, or click "Generate Table" to see it compile in real-time.
+                    </p>
+                </div>
+
+                <!-- Preset Selector -->
+                <div class="flex items-center gap-2">
+                    <label class="text-xs font-semibold text-slate-500">Pick an Example:</label>
+                    <select id="preset-selector" onchange="loadPreset(this.value)" class="text-xs font-semibold bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-700 shadow-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="employees">👥 Employee Directory (3 Columns)</option>
+                        <option value="products">📦 Product Catalog (Price & Category)</option>
+                        <option value="students">🎓 Student Scores (Grades & Rank)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Playground Shell -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Left Column: Input Editors (5 cols) -->
+                <div class="lg:col-span-5 flex flex-col space-y-4">
+                    <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden flex flex-col flex-1">
+                        
+                        <!-- Header with tab switches -->
+                        <div class="px-5 py-3.5 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
+                            <div class="flex items-center gap-1.5">
+                                <button id="btn-editor-data" onclick="switchEditorTab('data')" class="px-3 py-1 text-xs font-bold rounded-lg bg-indigo-600 text-white transition">
+                                    data.json
+                                </button>
+                                <button id="btn-editor-struct" onclick="switchEditorTab('struct')" class="px-3 py-1 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition">
+                                    structure.json
+                                </button>
+                            </div>
+                            <span class="text-[11px] font-mono text-slate-500">Editable Live</span>
+                        </div>
+
+                        <!-- Editor Textareas -->
+                        <div class="p-4 flex-1 bg-slate-950 flex flex-col">
+                            <textarea id="playground-data" class="w-full flex-1 bg-transparent text-indigo-300 font-mono text-xs leading-relaxed border-0 focus:outline-none resize-none min-h-[300px]" spellcheck="false"></textarea>
+                            <textarea id="playground-structure" class="w-full flex-1 bg-transparent text-teal-300 font-mono text-xs leading-relaxed border-0 focus:outline-none resize-none min-h-[300px] hidden" spellcheck="false"></textarea>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div class="p-3.5 bg-white border-t border-slate-200 flex items-center justify-between">
+                            <span id="compiler-status" class="text-xs font-mono text-slate-500 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Ready to compile
+                            </span>
+                            <button id="btn-run-compile" onclick="runPlaygroundCompile()" class="px-4 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-xs transition flex items-center gap-1.5">
+                                <span>⚡</span> Rebuild Table
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Table Output (7 cols) -->
+                <div class="lg:col-span-7 flex flex-col space-y-4">
+                    <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden flex flex-col flex-1">
+                        
+                        <!-- Output Header -->
+                        <div class="px-6 py-3.5 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-800 flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                Live Rendered Table Output
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <button id="view-tab-table" onclick="switchOutputTab('table')" class="px-2.5 py-1 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-xs border border-slate-200">
+                                    Table Preview
+                                </button>
+                                <button id="view-tab-spec" onclick="switchOutputTab('spec')" class="px-2.5 py-1 text-xs font-bold rounded-md bg-slate-200 text-slate-600 hover:bg-slate-300">
+                                    Compiled Spec JSON
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Rendered Table Box -->
+                        <div id="output-view-table" class="p-6 bg-slate-50/50 flex-1 overflow-x-auto min-h-[320px] flex flex-col justify-start">
+                            <div id="playground-render-target" class="w-full">
+                                <!-- Dynamic table will appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Spec Output Box -->
+                        <div id="output-view-spec" class="p-4 bg-slate-950 flex-1 overflow-auto max-h-[360px] hidden">
+                            <pre id="playground-spec-display" class="text-[11px] font-mono text-amber-300 leading-relaxed"></pre>
+                        </div>
+
+                        <!-- Footer Info -->
+                        <div class="px-6 py-3 bg-white border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+                            <span>Rendered via Bootstrap 5 + <code>json-to-spec</code> CDN</span>
+                            <span id="playground-metrics" class="font-mono text-indigo-600 font-semibold">0.00ms</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 5: Download 1-Click Starter HTML -->
+        <section class="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white shadow-xl relative overflow-hidden space-y-6">
+            <div class="max-w-3xl space-y-3">
+                <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-semibold">
+                    🎁 Super Easy Download
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black">Want to try it without making multiple files?</h2>
+                <p class="text-sm text-indigo-200 leading-relaxed">
+                    Download our <strong>All-In-One Standalone Starter</strong>. It has the structure and data pre-packaged inside one HTML file. You can simply double-click it on Windows, Mac, or Linux and it immediately opens in your browser!
+                </p>
+            </div>
+
+            <div class="pt-2 flex flex-wrap gap-4">
+                <button onclick="downloadStandaloneFile()" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition flex items-center gap-2">
+                    <span>📥</span> Download table-starter.html (Instant)
+                </button>
+                <a href="./demo.html" class="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm rounded-xl transition flex items-center gap-2">
+                    <span>⚡</span> Open Full Playground
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 6: Troubleshooting & Beginner FAQ -->
+        <section id="troubleshooting" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8">
+            <div class="space-y-2">
+                <span class="text-xs font-mono uppercase font-bold text-indigo-600 tracking-wider">Chapter 5</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">Frequently Asked Questions & Easy Fixes</h2>
+                <p class="text-sm text-slate-600 max-w-2xl">
+                    Common questions beginners ask when building their first table.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <span>❓</span> Why is my table blank when I double-click index.html on my computer?
+                    </h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        This is caused by modern browser security called <strong>CORS</strong>. Browsers block the JavaScript <code>fetch('./data.json')</code> command when running directly from your hard drive (<code>file:///</code>).<br>
+                        <strong>How to fix:</strong> Either download the <strong>All-In-One Standalone Starter</strong> above (which embeds the data directly), or open your folder with VS Code and use the free <em>Live Server</em> extension.
+                    </p>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <span>❓</span> How do I add a new column (like "Phone Number" or "Salary")?
+                    </h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        You only need to edit <strong>data.json</strong>! 
+                        1. Add <code>{ "title": "Phone", "field": "phone" }</code> inside the <code>"columns"</code> array. <br>
+                        2. Add <code>"phone": "555-0199"</code> to each person inside <code>"data"</code>. <br>
+                        Because <code>structure.json</code> is dynamic, it will automatically create the new header and cells for you!
+                    </p>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <span>❓</span> Can I customize the colors and styles?
+                    </h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Yes! In <code>structure.json</code>, change the <code>class</code> attribute on the <code>table</code> tag. For example:
+                        <ul class="list-disc pl-5 mt-1 space-y-0.5 font-mono text-[11px] text-indigo-700">
+                            <li><code>class: "table table-dark table-hover"</code> for a sleek dark mode table.</li>
+                            <li><code>class: "table table-bordered table-sm"</code> for a compact borders table.</li>
+                            <li><code>class: "table table-success"</code> for a soft green table.</li>
+                        </ul>
+                    </p>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <span>❓</span> Do I have to pay anything for the CDNs?
+                    </h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        No, all the CDNs used (Bootstrap on jsDelivr, json-to-spec, and json-to-tag on GitHub Pages) are <strong>100% free and open source</strong> with an MIT license.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500 space-y-2">
+        <div class="flex items-center justify-center gap-4 font-semibold text-slate-600">
+            <a href="./index.html" class="hover:text-indigo-600 transition">Docs Hub</a>
+            <span>&bull;</span>
+            <a href="./demo.html" class="hover:text-indigo-600 transition">Live Playground</a>
+            <span>&bull;</span>
+            <a href="./samples/table.html" class="hover:text-indigo-600 transition">Table Engine Samples</a>
+            <span>&bull;</span>
+            <a href="https://github.com/keshavsoft/json-to-spec" target="_blank" class="hover:text-indigo-600 transition">GitHub Repo</a>
+        </div>
+        <p>json-to-spec &bull; Declarative UI Specification Compiler &bull; MIT License</p>
+    </footer>
+
+    <!-- Standalone Script with Compiler & Interactive Lab Logic -->
+    <script type="module">
+        // Import json-to-spec compiler from CDN or local bundle
+        let compileFunc = null;
+
+        async function loadCompiler() {
+            try {
+                // Try local dist first if hosted locally
+                const mod = await import("./dist/min.js");
+                compileFunc = mod.default || mod.compile || window?.ks?.jsonToSpec?.buildSpecElement;
+            } catch (e) {
+                try {
+                    const cdnMod = await import("https://keshavsoft.github.io/json-to-spec/dist/v23/min.js");
+                    compileFunc = cdnMod.default || cdnMod.compile || window?.ks?.jsonToSpec?.buildSpecElement;
+                } catch (e2) {
+                    console.warn("Using built-in fallback compiler engine", e2);
+                }
+            }
+        }
+
+        // Lightweight reliable compiler fallback (for offline or local file viewing)
+        function fallbackCompile(structure, data) {
+            function replaceTokens(str, context) {
+                if (typeof str !== 'string') return str;
+                return str.replace(/\$\{([^}]+)\}/g, (match, key) => {
+                    const cleanKey = key.trim();
+                    if (cleanKey === '' || cleanKey === 'value') return context?.value !== undefined ? context.value : '';
+                    if (cleanKey === 'key') return context?.key !== undefined ? context.key : '';
+                    if (cleanKey === '$number') return context?.$number !== undefined ? context.$number : '';
+                    if (context && context[cleanKey] !== undefined) return context[cleanKey];
+                    if (data && data[cleanKey] !== undefined) return data[cleanKey];
+                    return '';
+                });
+            }
+
+            function processNode(node, currentData) {
+                if (!node || typeof node !== 'object') return node;
+
+                // Handle jsonToSpec operations
+                if (node.jsonToSpec) {
+                    const op = node.jsonToSpec.operation;
+                    const sourceKey = node.jsonToSpec.source;
+                    const template = node.jsonToSpec.template;
+                    const expandedChildren = [];
+
+                    if (op === 'loopArray') {
+                        const list = (currentData && currentData[sourceKey]) ? currentData[sourceKey] : (data && data[sourceKey] ? data[sourceKey] : []);
+                        if (Array.isArray(list)) {
+                            list.forEach((item, idx) => {
+                                const ctx = typeof item === 'object' ? { ...item, $number: idx + 1, value: item } : { value: item, $number: idx + 1 };
+                                const childClone = JSON.parse(JSON.stringify(template));
+                                expandedChildren.push(processNode(childClone, ctx));
+                            });
+                        }
+                    } else if (op === 'loopObject') {
+                        const targetObj = (currentData && currentData[sourceKey]) ? currentData[sourceKey] : (currentData || {});
+                        if (typeof targetObj === 'object' && !Array.isArray(targetObj)) {
+                            let idx = 1;
+                            for (const [k, v] of Object.entries(targetObj)) {
+                                const ctx = { key: k, value: v, $number: idx++ };
+                                const childClone = JSON.parse(JSON.stringify(template));
+                                expandedChildren.push(processNode(childClone, ctx));
+                            }
+                        }
+                    }
+
+                    const newNode = { ...node };
+                    delete newNode.jsonToSpec;
+                    newNode.children = [...(node.children || []), ...expandedChildren];
+                    return processNode(newNode, currentData);
+                }
+
+                // Clone node
+                const result = { ...node };
+
+                if (result.textContent) {
+                    result.textContent = replaceTokens(result.textContent, currentData);
+                }
+
+                if (result.attributes) {
+                    const newAttrs = {};
+                    for (const [k, v] of Object.entries(result.attributes)) {
+                        newAttrs[k] = replaceTokens(v, currentData);
+                    }
+                    result.attributes = newAttrs;
+                }
+
+                if (Array.isArray(result.children)) {
+                    result.children = result.children.map(child => processNode(child, currentData));
+                }
+
+                return result;
+            }
+
+            return processNode(JSON.parse(JSON.stringify(structure)), data);
+        }
+
+        // DOM renderer from spec
+        function specToHtmlElement(spec) {
+            if (!spec || !spec.tagName) return null;
+            const el = document.createElement(spec.tagName);
+            if (spec.attributes) {
+                for (const [k, v] of Object.entries(spec.attributes)) {
+                    el.setAttribute(k, v);
+                }
+            }
+            if (spec.textContent !== undefined && spec.textContent !== null) {
+                el.textContent = spec.textContent;
+            }
+            if (Array.isArray(spec.children)) {
+                spec.children.forEach(childSpec => {
+                    const childEl = specToHtmlElement(childSpec);
+                    if (childEl) el.appendChild(childEl);
+                });
+            }
+            return el;
+        }
+
+        // Preset Configurations
+        const PRESETS = {
+            employees: {
+                data: {
+                    "columns": [
+                        { "title": "#", "field": "id" },
+                        { "title": "Employee Name", "field": "name" },
+                        { "title": "Department", "field": "department" },
+                        { "title": "Role", "field": "role" }
+                    ],
+                    "data": [
+                        { "id": "1", "name": "Karthik Raja", "department": "Engineering", "role": "Architect" },
+                        { "id": "2", "name": "Praveen Kumar", "department": "Design", "role": "UI Lead" },
+                        { "id": "3", "name": "Srinivas Rao", "department": "Product", "role": "Manager" },
+                        { "id": "4", "name": "Anita Sharma", "department": "Marketing", "role": "Strategist" }
+                    ]
+                },
+                structure: {
+                    "tagName": "table",
+                    "attributes": {
+                        "class": "table table-striped table-hover table-bordered mb-0 align-middle shadow-sm rounded-xl overflow-hidden"
+                    },
+                    "children": [
+                        {
+                            "tagName": "thead",
+                            "attributes": { "class": "table-dark" },
+                            "children": [
+                                {
+                                    "tagName": "tr",
+                                    "jsonToSpec": {
+                                        "operation": "loopArray",
+                                        "source": "columns",
+                                        "template": {
+                                            "tagName": "th",
+                                            "textContent": "${title}",
+                                            "attributes": { "class": "py-3 px-4 text-start font-semibold text-xs uppercase tracking-wider" }
+                                        }
+                                    },
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "tagName": "tbody",
+                            "jsonToSpec": {
+                                "operation": "loopArray",
+                                "source": "data",
+                                "template": {
+                                    "tagName": "tr",
+                                    "jsonToSpec": {
+                                        "operation": "loopObject",
+                                        "source": "data",
+                                        "template": {
+                                            "tagName": "td",
+                                            "textContent": "${value}",
+                                            "attributes": { "class": "py-3 px-4 text-sm" }
+                                        }
+                                    },
+                                    "children": []
+                                }
+                            },
+                            "children": []
+                        }
+                    ]
+                }
+            },
+            products: {
+                data: {
+                    "columns": [
+                        { "title": "SKU", "field": "sku" },
+                        { "title": "Product Name", "field": "name" },
+                        { "title": "Category", "field": "category" },
+                        { "title": "Price", "field": "price" }
+                    ],
+                    "data": [
+                        { "sku": "PROD-101", "name": "Mechanical Keyboard", "category": "Accessories", "price": "$129" },
+                        { "sku": "PROD-102", "name": "Ergonomic Mouse", "category": "Accessories", "price": "$79" },
+                        { "sku": "PROD-103", "name": "4K Ultra Monitor", "category": "Displays", "price": "$450" },
+                        { "sku": "PROD-104", "name": "Noise-Cancelling Headset", "category": "Audio", "price": "$199" }
+                    ]
+                },
+                structure: {
+                    "tagName": "table",
+                    "attributes": {
+                        "class": "table table-hover table-bordered mb-0 align-middle shadow-sm rounded-xl overflow-hidden"
+                    },
+                    "children": [
+                        {
+                            "tagName": "thead",
+                            "attributes": { "class": "table-primary" },
+                            "children": [
+                                {
+                                    "tagName": "tr",
+                                    "jsonToSpec": {
+                                        "operation": "loopArray",
+                                        "source": "columns",
+                                        "template": {
+                                            "tagName": "th",
+                                            "textContent": "${title}",
+                                            "attributes": { "class": "py-3 px-4 text-start font-bold text-xs uppercase" }
+                                        }
+                                    },
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "tagName": "tbody",
+                            "jsonToSpec": {
+                                "operation": "loopArray",
+                                "source": "data",
+                                "template": {
+                                    "tagName": "tr",
+                                    "jsonToSpec": {
+                                        "operation": "loopObject",
+                                        "source": "data",
+                                        "template": {
+                                            "tagName": "td",
+                                            "textContent": "${value}",
+                                            "attributes": { "class": "py-3 px-4 text-sm" }
+                                        }
+                                    },
+                                    "children": []
+                                }
+                            },
+                            "children": []
+                        }
+                    ]
+                }
+            },
+            students: {
+                data: {
+                    "columns": [
+                        { "title": "Roll #", "field": "roll" },
+                        { "title": "Student Name", "field": "student" },
+                        { "title": "Subject", "field": "subject" },
+                        { "title": "Score", "field": "score" }
+                    ],
+                    "data": [
+                        { "roll": "101", "student": "Arjun V.", "subject": "Mathematics", "score": "98%" },
+                        { "roll": "102", "student": "Divya N.", "subject": "Science", "score": "95%" },
+                        { "roll": "103", "student": "Rahul S.", "subject": "History", "score": "89%" },
+                        { "roll": "104", "student": "Meera K.", "subject": "English", "score": "92%" }
+                    ]
+                },
+                structure: {
+                    "tagName": "table",
+                    "attributes": {
+                        "class": "table table-striped table-hover mb-0 align-middle shadow-sm rounded-xl overflow-hidden"
+                    },
+                    "children": [
+                        {
+                            "tagName": "thead",
+                            "attributes": { "class": "table-success" },
+                            "children": [
+                                {
+                                    "tagName": "tr",
+                                    "jsonToSpec": {
+                                        "operation": "loopArray",
+                                        "source": "columns",
+                                        "template": {
+                                            "tagName": "th",
+                                            "textContent": "${title}",
+                                            "attributes": { "class": "py-3 px-4 text-start font-bold text-xs uppercase" }
+                                        }
+                                    },
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "tagName": "tbody",
+                            "jsonToSpec": {
+                                "operation": "loopArray",
+                                "source": "data",
+                                "template": {
+                                    "tagName": "tr",
+                                    "jsonToSpec": {
+                                        "operation": "loopObject",
+                                        "source": "data",
+                                        "template": {
+                                            "tagName": "td",
+                                            "textContent": "${value}",
+                                            "attributes": { "class": "py-3 px-4 text-sm" }
+                                        }
+                                    },
+                                    "children": []
+                                }
+                            },
+                            "children": []
+                        }
+                    ]
+                }
+            }
+        };
+
+        // Tab Switching for Chapter 2
+        let currentFileTab = 1;
+        window.switchFileTab = function(tabIndex) {
+            currentFileTab = tabIndex;
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`file-tab-${i}`);
+                const content = document.getElementById(`file-content-${i}`);
+                if (i === tabIndex) {
+                    btn.className = "px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-xs transition";
+                    content.classList.remove("hidden");
+                } else {
+                    btn.className = "px-4 py-2 text-xs font-bold rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
+                    content.classList.add("hidden");
+                }
+            }
+        };
+
+        window.copyCurrentCode = function() {
+            const pre = document.getElementById(`code-block-${currentFileTab}`);
+            if (!pre) return;
+            navigator.clipboard.writeText(pre.innerText).then(() => {
+                const textSpan = document.getElementById("copy-text");
+                const iconSpan = document.getElementById("copy-icon");
+                const oldText = textSpan.innerText;
+                textSpan.innerText = "Copied to Clipboard!";
+                iconSpan.innerText = "✅";
+                setTimeout(() => {
+                    textSpan.innerText = oldText;
+                    iconSpan.innerText = "📋";
+                }, 2000);
+            });
+        };
+
+        // Playground Tab Switching
+        window.switchEditorTab = function(type) {
+            const btnData = document.getElementById("btn-editor-data");
+            const btnStruct = document.getElementById("btn-editor-struct");
+            const textData = document.getElementById("playground-data");
+            const textStruct = document.getElementById("playground-structure");
+
+            if (type === 'data') {
+                btnData.className = "px-3 py-1 text-xs font-bold rounded-lg bg-indigo-600 text-white transition";
+                btnStruct.className = "px-3 py-1 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
+                textData.classList.remove("hidden");
+                textStruct.classList.add("hidden");
+            } else {
+                btnStruct.className = "px-3 py-1 text-xs font-bold rounded-lg bg-teal-600 text-white transition";
+                btnData.className = "px-3 py-1 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
+                textStruct.classList.remove("hidden");
+                textData.classList.add("hidden");
+            }
+        };
+
+        window.switchOutputTab = function(type) {
+            const btnTable = document.getElementById("view-tab-table");
+            const btnSpec = document.getElementById("view-tab-spec");
+            const viewTable = document.getElementById("output-view-table");
+            const viewSpec = document.getElementById("output-view-spec");
+
+            if (type === 'table') {
+                btnTable.className = "px-2.5 py-1 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-xs border border-slate-200";
+                btnSpec.className = "px-2.5 py-1 text-xs font-bold rounded-md bg-slate-200 text-slate-600 hover:bg-slate-300";
+                viewTable.classList.remove("hidden");
+                viewSpec.classList.add("hidden");
+            } else {
+                btnSpec.className = "px-2.5 py-1 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-xs border border-slate-200";
+                btnTable.className = "px-2.5 py-1 text-xs font-bold rounded-md bg-slate-200 text-slate-600 hover:bg-slate-300";
+                viewSpec.classList.remove("hidden");
+                viewTable.classList.add("hidden");
+            }
+        };
+
+        window.loadPreset = function(presetKey) {
+            const preset = PRESETS[presetKey] || PRESETS.employees;
+            document.getElementById("playground-data").value = JSON.stringify(preset.data, null, 2);
+            document.getElementById("playground-structure").value = JSON.stringify(preset.structure, null, 2);
+            runPlaygroundCompile();
+        };
+
+        window.runPlaygroundCompile = function() {
+            const statusEl = document.getElementById("compiler-status");
+            const metricsEl = document.getElementById("playground-metrics");
+            const targetEl = document.getElementById("playground-render-target");
+            const specDisplayEl = document.getElementById("playground-spec-display");
+
+            try {
+                const dataVal = JSON.parse(document.getElementById("playground-data").value);
+                const structVal = JSON.parse(document.getElementById("playground-structure").value);
+
+                const t0 = performance.now();
+                let compiledSpec = null;
+
+                if (typeof compileFunc === 'function') {
+                    try {
+                        compiledSpec = compileFunc({ specJson: structVal, dataJson: dataVal });
+                    } catch (err2) {
+                        compiledSpec = fallbackCompile(structVal, dataVal);
+                    }
+                } else {
+                    compiledSpec = fallbackCompile(structVal, dataVal);
+                }
+
+                const elapsed = (performance.now() - t0).toFixed(2);
+                metricsEl.textContent = `Compiled in ${elapsed}ms`;
+
+                // Display Spec JSON
+                specDisplayEl.textContent = JSON.stringify(compiledSpec, null, 2);
+
+                // Render into DOM
+                targetEl.innerHTML = '';
+                const domNode = specToHtmlElement(compiledSpec);
+                if (domNode) {
+                    targetEl.appendChild(domNode);
+                }
+
+                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Compiled successfully!`;
+            } catch (err) {
+                console.error(err);
+                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span> Error: ${err.message}`;
+                metricsEl.textContent = "Failed";
+            }
+        };
+
+        // 1-Click All-in-One Download Function
+        window.downloadStandaloneFile = function() {
+            const currentData = document.getElementById("playground-data").value || JSON.stringify(PRESETS.employees.data, null, 2);
+            const currentStructure = document.getElementById("playground-structure").value || JSON.stringify(PRESETS.employees.structure, null, 2);
+
+            const fileContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Standalone Table - json-to-spec</title>
+  <!-- Bootstrap 5 CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+  <div class="container py-4">
+    <div class="card shadow-sm p-4">
+      <h2 class="mb-3 fw-bold">Live Data Table</h2>
+      <p class="text-muted small">Generated automatically from structure.json + data.json using CDN tools.</p>
+      
+      <div id="table-container" class="mt-3">
+        <div class="text-center py-4 text-muted">Building table...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CDN Script Module -->
+  <script type="module">
+    // Load tools directly from CDNs
+    import buildSpecElement from "https://keshavsoft.github.io/json-to-spec/dist/v23/min.js";
+    import "https://keshavsoft.github.io/json-to-tag/dist/v4/min.js";
+
+    // Embedded Data and Structure
+    const structure = ${currentStructure};
+    const data = ${currentData};
+
+    try {
+      // 1. Compile structure + data into a spec
+      const spec = buildSpecElement({ specJson: structure, dataJson: data });
+
+      // 2. Render to real HTML element
+      const element = window.ks.jsonToTag.buildSpecElement(spec);
+
+      // 3. Place on the page
+      const container = document.getElementById('table-container');
+      container.innerHTML = '';
+      container.appendChild(element);
+    } catch (e) {
+      document.getElementById('table-container').innerHTML = 
+        '<div class="alert alert-danger">Error rendering table: ' + e.message + '</div>';
+    }
+  <\/script>
+</body>
+</html>`;
+
+            const blob = new Blob([fileContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'table-starter.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        // Attach download button in hero
+        document.getElementById("btn-download-starter")?.addEventListener("click", window.downloadStandaloneFile);
+
+        // Initialize on load
+        async function start() {
+            await loadCompiler();
+            loadPreset('employees');
+        }
+
+        start();
+    </script>
+</body>
+</html>
