@@ -1,481 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>json-to-tag • Browser Documentation</title>
-  <meta name="description" content="Browser-first documentation for json-to-tag using CDN.">
-  <style>
-    :root {
-      --bg: #f5f7fb;
-      --card: #fff;
-      --text: #172033;
-      --muted: #667085;
-      --primary: #635bff;
-      --dark: #101828;
-      --border: #e6eaf0;
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      line-height: 1.6
-    }
-
-    nav {
-      height: 68px;
-      background: rgba(255, 255, 255, .92);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 7%;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(12px)
-    }
-
-    .logo {
-      font-weight: 800;
-      font-size: 20px
-    }
-
-    .logo span {
-      color: var(--primary)
-    }
-
-    .navlinks {
-      display: flex;
-      gap: 22px;
-      font-size: 14px
-    }
-
-    .navlinks a {
-      color: var(--muted);
-      text-decoration: none
-    }
-
-    .hero {
-      padding: 90px 7% 70px;
-      background: linear-gradient(135deg, #f8f9ff, #eef2ff)
-    }
-
-    .hero-grid {
-      max-width: 1120px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 55px;
-      align-items: center
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: #e9e7ff;
-      color: #5148d8;
-      font-size: 12px;
-      font-weight: 700
-    }
-
-    h1 {
-      font-size: 56px;
-      line-height: 1.05;
-      margin: 18px 0
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: var(--muted);
-      max-width: 650px
-    }
-
-    .buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 28px
-    }
-
-    .btn {
-      padding: 12px 18px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px
-    }
-
-    .primary {
-      background: var(--primary);
-      color: #fff
-    }
-
-    .secondary {
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--text)
-    }
-
-    .flow {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 20px 50px #34405418
-    }
-
-    .flow div {
-      padding: 14px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin: 9px 0;
-      text-align: center;
-      font-weight: 700
-    }
-
-    .flow .arrow {
-      border: 0;
-      padding: 0;
-      color: var(--primary)
-    }
-
-    main {
-      max-width: 1120px;
-      margin: 55px auto;
-      padding: 0 22px
-    }
-
-    section {
-      margin-bottom: 65px
-    }
-
-    h2 {
-      font-size: 30px;
-      margin-bottom: 10px
-    }
-
-    h3 {
-      margin-top: 0
-    }
-
-    .lead {
-      color: var(--muted)
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      padding: 24px
-    }
-
-    .card p {
-      color: var(--muted);
-      font-size: 14px
-    }
-
-    .code {
-      background: #0b1220;
-      color: #dbe4ff;
-      padding: 20px;
-      border-radius: 12px;
-      overflow: auto;
-      font: 14px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace
-    }
-
-    .callout {
-      background: #eef2ff;
-      border-left: 4px solid var(--primary);
-      padding: 18px;
-      border-radius: 8px;
-      margin: 20px 0
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden
-    }
-
-    th,
-    td {
-      text-align: left;
-      padding: 14px;
-      border-bottom: 1px solid var(--border)
-    }
-
-    th {
-      background: #f8f9fc
-    }
-
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 30px 7%;
-      color: var(--muted);
-      text-align: center
-    }
-
-    @media(max-width:800px) {
-
-      .hero-grid,
-      .grid {
-        grid-template-columns: 1fr
-      }
-
-      h1 {
-        font-size: 42px
-      }
-
-      .navlinks {
-        display: none
-      }
-    }
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>json-to-tag — Browser Architecture</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <nav>
-    <div class="logo">json-to<span>tag</span></div>
-    <div class="navlinks">
-      <a href="#start">Start</a><a href="#cdn">CDN</a><a href="#spec">Specification</a>
-      <a href="#flow">Architecture</a><a href="#examples">Examples</a><a
-        href="./Build_DOM_from_data/index.html">Build_DOM_from_data</a>
-    </div>
-  </nav>
-
-  <header class="hero">
-    <div class="hero-grid">
-      <div>
-        <span class="badge">BROWSER-FIRST DOCUMENTATION</span>
-        <h1>JSON to<br>Native DOM.</h1>
-        <p>Define UI elements as JSON and convert them into real browser DOM elements using <strong>json-to-tag</strong>
-          loaded directly through a CDN.</p>
-        <div class="buttons">
-          <a class="btn primary" href="#start">Get Started</a>
-          <a class="btn secondary" href="https://github.com/keshavsoft/json-to-tag" target="_blank">View Repository</a>
+    <nav>
+        <div class="wrap navin"><a class="brand" href="index.html">json-to-tag / docs</a>
+            <div class="navlinks"></div>
         </div>
-      </div>
-      <div class="flow">
-        <div>JSON Specification</div>
-        <div class="arrow">↓</div>
-        <div>CDN Library</div>
-        <div class="arrow">↓</div>
-        <div>buildSpecElement()</div>
-        <div class="arrow">↓</div>
-        <div>Native DOM Element</div>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <section id="start">
-      <h2>Start Here</h2>
-      <p class="lead">The complete browser workflow in three steps.</p>
-      <div class="grid">
-        <div class="card">
-          <h3>01 · Load</h3>
-          <p>Load the browser build using a script tag.</p>
+    </nav>
+    <main>
+        <div class="wrap"><span class="eyebrow">BROWSER + CDN</span><span class="badge">v4 engine • source-mapped •
+                non-repeating documentation</span>
+            <h1>JSON to Native DOM</h1>
+            <p class="lead">Start from a visible UI, split it into small DOM elements, describe those elements as JSON,
+                and follow the browser build path to the native DOM.</p>
+            <div class="flow"><span class="node">UI piece</span><span class="arrow">→</span><span class="node">JSON
+                    spec</span><span class="arrow">→</span><span class="node">buildSpecElement()</span><span
+                    class="arrow">→</span><span class="node">DOM node</span></div>
+            <h2>Documentation map</h2>
+            <div class="grid">
+                <div class="card"><b>01 · UI Model</b>
+                    <p>UI → small specification pieces.</p><a href="01-ui-model.html">Open →</a>
+                </div>
+                <div class="card"><b>02 · Spec → DOM</b>
+                    <p>Public API and dispatch path.</p><a href="02-spec-to-dom.html">Open →</a>
+                </div>
+                <div class="card"><b>03 · Builder</b>
+                    <p>Six stages that assemble one element.</p><a href="03-element-builder.html">Open →</a>
+                </div>
+                <div class="card"><b>04 · Children</b>
+                    <p>Nested specifications become a tree.</p><a href="04-children.html">Open →</a>
+                </div>
+                <div class="card"><b>05 · Runtime</b>
+                    <p>CDN and browser global.</p><a href="05-browser-runtime.html">Open →</a>
+                </div>
+                <div class="card"><b>06–08</b>
+                    <p>Complete example, debugging, reference.</p><a href="06-complete-example.html">Open →</a>
+                </div>
+            </div>
         </div>
-        <div class="card">
-          <h3>02 · Define</h3>
-          <p>Create a serializable JSON specification for your element.</p>
-        </div>
-        <div class="card">
-          <h3>03 · Render</h3>
-          <p>Build the specification and append the returned DOM element.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="cdn">
-      <h2>CDN Usage</h2>
-      <p class="lead">No package installation or bundler is required for the browser workflow.</p>
-      <div class="code">&lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;
-      </div>
-      <div class="callout"><strong>Browser API:</strong> after the library is loaded, the browser global is available
-        through <code>window.ks.jsonToTag</code>.</div>
-      <div class="code">&lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;
-
-        &lt;script&gt;
-        const element =
-        window.ks.jsonToTag.buildSpecElement(spec);
-
-        document
-        .getElementById("app")
-        .appendChild(element);
-        &lt;/script&gt;</div>
-    </section>
-
-    <section id="spec">
-      <h2>JSON Specification</h2>
-      <p class="lead">A specification describes the DOM element that should be created.</p>
-      <table>
-        <tr>
-          <th>Property</th>
-          <th>Purpose</th>
-          <th>Example</th>
-        </tr>
-        <tr>
-          <td>tagName</td>
-          <td>HTML element to create</td>
-          <td>"button"</td>
-        </tr>
-        <tr>
-          <td>textContent</td>
-          <td>Text inside the element</td>
-          <td>"Save"</td>
-        </tr>
-        <tr>
-          <td>classList</td>
-          <td>CSS classes</td>
-          <td>"btn btn-primary"</td>
-        </tr>
-        <tr>
-          <td>attributes</td>
-          <td>HTML attributes</td>
-          <td>{ type: "button" }</td>
-        </tr>
-        <tr>
-          <td>properties</td>
-          <td>DOM properties</td>
-          <td>{ value: "John" }</td>
-        </tr>
-        <tr>
-          <td>children</td>
-          <td>Nested specifications</td>
-          <td>[ ... ]</td>
-        </tr>
-      </table>
-    </section>
-
-    <section id="flow">
-      <h2>Browser Architecture</h2>
-      <p class="lead">The runtime flow from JSON data to a native DOM node.</p>
-      <div class="code">JSON Specification
-        │
-        ▼
-        buildSpecElement(spec)
-        │
-        ▼
-        buildSpec()
-        │
-        ├── Single specification
-        │ └── Element Builder
-        │
-        ├── Array specification
-        │ └── Build each item
-        │
-        └── Existing DOM Node
-        └── Reuse Node
-        │
-        ▼
-        Native DOM Element
-        │
-        ▼
-        document.append(...)</div>
-    </section>
-
-    <section id="examples">
-      <h2>Complete Browser Example</h2>
-      <p class="lead">A complete page using only HTML, JavaScript, and the CDN build.</p>
-      <div class="code">&lt;!DOCTYPE html&gt;
-        &lt;html&gt;
-        &lt;body&gt;
-
-        &lt;div id="app"&gt;&lt;/div&gt;
-
-        &lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;
-
-        &lt;script&gt;
-        const spec = {
-        tagName: "button",
-        textContent: "Click Me",
-        classList: "btn btn-primary",
-        attributes: {
-        type: "button"
-        }
-        };
-
-        const button =
-        window.ks.jsonToTag.buildSpecElement(spec);
-
-        document
-        .getElementById("app")
-        .appendChild(button);
-        &lt;/script&gt;
-
-        &lt;/body&gt;
-        &lt;/html&gt;</div>
-    </section>
-
-    <section>
-      <h2>Nested UI</h2>
-      <p class="lead">Specifications can contain children, allowing complete UI structures to be described as JSON.</p>
-      <div class="code">const spec = {
-        tagName: "div",
-        classList: "card",
-        children: [
-        {
-        tagName: "h2",
-        textContent: "User Profile"
-        },
-        {
-        tagName: "p",
-        textContent: "Created from JSON."
-        },
-        {
-        tagName: "button",
-        textContent: "Open"
-        }
-        ]
-        };
-
-        const card =
-        window.ks.jsonToTag.buildSpecElement(spec);
-
-        document.getElementById("app").appendChild(card);</div>
-    </section>
-
-    <section>
-      <h2>Documentation Map</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Getting Started</h3>
-          <p>Browser setup and first render.</p>
-        </div>
-        <div class="card">
-          <h3>Specification</h3>
-          <p>Properties and JSON structure.</p>
-        </div>
-        <div class="card">
-          <h3>Examples</h3>
-          <p>Buttons, cards, forms and nested UI.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <strong>@keshavsoft/json-to-tag</strong><br>
-    Browser documentation · CDN workflow
-  </footer>
+    </main>
+    <footer>
+        <div class="wrap">json-to-tag • Browser-first documentation</div>
+    </footer>
 </body>
 
 </html>
