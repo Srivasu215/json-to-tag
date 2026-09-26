@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>json-to-tag — Browser Architecture</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin"><a class="brand" href="index.html">json-to-tag / docs</a>
+      <div class="navlinks"></div>
+    </div>
+  </nav>
+  <main>
+    <div class="wrap"><span class="eyebrow">BROWSER + CDN</span><span class="badge">v4 engine • source-mapped •
+        non-repeating documentation</span>
+      <h1>JSON to Native DOM</h1>
+      <p class="lead">Start from a visible UI, split it into small DOM elements, describe those elements as JSON, and
+        follow the browser build path to the native DOM.</p>
+      <div class="flow"><span class="node">UI piece</span><span class="arrow">→</span><span class="node">JSON
+          spec</span><span class="arrow">→</span><span class="node">buildSpecElement()</span><span
+          class="arrow">→</span><span class="node">DOM node</span></div>
+      <h2>Documentation map</h2>
+      <div class="grid">
+        <div class="card"><b>01 · UI Model</b>
+          <p>UI → small specification pieces.</p><a href="01-ui-model.html">Open →</a>
+        </div>
+        <div class="card"><b>02 · Spec → DOM</b>
+          <p>Public API and dispatch path.</p><a href="02-spec-to-dom.html">Open →</a>
+        </div>
+        <div class="card"><b>03 · Builder</b>
+          <p>Six stages that assemble one element.</p><a href="03-element-builder.html">Open →</a>
+        </div>
+        <div class="card"><b>04 · Children</b>
+          <p>Nested specifications become a tree.</p><a href="04-children.html">Open →</a>
+        </div>
+        <div class="card"><b>05 · Runtime</b>
+          <p>CDN and browser global.</p><a href="05-browser-runtime.html">Open →</a>
+        </div>
+        <div class="card"><b>06–08</b>
+          <p>Complete example, debugging, reference.</p><a href="06-complete-example.html">Open →</a>
+        </div>
+      </div>
+      <h2>HTML → Label → Test Content → DOM</h2>
+      <p class="lead">Compare the original HTML piece with the same piece built through the browser CDN. Each card has
+        its own browser output, so the visual result can be compared directly.</p>
+
+      <div class="grid2">
+        <div class="card">
+          <span class="num">01 · ORIGINAL HTML</span>
+          <h3>Original HTML piece</h3>
+          <div class="code">
+            <pre>&lt;div id="test-content"&gt;
+  &lt;label&gt;Name&lt;/label&gt;
+  &lt;p&gt;Test Content&lt;/p&gt;
+&lt;/div&gt;</pre>
+          </div>
+
+          <h3 style="margin-top:20px">Browser Output</h3>
+          <div class="ui">
+            <div class="mini">
+              <label style="display:block;font-weight:700;margin-bottom:6px">Name</label>
+              <p style="margin:0">Test Content</p>
+            </div>
+          </div>
+          <p><a href="09-original-html.html">Open this HTML example →</a></p>
+        </div>
+
+        <div class="card">
+          <span class="num">02 · CDN BUILD</span>
+          <h3>Build the same piece</h3>
+          <div class="code" style="position:relative">
+            <button class="copy-btn" data-copy-target="build-code">Copy code</button>
+            <pre id="build-code">&lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;
+
+const spec = {
+  tagName: "div",
+  attributes: { id: "test-content" },
+  children: [
+    { tagName: "label", textContent: "Name" },
+    { tagName: "p", textContent: "Test Content" }
+  ]
+};
+
+const element =
+  window.ks.jsonToTag.buildSpecElement(spec);
+
+document.querySelector("#build-output")
+  .replaceChildren(element);</pre>
+          </div>
+
+          <h3 style="margin-top:20px">Browser Output</h3>
+          <div id="build-output" class="ui">
+            <div class="mini">
+              <label style="display:block;font-weight:700;margin-bottom:6px">Name</label>
+              <p style="margin:0">Test Content</p>
+            </div>
+          </div>
+          <p><a href="10-build-same-piece.html">Open the CDN build example →</a></p>
+        </div>
+      </div>
+
+      <div class="callout">
+        Two cards, two outputs: the left card shows the original HTML result; the right card shows the result produced
+        by <code>json-to-tag</code> through CDN. The output is intentionally identical so the build process is easy to
+        understand.
+      </div>
+
+      <script>
+        (function () {
+          const spec = {
+            tagName: "div",
+            attributes: { id: "test-content" },
+            children: [
+              {
+                tagName: "label",
+                textContent: "Name",
+                properties: {
+                  style: "display:block;font-weight:700;margin-bottom:6px"
+                }
+              },
+              { tagName: "p", textContent: "Test Content" }
+            ]
+          };
+
+          const output = document.querySelector("#build-output");
+
+          function render() {
+            if (!output || !window.ks?.jsonToTag?.buildSpecElement) return;
+            output.replaceChildren(window.ks.jsonToTag.buildSpecElement(spec));
+          }
+
+          if (window.ks?.jsonToTag?.buildSpecElement) {
+            render();
+          } else {
+            const script = document.createElement("script");
+            script.src = "https://keshavsoft.github.io/json-to-tag/dist/v4/min.js";
+            script.onload = render;
+            document.head.appendChild(script);
+          }
+
+          document.querySelectorAll(".copy-btn").forEach(button => {
+            button.addEventListener("click", async () => {
+              const target = document.getElementById(button.dataset.copyTarget);
+              if (!target) return;
+              const source = target.textContent;
+              try {
+                await navigator.clipboard.writeText(source);
+                button.textContent = "Copied!";
+                setTimeout(() => button.textContent = "Copy code", 1400);
+              } catch {
+                button.textContent = "Copy failed";
+                setTimeout(() => button.textContent = "Copy code", 1400);
+              }
+            });
+          });
+        })();
+      </script>
+
+    </div>
+  </main>
+  <footer>
+    <div class="wrap">json-to-tag • Browser-first documentation</div>
+  </footer>
+</body>
+
+</html>

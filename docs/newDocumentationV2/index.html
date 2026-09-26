@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>json-to-tag — Browser Architecture</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav>
+        <div class="wrap navin"><a class="brand" href="index.html">json-to-tag / docs</a>
+            <div class="navlinks"></div>
+        </div>
+    </nav>
+    <main>
+        <div class="wrap"><span class="eyebrow">BROWSER + CDN</span><span class="badge">v4 engine • source-mapped •
+                non-repeating documentation</span>
+            <h1>JSON to Native DOM</h1>
+            <p class="lead">Start from a visible UI, split it into small DOM elements, describe those elements as JSON,
+                and follow the browser build path to the native DOM.</p>
+            <div class="flow"><span class="node">UI piece</span><span class="arrow">→</span><span class="node">JSON
+                    spec</span><span class="arrow">→</span><span class="node">buildSpecElement()</span><span
+                    class="arrow">→</span><span class="node">DOM node</span></div>
+            <h2>Documentation map</h2>
+            <div class="grid">
+                <div class="card"><b>01 · UI Model</b>
+                    <p>UI → small specification pieces.</p><a href="01-ui-model.html">Open →</a>
+                </div>
+                <div class="card"><b>02 · Spec → DOM</b>
+                    <p>Public API and dispatch path.</p><a href="02-spec-to-dom.html">Open →</a>
+                </div>
+                <div class="card"><b>03 · Builder</b>
+                    <p>Six stages that assemble one element.</p><a href="03-element-builder.html">Open →</a>
+                </div>
+                <div class="card"><b>04 · Children</b>
+                    <p>Nested specifications become a tree.</p><a href="04-children.html">Open →</a>
+                </div>
+                <div class="card"><b>05 · Runtime</b>
+                    <p>CDN and browser global.</p><a href="05-browser-runtime.html">Open →</a>
+                </div>
+                <div class="card"><b>06–08</b>
+                    <p>Complete example, debugging, reference.</p><a href="06-complete-example.html">Open →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="wrap">json-to-tag • Browser-first documentation</div>
+    </footer>
+</body>
+
+</html>
