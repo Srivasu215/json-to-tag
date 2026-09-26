@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>json-to-tag — Documentation</title>
+<meta name="description" content="A guided documentation site for @keshavsoft/json-to-tag.">
+<style>
+:root{--bg:#09111f;--panel:#101b2e;--panel2:#14223a;--text:#e8eef8;--muted:#9aabc3;--line:#263752;--accent:#66e3c4;--accent2:#78a9ff;--code:#07101d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#09111f 0,#0c1526 55%,#09111f 100%);color:var(--text);font:15px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}.wrap{max-width:1160px;margin:auto;padding:0 22px}
+header{position:sticky;top:0;z-index:10;background:rgba(9,17,31,.86);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-weight:800;letter-spacing:-.02em;font-size:18px}.brand span{color:var(--accent)}.navlinks{display:flex;gap:18px;flex-wrap:wrap;font-size:13px}.navlinks a{color:#cdd8e8}
+.hero{padding:88px 0 64px;display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:end}.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800}.hero h1{font-size:clamp(42px,7vw,76px);line-height:1.02;margin:13px 0 22px;letter-spacing:-.055em}.hero p{max-width:720px;font-size:19px;color:#b5c4d9;margin:0}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:12px;padding:11px 15px;font-weight:700}.btn.primary{background:var(--accent);color:#07131a;border-color:var(--accent)}.btn.secondary{background:var(--panel);color:var(--text)}
+.hero-card{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 25px 70px rgba(0,0,0,.22)}
+.stat{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.stat:last-child{border-bottom:0}.stat b{color:white}.stat span{color:var(--muted)}
+main{padding-bottom:80px}.section{padding:40px 0;border-top:1px solid rgba(255,255,255,.07)}.section h2{font-size:30px;margin:0 0 10px;letter-spacing:-.025em}.lead{color:var(--muted);max-width:800px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}.card{background:rgba(16,27,46,.76);border:1px solid var(--line);border-radius:18px;padding:20px}.card h3{margin:0 0 7px;font-size:17px}.card p{margin:0;color:var(--muted);font-size:14px}.pill{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:999px;color:#bed0e9;font-size:12px;margin-bottom:12px}
+pre{background:var(--code);border:1px solid var(--line);border-radius:14px;padding:18px;overflow:auto;color:#dce9f8}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:24px}.flow div{background:var(--panel);border:1px solid var(--line);padding:16px;border-radius:14px;position:relative}.flow strong{display:block;margin-bottom:5px}.flow span{font-size:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin-top:20px;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}th{color:#cbd7e9;font-size:13px}td{color:#9fb0c7}td:first-child{color:white;font-weight:700}
+footer{border-top:1px solid rgba(255,255,255,.07);padding:32px 0 45px;color:var(--muted);font-size:13px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:620px){.navlinks{display:none}.grid,.flow{grid-template-columns:1fr}.hero{padding-top:55px}.hero h1{font-size:48px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+  <a class="brand" href="#"><span>json</span>-to-tag</a>
+  <nav class="navlinks">
+    <a href="#start">Start</a><a href="#spec">Spec</a><a href="#architecture">Architecture</a><a href="#review">Review</a><a href="#catalog">Catalog</a>
+  </nav>
+</div></header>
+
+<div class="wrap">
+<section class="hero">
+  <div>
+    <div class="eyebrow">Documentation • current v4 source</div>
+    <h1>Build DOM from data.</h1>
+    <p><strong>@keshavsoft/json-to-tag</strong> turns a JSON specification into native DOM nodes, while keeping the rendering pipeline small, explicit, and easy to inspect.</p>
+    <div class="actions">
+      <a class="btn primary" href="#start">Start here</a>
+      <a class="btn secondary" target="_blank" href="https://github.com/keshavsoft/json-to-tag">GitHub ↗</a>
+      <a class="btn secondary" target="_blank" href="https://keshavsoft.github.io/json-to-tag/playground/index.html">Playground ↗</a>
+    </div>
+  </div>
+  <aside class="hero-card">
+    <div class="stat"><span>Primary API</span><b>buildSpecElement</b></div>
+    <div class="stat"><span>Secondary API</span><b>reviewSpec</b></div>
+    <div class="stat"><span>Builder design</span><b>6 stages</b></div>
+    <div class="stat"><span>Composition</span><b>Recursive children</b></div>
+  </aside>
+</section>
+
+<main>
+<section class="section" id="start">
+  <h2>Start in two minutes</h2>
+  <p class="lead">Install the package, describe a button as data, build it, and append the resulting element.</p>
+  <pre><code>npm install @keshavsoft/json-to-tag</code></pre>
+  <pre><code>import { buildSpecElement } from "@keshavsoft/json-to-tag";
+
+const spec = {
+  tagName: "button",
+  classList: "btn btn-primary",
+  textContent: "Save",
+  attributes: { type: "button" }
+};
+
+const button = buildSpecElement({ inSpec: spec });
+document.body.appendChild(button);</code></pre>
+  <div class="grid">
+    <article class="card"><span class="pill">01 · Describe</span><h3>Write a spec</h3><p>Use JSON-like data instead of hand-building each DOM node.</p></article>
+    <article class="card"><span class="pill">02 · Compile</span><h3>Call the builder</h3><p>The dispatcher determines whether the input is a single spec, array, or existing node.</p></article>
+    <article class="card"><span class="pill">03 · Render</span><h3>Get native DOM</h3><p>The result can be appended to the document like any other DOM node.</p></article>
+  </div>
+</section>
+
+<section class="section" id="spec">
+  <h2>The specification model</h2>
+  <p class="lead">Six fields cover the core DOM responsibilities: element type, text, classes, attributes, properties, and children.</p>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td>tagName</td><td>string</td><td>HTML element name</td></tr>
+      <tr><td>textContent</td><td>string | number</td><td>Direct text content</td></tr>
+      <tr><td>classList</td><td>string | string[]</td><td>CSS classes</td></tr>
+      <tr><td>attributes</td><td>object</td><td>HTML attributes</td></tr>
+      <tr><td>properties</td><td>object</td><td>Direct DOM property assignment</td></tr>
+      <tr><td>children</td><td>array</td><td>Nested specs, text, nodes, or nested arrays</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="architecture">
+  <h2>How the engine works</h2>
+  <p class="lead">The current v4 implementation follows a readable pipeline rather than hiding all behavior in one function.</p>
+  <div class="flow">
+    <div><strong>Normalize</strong><span>Resolve spec / inSpec / direct input</span></div>
+    <div><strong>Dispatch</strong><span>Null, Node, Array, or spec</span></div>
+    <div><strong>Build</strong><span>Create one element</span></div>
+    <div><strong>Apply</strong><span>Run six builder stages</span></div>
+    <div><strong>Recurse</strong><span>Compile children</span></div>
+  </div>
+  <div class="grid">
+    <article class="card"><span class="pill">Stage 0</span><h3>Create element</h3><p><code>0.createElement.js</code> creates the element and contains the <code>checkbox</code> alias.</p></article>
+    <article class="card"><span class="pill">Stage 1–2</span><h3>Text + properties</h3><p>Direct text is applied, then JavaScript properties are assigned to the DOM object.</p></article>
+    <article class="card"><span class="pill">Stage 3–4</span><h3>Attributes + classes</h3><p>Attributes use HTML attribute operations; classes are normalized and added through <code>classList</code>.</p></article>
+    <article class="card"><span class="pill">Stage 5</span><h3>Append children</h3><p>Child nodes and primitive text are appended after recursive child resolution.</p></article>
+  </div>
+</section>
+
+<section class="section" id="review">
+  <h2>Review without rendering</h2>
+  <p class="lead"><code>reviewSpec</code> provides a separate path for analyzing a specification against the repository's tag catalog.</p>
+  <pre><code>import { reviewSpec } from "@keshavsoft/json-to-tag";
+
+const result = reviewSpec({ inSpec: {
+  tagName: "div",
+  children: [
+    { tagName: "h1", textContent: "Dashboard" },
+    { tagName: "button", textContent: "Open" }
+  ]
+}});
+
+console.log(result.totalTags);
+console.log(result.tagCounts);
+console.log(result.areAllTagsPresent);
+console.log(result.unrecognizedTags);</code></pre>
+</section>
+
+<section class="section" id="catalog">
+  <h2>Explore the catalog</h2>
+  <p class="lead">The repository's documentation site turns the catalog into a practical authoring reference and review workspace.</p>
+  <div class="grid">
+    <a class="card" target="_blank" href="https://keshavsoft.github.io/json-to-tag/tags/index.html"><span class="pill">Reference</span><h3>Tags catalog ↗</h3><p>Browse catalog definitions and usage rules.</p></a>
+    <a class="card" target="_blank" href="https://keshavsoft.github.io/json-to-tag/tags/individualTags/index.html"><span class="pill">Deep dive</span><h3>Individual tags ↗</h3><p>Inspect tag-specific documentation pages.</p></a>
+    <a class="card" target="_blank" href="https://keshavsoft.github.io/json-to-tag/summary/index.html"><span class="pill">Validation</span><h3>Review hub ↗</h3><p>Inspect tag usage and recognition results.</p></a>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Documentation path</h2>
+  <div class="grid">
+    <a class="card" href="getting-started.md"><span class="pill">01</span><h3>Getting Started</h3><p>Install the package and render your first element.</p></a>
+    <a class="card" href="specification.md"><span class="pill">02</span><h3>Specification</h3><p>Learn every field and composition rule.</p></a>
+    <a class="card" href="architecture.md"><span class="pill">03</span><h3>Architecture</h3><p>Follow the dispatcher and staged builder.</p></a>
+    <a class="card" href="review.md"><span class="pill">04</span><h3>Review API</h3><p>Analyze specifications before rendering.</p></a>
+    <a class="card" href="catalog.md"><span class="pill">05</span><h3>Catalog</h3><p>Use the repository's tag reference.</p></a>
+    <a class="card" href="examples.md"><span class="pill">06</span><h3>Examples</h3><p>See buttons, forms, cards, and data-driven UI.</p></a>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+<strong>@keshavsoft/json-to-tag</strong> · Documentation redesign<br>
+<a href="https://github.com/keshavsoft/json-to-tag">GitHub</a> ·
+<a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag">NPM</a> ·
+<a href="https://keshavsoft.github.io/json-to-tag/">Current docs</a>
+</div></footer>
+</div>
+</body>
+</html>
