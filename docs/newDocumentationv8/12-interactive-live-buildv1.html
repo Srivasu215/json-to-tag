@@ -202,101 +202,25 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      height: 410px;
-      min-height: 380px;
-    }
-
-    .editor-workspace {
-      display: flex;
-      flex: 1;
-      height: 100%;
-      min-height: 100%;
-      background: #050e18;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .editor-gutter {
-      width: 52px;
-      min-width: 52px;
-      background: #071322;
-      border-right: 1px solid #162c47;
-      padding: 14px 4px 14px 2px;
-      user-select: none;
-      overflow-y: hidden;
-      overflow-x: hidden;
-      box-sizing: border-box;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 13px;
-      line-height: 25px;
-      color: #486585;
-    }
-
-    .gutter-row {
-      height: 25px;
-      line-height: 25px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 3px;
-      box-sizing: border-box;
-    }
-
-    .gutter-num {
-      font-size: 12px;
-      color: #55789f;
-      min-width: 22px;
-      text-align: right;
-    }
-
-    .gutter-fold-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 15px;
-      height: 15px;
-      font-size: 9px;
-      line-height: 1;
-      cursor: pointer;
-      color: #64d7ff;
-      border-radius: 3px;
-      background: transparent;
-      border: none;
-      padding: 0;
-      transition: all 0.15s ease;
-      user-select: none;
-    }
-
-    .gutter-fold-btn:hover {
-      background: #14355a;
-      color: #ffffff;
-      transform: scale(1.15);
-    }
-
-    .gutter-fold-placeholder {
-      width: 15px;
-      height: 15px;
-      display: inline-block;
     }
 
     #spec-editor {
-      flex: 1;
-      height: 100%;
-      min-height: 100%;
+      width: 100%;
+      height: 410px;
+      min-height: 380px;
       background: #050e18;
       color: #d4e5f7;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 15.5px;
-      line-height: 25px;
-      padding: 14px 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      padding: 14px;
       border: none;
-      resize: none;
+      resize: vertical;
       outline: none;
       box-sizing: border-box;
       tab-size: 2;
       display: block;
-      white-space: pre;
-      overflow: auto;
+      flex: 1;
     }
 
     #spec-editor:focus {
@@ -409,45 +333,31 @@
       height: 410px;
       min-height: 380px;
       overflow-y: auto;
-      padding: 16px;
-      background: #ffffff;
+      padding: 14px;
+      background: #050e18;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
     }
 
-    .stage-output-wrap::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
-    }
-
-    .stage-output-wrap::-webkit-scrollbar-track {
-      background: #f8fafc;
-    }
-
-    .stage-output-wrap::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
-    }
-
-    .stage-output-wrap::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-
+    .stage-output-wrap::-webkit-scrollbar,
     #spec-editor::-webkit-scrollbar {
       width: 7px;
       height: 7px;
     }
 
+    .stage-output-wrap::-webkit-scrollbar-track,
     #spec-editor::-webkit-scrollbar-track {
       background: #050e18;
     }
 
+    .stage-output-wrap::-webkit-scrollbar-thumb,
     #spec-editor::-webkit-scrollbar-thumb {
       background: #1b3554;
       border-radius: 4px;
     }
 
+    .stage-output-wrap::-webkit-scrollbar-thumb:hover,
     #spec-editor::-webkit-scrollbar-thumb:hover {
       background: #274d7a;
     }
@@ -456,15 +366,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 10px;
     }
 
     .pane-title {
       font-size: 11px;
       font-weight: 800;
-      color: #64748b;
+      color: #8bb5e0;
       text-transform: uppercase;
       letter-spacing: .08em;
       margin: 0;
@@ -473,9 +381,9 @@
     .stage-badge-tag {
       font-size: 10px;
       font-weight: 700;
-      color: #0369a1;
-      background: #e0f2fe;
-      border: 1px solid #bae6fd;
+      color: #64d7ff;
+      background: #092138;
+      border: 1px solid #1a4269;
       border-radius: 4px;
       padding: 2px 7px;
       letter-spacing: .04em;
@@ -486,17 +394,16 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: #ffffff;
     }
 
     .placeholder-box {
       flex: 1;
-      border: 2px dashed #cbd5e1;
+      border: 2px dashed #1c3552;
       border-radius: 10px;
-      padding: 28px 16px;
+      padding: 24px 16px;
       text-align: center;
-      color: #64748b;
-      background: #f8fafc;
+      color: var(--m);
+      background: #071322;
       min-height: 260px;
       display: flex;
       flex-direction: column;
@@ -505,21 +412,21 @@
     }
 
     .placeholder-icon {
-      font-size: 28px;
-      margin-bottom: 8px;
-      color: #94a3b8;
+      font-size: 26px;
+      margin-bottom: 6px;
+      color: #486a91;
     }
 
     .placeholder-box p {
       margin: 0 0 6px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
-      color: #1e293b;
+      color: #9cb5d1;
     }
 
     .placeholder-box small {
-      font-size: 13px;
-      color: #64748b;
+      font-size: 12px;
+      color: #5c799a;
       max-width: 320px;
       line-height: 1.4;
     }
@@ -527,53 +434,29 @@
     .built-card,
     .preview2 {
       background: #ffffff;
-      color: #0f172a;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 18px 20px;
+      color: #152235;
+      border-radius: 9px;
+      padding: 14px 16px;
       width: 100%;
       box-sizing: border-box;
       animation: fadeInScale 0.25s ease-out;
-      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
-      font-size: 15px;
-      line-height: 1.6;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     }
 
     .built-card label,
     .preview2 label {
       display: block;
-      font-size: 15px;
+      font-size: 12px;
       font-weight: 700;
-      margin-bottom: 6px;
-      color: #0f172a;
+      margin-bottom: 5px;
+      color: #152235;
     }
 
     .built-card p,
     .preview2 p {
       margin: 0;
-      font-size: 15px;
-      line-height: 1.55;
-      color: #334155;
-    }
-
-    .built-card h1,
-    .built-card h2,
-    .built-card h3,
-    .built-card h4 {
-      color: #0f2744;
-      margin-top: 0;
-      margin-bottom: 12px;
-      font-size: 18px;
-    }
-
-    .built-card input,
-    .built-card select,
-    .built-card textarea {
-      font-size: 15px;
-    }
-
-    .built-card button {
-      font-size: 14.5px;
+      font-size: 12px;
+      color: #6e86a2;
     }
 
     @keyframes fadeInScale {
@@ -591,13 +474,27 @@
 </head>
 
 <body>
+  <nav>
+    <div class="wrap navin">
+      <div style="display: flex; align-items: center; gap: 8px; margin-right: auto; flex-wrap: wrap;">
+        <a class="brand" href="index.html" style="margin-right: 0;">json-to-tag / docs</a>
+        <span style="color: #2a476e; font-weight: 400;">/</span>
+        <span style="color: var(--a); font-size: 12px; font-weight: 800; letter-spacing: .08em;">12 · INTERACTIVE DEMO</span>
+      </div>
+      <div class="navlinks">
+        <a href="11-vanilla-javascript.html">Previous</a>
+        <a href="Documentation.html">Documentation</a>
+        <a href="index.html">Home</a>
+      </div>
+    </div>
+  </nav>
+
   <main>
     <div class="wrap">
       <div class="demo-header">
         <h1>Interactive Live Build Demo</h1>
         <p class="lead">
-          Edit your JSON specification or choose a preset on the left, and build native browser DOM elements live on the
-          right.
+          Edit your JSON specification or choose a preset on the left, and build native browser DOM elements live on the right.
         </p>
       </div>
 
@@ -616,7 +513,8 @@
         <div class="panel-card" id="editor-card">
           <div class="panel-header">
             <div class="panel-header-group">
-              <label for="preset-select" style="font-size: 11px; color: var(--m); font-weight: 600;">Preset:</label>
+              <label for="preset-select"
+                style="font-size: 11px; color: var(--m); font-weight: 600;">Preset:</label>
               <select id="preset-select" class="preset-select" title="Choose a component preset">
                 <option value="card">Card (Label &amp; Text)</option>
                 <option value="form">Interactive Form</option>
@@ -628,8 +526,6 @@
 
             <div class="panel-header-group">
               <span id="json-status" class="json-status-pill status-valid">✓ Valid JSON</span>
-              <button id="btn-toggle-fold" class="btn-tool" title="Collapse or expand all nested JSON blocks">⊟ Collapse
-                All</button>
               <button id="btn-format" class="btn-tool" title="Format and pretty-print JSON">⟳ Format</button>
               <button id="btn-reset" class="btn-tool" title="Reset to default specification">↺ Reset</button>
               <button id="btn-copy-json" class="btn-tool" title="Copy JSON specification">📋 Copy</button>
@@ -637,11 +533,8 @@
           </div>
 
           <div class="editor-body-wrap">
-            <div class="editor-workspace">
-              <div class="editor-gutter" id="editor-gutter" aria-hidden="true"></div>
-              <textarea id="spec-editor" spellcheck="false"
-                placeholder="Paste or type your JSON specification here..."></textarea>
-            </div>
+            <textarea id="spec-editor" spellcheck="false"
+              placeholder="Paste or type your JSON specification here..."></textarea>
           </div>
 
           <div class="panel-footer">
@@ -694,11 +587,7 @@
 
   <footer>
     <div class="wrap">
-      json-to-tag • Interactive Live Build
-      <span>·</span>
-      <a href="Documentation.html">Documentation</a>
-      <span>·</span>
-      <a href="index.html">Home</a>
+      json-to-tag • Browser-first documentation
       <span>·</span>
       <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
         GitHub ↗
@@ -733,35 +622,35 @@
           {
             tagName: "h4",
             textContent: "Contact Us",
-            properties: { style: "margin:0 0 12px;font-size:18px;color:#0f2744;font-weight:700" }
+            properties: { style: "margin:0 0 10px;font-size:15px;color:#0f2744;font-weight:700" }
           },
           {
             tagName: "label",
             textContent: "Email Address",
-            properties: { style: "display:block;font-size:14.5px;font-weight:600;margin-bottom:8px;color:#334155" }
+            properties: { style: "display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:#475569" }
           },
           {
             tagName: "input",
             attributes: { type: "email", placeholder: "user@example.com" },
-            properties: { style: "width:100%;padding:10px 14px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#1e293b;margin-bottom:14px;box-sizing:border-box;font-size:15px" }
+            properties: { style: "width:100%;padding:8px 12px;border:1px solid #cbd5e1;border-radius:6px;background:#f8fafc;color:#1e293b;margin-bottom:12px;box-sizing:border-box;font-size:13px" }
           },
           {
             tagName: "button",
             textContent: "Send Message",
             attributes: { type: "button" },
-            properties: { style: "background:#186fa5;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;font-size:14.5px" }
+            properties: { style: "background:#186fa5;color:#fff;border:none;padding:8px 16px;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px" }
           }
         ]
       },
       profile: {
         tagName: "div",
         attributes: { class: "profile-badge" },
-        properties: { style: "display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px" },
+        properties: { style: "display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px" },
         children: [
           {
             tagName: "div",
             textContent: "JS",
-            properties: { style: "width:48px;height:48px;border-radius:50%;background:#186fa5;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px" }
+            properties: { style: "width:40px;height:40px;border-radius:50%;background:#186fa5;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px" }
           },
           {
             tagName: "div",
@@ -769,12 +658,12 @@
               {
                 tagName: "strong",
                 textContent: "Alex Developer",
-                properties: { style: "display:block;color:#0f2744;font-size:16px;margin-bottom:2px" }
+                properties: { style: "display:block;color:#0f2744;font-size:14px" }
               },
               {
                 tagName: "span",
                 textContent: "Active • CDN Runtime v4",
-                properties: { style: "font-size:13.5px;color:#16a34a;font-weight:600" }
+                properties: { style: "font-size:12px;color:#16a34a;font-weight:600" }
               }
             ]
           }
@@ -782,17 +671,17 @@
       },
       alert: {
         tagName: "div",
-        properties: { style: "border-left:4px solid #186fa5;background:#f0f7fc;padding:14px 18px;border-radius:0 8px 8px 0;border-top:1px solid #dcebf7;border-right:1px solid #dcebf7;border-bottom:1px solid #dcebf7" },
+        properties: { style: "border-left:4px solid #186fa5;background:#f0f7fc;padding:12px 16px;border-radius:0 8px 8px 0;border-top:1px solid #dcebf7;border-right:1px solid #dcebf7;border-bottom:1px solid #dcebf7" },
         children: [
           {
             tagName: "h4",
             textContent: "💡 Declarative Architecture",
-            properties: { style: "margin:0 0 6px;color:#0f4b73;font-size:16px;font-weight:700" }
+            properties: { style: "margin:0 0 4px;color:#0f4b73;font-size:14px;font-weight:700" }
           },
           {
             tagName: "p",
             textContent: "json-to-tag compiles declarative JSON trees directly into native browser DOM elements without virtual DOM overhead.",
-            properties: { style: "margin:0;font-size:14.5px;line-height:1.55;color:#334155" }
+            properties: { style: "margin:0;font-size:13px;line-height:1.5;color:#334155" }
           }
         ]
       },
@@ -803,30 +692,28 @@
           {
             tagName: "li",
             textContent: "✓ Zero dependencies & pure native DOM APIs",
-            properties: { style: "padding:10px 0;border-bottom:1px solid #e2e8f0;color:#334155;font-size:14.5px" }
+            properties: { style: "padding:8px 0;border-bottom:1px solid #e2e8f0;color:#334155;font-size:13px" }
           },
           {
             tagName: "li",
             textContent: "✓ Lightweight CDN bundle (< 2KB gzip)",
-            properties: { style: "padding:10px 0;border-bottom:1px solid #e2e8f0;color:#334155;font-size:14.5px" }
+            properties: { style: "padding:8px 0;border-bottom:1px solid #e2e8f0;color:#334155;font-size:13px" }
           },
           {
             tagName: "li",
             textContent: "✓ Dynamic JSON to DOM compilation in < 1ms",
-            properties: { style: "padding:10px 0;color:#186fa5;font-size:14.5px;font-weight:600" }
+            properties: { style: "padding:8px 0;color:#186fa5;font-size:13px;font-weight:600" }
           }
         ]
       }
     };
 
     const specEditor = document.querySelector("#spec-editor");
-    const editorGutter = document.querySelector("#editor-gutter");
     const jsonFileInput = document.querySelector("#json-file-input");
     const presetSelect = document.querySelector("#preset-select");
     const btnFormat = document.querySelector("#btn-format");
     const btnReset = document.querySelector("#btn-reset");
     const btnCopyJson = document.querySelector("#btn-copy-json");
-    const btnToggleFold = document.querySelector("#btn-toggle-fold");
     const jsonStatus = document.querySelector("#json-status");
     const fileInfo = document.querySelector("#file-info");
     const editorStats = document.querySelector("#editor-stats");
@@ -845,211 +732,23 @@
       </div>
     `;
 
-    // Map storing folded placeholder line -> original block content
-    const foldedMap = new Map();
-    let isAllCollapsed = false;
-
-    // Helper: restore full JSON string with any collapsed blocks expanded
-    function getFullSpecText() {
-      let text = specEditor.value;
-      for (const [placeholder, original] of foldedMap.entries()) {
-        text = text.replaceAll(placeholder, original);
-      }
-      return text;
-    }
-
-    // Helper: find matching closing brace or bracket
-    function findBlockEnd(lines, startIdx) {
-      const startLine = lines[startIdx];
-      let openChar = null;
-      let closeChar = null;
-
-      if (startLine.includes("{")) {
-        openChar = "{";
-        closeChar = "}";
-      } else if (startLine.includes("[")) {
-        openChar = "[";
-        closeChar = "]";
-      } else {
-        return -1;
-      }
-
-      let depth = 0;
-      for (let i = startIdx; i < lines.length; i++) {
-        const line = lines[i];
-        for (let c = 0; c < line.length; c++) {
-          if (line[c] === openChar) depth++;
-          else if (line[c] === closeChar) {
-            depth--;
-            if (depth === 0) {
-              return i;
-            }
-          }
-        }
-      }
-      return -1;
-    }
-
-    // Render line numbers and fold indicators in gutter
-    function renderGutter() {
-      if (!editorGutter) return;
-      const text = specEditor.value;
-      const lines = text.split("\n");
-      const lineCount = lines.length;
-
-      let html = "";
-      for (let i = 0; i < lineCount; i++) {
-        const line = lines[i];
-        const lineNum = i + 1;
-        const isFolded = line.includes("/* ...\u200B");
-        const canFold = !isFolded && (line.includes("{") || line.includes("[")) && findBlockEnd(lines, i) > i;
-
-        let foldIcon = '<span class="gutter-fold-placeholder"></span>';
-        if (isFolded) {
-          foldIcon = `<button type="button" class="gutter-fold-btn" data-line="${i}" title="Expand code block">▶</button>`;
-        } else if (canFold) {
-          foldIcon = `<button type="button" class="gutter-fold-btn" data-line="${i}" title="Collapse code block">▼</button>`;
-        }
-
-        html += `<div class="gutter-row"><span class="gutter-num">${lineNum}</span>${foldIcon}</div>`;
-      }
-      editorGutter.innerHTML = html;
-      editorGutter.scrollTop = specEditor.scrollTop;
-    }
-
-    // Toggle collapse on a single line
-    function toggleFoldAtLine(lineIdx) {
-      const currentText = specEditor.value;
-      const lines = currentText.split("\n");
-      const targetLine = lines[lineIdx];
-      if (!targetLine) return;
-
-      // If already folded, expand it
-      if (targetLine.includes("/* ...\u200B")) {
-        const key = targetLine.trim();
-        const originalBlock = foldedMap.get(key);
-        if (originalBlock) {
-          lines.splice(lineIdx, 1, originalBlock);
-          foldedMap.delete(key);
-          specEditor.value = lines.join("\n");
-          if (foldedMap.size === 0) {
-            isAllCollapsed = false;
-            if (btnToggleFold) btnToggleFold.textContent = "⊟ Collapse All";
-          }
-          validateAndRenderStats();
-          renderGutter();
-        }
-        return;
-      }
-
-      // Otherwise collapse the block
-      const endIdx = findBlockEnd(lines, lineIdx);
-      if (endIdx <= lineIdx) return;
-
-      const blockLines = lines.slice(lineIdx, endIdx + 1);
-      const originalBlock = blockLines.join("\n");
-      const id = "f" + Math.random().toString(36).slice(2, 8);
-
-      const lastLine = lines[endIdx].trim();
-      const hasComma = lastLine.endsWith(",");
-      const comma = hasComma ? "," : "";
-
-      const openBrace = targetLine.indexOf("{");
-      const openBracket = targetLine.indexOf("[");
-
-      let collapsedLine = "";
-      if (openBrace !== -1 && (openBracket === -1 || openBrace < openBracket)) {
-        collapsedLine = `${targetLine.substring(0, openBrace + 1)} /* ...\u200B${id} */ }${comma}`;
-      } else if (openBracket !== -1) {
-        collapsedLine = `${targetLine.substring(0, openBracket + 1)} /* ...\u200B${id} */ ]${comma}`;
-      } else {
-        return;
-      }
-
-      foldedMap.set(collapsedLine.trim(), originalBlock);
-      lines.splice(lineIdx, endIdx - lineIdx + 1, collapsedLine);
-      specEditor.value = lines.join("\n");
-      validateAndRenderStats();
-      renderGutter();
-    }
-
-    // Expand all folded blocks
-    function unfoldAll() {
-      let text = specEditor.value;
-      for (const [placeholder, original] of foldedMap.entries()) {
-        text = text.replaceAll(placeholder, original);
-      }
-      foldedMap.clear();
-      isAllCollapsed = false;
-      if (btnToggleFold) btnToggleFold.textContent = "⊟ Collapse All";
-      specEditor.value = text;
-      validateAndRenderStats();
-      renderGutter();
-    }
-
-    // Collapse all level-1 nested blocks
-    function foldAll() {
-      unfoldAll();
-      const fullText = specEditor.value;
-      const lines = fullText.split("\n");
-
-      for (let i = lines.length - 1; i >= 1; i--) {
-        const line = lines[i];
-        if (/^  "[a-zA-Z0-9_\-]+":\s*(\{|\[)/.test(line)) {
-          const endIdx = findBlockEnd(lines, i);
-          if (endIdx > i) {
-            const blockLines = lines.slice(i, endIdx + 1);
-            const originalBlock = blockLines.join("\n");
-            const id = "f" + Math.random().toString(36).slice(2, 8);
-            const lastLine = lines[endIdx].trim();
-            const comma = lastLine.endsWith(",") ? "," : "";
-            const openBrace = line.indexOf("{");
-            const openBracket = line.indexOf("[");
-
-            let collapsedLine = "";
-            if (openBrace !== -1 && (openBracket === -1 || openBrace < openBracket)) {
-              collapsedLine = `${line.substring(0, openBrace + 1)} /* ...\u200B${id} */ }${comma}`;
-            } else if (openBracket !== -1) {
-              collapsedLine = `${line.substring(0, openBracket + 1)} /* ...\u200B${id} */ ]${comma}`;
-            }
-
-            if (collapsedLine) {
-              foldedMap.set(collapsedLine.trim(), originalBlock);
-              lines.splice(i, endIdx - i + 1, collapsedLine);
-            }
-          }
-        }
-      }
-
-      specEditor.value = lines.join("\n");
-      isAllCollapsed = true;
-      if (btnToggleFold) btnToggleFold.textContent = "⊞ Expand All";
-      validateAndRenderStats();
-      renderGutter();
-    }
-
     // Live validation & statistics update
     function validateAndRenderStats() {
-      const fullVal = getFullSpecText().trim();
-      const editorVal = specEditor.value;
-      const lines = editorVal ? editorVal.split("\n").length : 0;
-      const chars = editorVal.length;
+      const val = specEditor.value.trim();
+      const lines = val ? val.split("\n").length : 0;
+      const chars = val.length;
       editorStats.textContent = `Lines: ${lines} · Chars: ${chars}`;
 
-      if (!fullVal) {
+      if (!val) {
         jsonStatus.className = "json-status-pill status-invalid";
         jsonStatus.innerHTML = "⚠ Empty Spec";
         return null;
       }
 
       try {
-        const parsed = JSON.parse(fullVal);
+        const parsed = JSON.parse(val);
         jsonStatus.className = "json-status-pill status-valid";
-        if (foldedMap.size > 0) {
-          jsonStatus.innerHTML = `✓ Valid JSON (${foldedMap.size} folded)`;
-        } else {
-          jsonStatus.innerHTML = "✓ Valid JSON";
-        }
+        jsonStatus.innerHTML = "✓ Valid JSON";
         jsonStatus.title = "Valid JSON specification ready to compile";
         return parsed;
       } catch (err) {
@@ -1063,15 +762,10 @@
     // Set editor value helper
     function setEditorContent(data, label = "Preset loaded") {
       try {
-        foldedMap.clear();
-        isAllCollapsed = false;
-        if (btnToggleFold) btnToggleFold.textContent = "⊟ Collapse All";
-
         const str = typeof data === "string" ? data : JSON.stringify(data, null, 2);
         specEditor.value = str;
         fileInfo.innerHTML = label;
         validateAndRenderStats();
-        renderGutter();
       } catch (err) {
         console.error("Could not set editor content:", err);
       }
@@ -1089,41 +783,10 @@
         specEditor.value = specEditor.value.substring(0, start) + "  " + specEditor.value.substring(end);
         specEditor.selectionStart = specEditor.selectionEnd = start + 2;
         validateAndRenderStats();
-        renderGutter();
       }
     });
 
-    specEditor.addEventListener("input", () => {
-      validateAndRenderStats();
-      renderGutter();
-    });
-
-    specEditor.addEventListener("scroll", () => {
-      if (editorGutter) editorGutter.scrollTop = specEditor.scrollTop;
-    });
-
-    // Gutter fold button clicks
-    if (editorGutter) {
-      editorGutter.addEventListener("click", (e) => {
-        const btn = e.target.closest(".gutter-fold-btn");
-        if (!btn) return;
-        const lineIdx = parseInt(btn.getAttribute("data-line"), 10);
-        if (!isNaN(lineIdx)) {
-          toggleFoldAtLine(lineIdx);
-        }
-      });
-    }
-
-    // Toolbar Collapse All / Expand All button
-    if (btnToggleFold) {
-      btnToggleFold.addEventListener("click", () => {
-        if (isAllCollapsed || foldedMap.size > 0) {
-          unfoldAll();
-        } else {
-          foldAll();
-        }
-      });
-    }
+    specEditor.addEventListener("input", validateAndRenderStats);
 
     // Preset selection change
     presetSelect.addEventListener("change", (e) => {
@@ -1137,15 +800,9 @@
     // Format JSON button
     btnFormat.addEventListener("click", () => {
       try {
-        const fullVal = getFullSpecText();
-        const parsed = JSON.parse(fullVal);
-        foldedMap.clear();
-        isAllCollapsed = false;
-        if (btnToggleFold) btnToggleFold.textContent = "⊟ Collapse All";
-
+        const parsed = JSON.parse(specEditor.value);
         specEditor.value = JSON.stringify(parsed, null, 2);
         validateAndRenderStats();
-        renderGutter();
         btnFormat.textContent = "✓ Formatted";
         setTimeout(() => btnFormat.textContent = "⟳ Format", 1200);
       } catch (err) {
@@ -1164,8 +821,7 @@
     // Copy JSON button
     btnCopyJson.addEventListener("click", async () => {
       try {
-        const fullVal = getFullSpecText();
-        await navigator.clipboard.writeText(fullVal);
+        await navigator.clipboard.writeText(specEditor.value);
         btnCopyJson.textContent = "Copied!";
         setTimeout(() => btnCopyJson.textContent = "📋 Copy", 1400);
       } catch {

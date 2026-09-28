@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Build the Same Piece — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin">
+      <div style="display: flex; align-items: center; gap: 8px; margin-right: auto; flex-wrap: wrap;">
+        <a class="brand" href="index.html" style="margin-right: 0;">json-to-tag / docs</a>
+        <span style="color: #2a476e; font-weight: 400;">/</span>
+        <span style="color: var(--a); font-size: 12px; font-weight: 800; letter-spacing: .08em;">10 · CDN BUILD</span>
+      </div>
+      <div class="navlinks"><a href="09-original-html.html">Previous</a><a href="11-vanilla-javascript.html">Next</a></div>
+    </div>
+  </nav>
+  <main>
+    <div class="wrap">
+      <h1>Build the same piece</h1>
+      <p class="lead">The JSON describes the same UI, the CDN provides the builder, and the browser receives a native
+        DOM element.</p>
+
+      <div class="callout" style="margin: 20px 0 25px;">
+        <strong>How is this loaded?</strong><br>
+        This page demonstrates the <strong>CDN approach</strong>: a standalone browser bundle loaded via a
+        <code>&lt;script&gt;</code> tag with <em>zero build tools, zero Node.js, and zero npm install</em> required. For
+        Node.js / bundler environments, see the module comparison below.
+      </div>
+
+      <h2>1 · CDN Build (Direct Browser HTML)</h2>
+      <p style="color: var(--m); font-size: 13px; margin-top: -6px;">
+        Load the library bundle directly via CDN in your HTML. The CDN registers the global API on
+        <code>window.ks.jsonToTag</code>.
+      </p>
+      <div class="code" style="position:relative">
+        <button id="copy-build" class="copy-btn">Copy code</button>
+        <pre id="build-code">&lt;!-- 1. Load json-to-tag engine directly from CDN (no Node.js needed) --&gt;
+&lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+// 2. Define the UI as a JSON specification
+const spec = {
+  tagName: "div",
+  attributes: { id: "test-content" },
+  children: [
+    { tagName: "label", textContent: "Name" },
+    { tagName: "p", textContent: "Test Content" }
+  ]
+};
+
+// 3. Global function exposed by CDN bundle:
+const element = window.ks.jsonToTag.buildSpecElement(spec);
+
+// 4. Mount the native DOM element into the page:
+document.querySelector("#browser-output").replaceChildren(element);
+&lt;/script&gt;</pre>
+      </div>
+
+      <h2>2 · Node.js / ES Module (npm package)</h2>
+      <p style="color: var(--m); font-size: 13px; margin-top: -6px;">
+        If you are working in Node.js or a bundler project (Vite, Webpack, Next.js), install from npm and import as an
+        ES module instead:
+      </p>
+      <div class="code">
+        <pre><span style="color: #64d7ff;"># Install via npm:</span>
+npm install @keshavsoft/json-to-tag
+
+<span style="color: #64d7ff;">// In your JavaScript / TypeScript application:</span>
+import { buildSpecElement } from "@keshavsoft/json-to-tag";
+// Or if copied locally via npx:
+// import { buildSpecElement } from "./json-to-tag/index.js";
+
+const spec = {
+  tagName: "div",
+  attributes: { id: "test-content" },
+  children: [
+    { tagName: "label", textContent: "Name" },
+    { tagName: "p", textContent: "Test Content" }
+  ]
+};
+
+const element = buildSpecElement(spec);
+document.querySelector("#browser-output").replaceChildren(element);</pre>
+      </div>
+
+      <h2>CDN vs Node.js Module</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>CDN (Browser)</th>
+            <th>Node.js / npm Module</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Setup</strong></td>
+            <td><code>&lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;</code>
+            </td>
+            <td><code>npm install @keshavsoft/json-to-tag</code></td>
+          </tr>
+          <tr>
+            <td><strong>API Access</strong></td>
+            <td><code>window.ks.jsonToTag.buildSpecElement(spec)</code></td>
+            <td><code>import { buildSpecElement } from "@keshavsoft/json-to-tag"</code></td>
+          </tr>
+          <tr>
+            <td><strong>Environment</strong></td>
+            <td>Pure HTML / browser pages (zero tooling)</td>
+            <td>Node.js, Vite, Webpack, Next.js, Bundlers</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Live Browser Output</h2>
+      <div id="browser-output" class="ui">
+        <div class="mini">
+          <label style="display:block;font-weight:700;margin-bottom:6px">Name</label>
+          <p style="margin:0">Test Content</p>
+        </div>
+      </div>
+
+      <h2>DOM</h2>
+      <div class="tree">#test-content
+        ├─ label → Name
+        └─ p → Test Content</div>
+
+      <div class="callout" style="margin: 28px 0 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <strong>Looking for the Interactive Demo?</strong><br>
+          <span style="color: var(--m); font-size: 13px;">Test the empty-state DOM, click-to-build button, and live DOM inspector on the dedicated demo page.</span>
+        </div>
+        <a href="12-interactive-live-build.html" style="background: #186fa5; color: #fff; padding: 9px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; text-decoration: none; white-space: nowrap;">
+          Open Interactive Demo →
+        </a>
+      </div>
+
+      <script>
+        const spec = {
+          tagName: "div",
+          attributes: { id: "test-content" },
+          children: [
+            {
+              tagName: "label", textContent: "Name", properties: {
+                style: "display:block;font-weight:700;margin-bottom:6px"
+              }
+            },
+            { tagName: "p", textContent: "Test Content" }
+          ]
+        };
+
+        function render(buildFn) {
+          const output = document.querySelector("#browser-output");
+          const fn = buildFn || window.ks?.jsonToTag?.buildSpecElement;
+          if (output && fn) {
+            output.replaceChildren(fn(spec));
+          }
+        }
+
+        import("../dist/v4/min.js")
+          .catch(() => import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"))
+          .then(mod => render(mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement))
+          .catch(err => console.error("Could not load bundle:", err));
+
+        document.querySelector("#copy-build").addEventListener("click", async () => {
+          const code = document.querySelector("#build-code").textContent;
+          const button = document.querySelector("#copy-build");
+          try {
+            await navigator.clipboard.writeText(code);
+            button.textContent = "Copied!";
+            setTimeout(() => button.textContent = "Copy code", 1400);
+          } catch {
+            button.textContent = "Copy failed";
+            setTimeout(() => button.textContent = "Copy code", 1400);
+          }
+        });
+      </script>
+
+      <p style="margin-top: 24px;"><a href="11-vanilla-javascript.html">Next: vanilla JavaScript implementation →</a></p>
+      <p><a href="index.html">← Back to documentation map</a></p>
+    </div>
+  </main>
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+
+      <span>·</span>
+
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+</body>
+
+</html>
