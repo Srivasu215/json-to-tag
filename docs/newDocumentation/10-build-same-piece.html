@@ -21,10 +21,55 @@
       <p class="lead">The JSON describes the same UI, the CDN provides the builder, and the browser receives a native
         DOM element.</p>
 
-      <h2>Build code</h2>
+      <div class="callout" style="margin: 20px 0 25px;">
+        <strong>How is this loaded?</strong><br>
+        This page demonstrates the <strong>CDN approach</strong>: a standalone browser bundle loaded via a
+        <code>&lt;script&gt;</code> tag with <em>zero build tools, zero Node.js, and zero npm install</em> required. For
+        Node.js / bundler environments, see the module comparison below.
+      </div>
+
+      <h2>1 · CDN Build (Direct Browser HTML)</h2>
+      <p style="color: var(--m); font-size: 13px; margin-top: -6px;">
+        Load the library bundle directly via CDN in your HTML. The CDN registers the global API on
+        <code>window.ks.jsonToTag</code>.
+      </p>
       <div class="code" style="position:relative">
         <button id="copy-build" class="copy-btn">Copy code</button>
-        <pre id="build-code">&lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;
+        <pre id="build-code">&lt;!-- 1. Load json-to-tag engine directly from CDN (no Node.js needed) --&gt;
+&lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+// 2. Define the UI as a JSON specification
+const spec = {
+  tagName: "div",
+  attributes: { id: "test-content" },
+  children: [
+    { tagName: "label", textContent: "Name" },
+    { tagName: "p", textContent: "Test Content" }
+  ]
+};
+
+// 3. Global function exposed by CDN bundle:
+const element = window.ks.jsonToTag.buildSpecElement(spec);
+
+// 4. Mount the native DOM element into the page:
+document.querySelector("#browser-output").replaceChildren(element);
+&lt;/script&gt;</pre>
+      </div>
+
+      <h2>2 · Node.js / ES Module (npm package)</h2>
+      <p style="color: var(--m); font-size: 13px; margin-top: -6px;">
+        If you are working in Node.js or a bundler project (Vite, Webpack, Next.js), install from npm and import as an
+        ES module instead:
+      </p>
+      <div class="code">
+        <pre><span style="color: #64d7ff;"># Install via npm:</span>
+npm install @keshavsoft/json-to-tag
+
+<span style="color: #64d7ff;">// In your JavaScript / TypeScript application:</span>
+import { buildSpecElement } from "@keshavsoft/json-to-tag";
+// Or if copied locally via npx:
+// import { buildSpecElement } from "./json-to-tag/index.js";
 
 const spec = {
   tagName: "div",
@@ -35,14 +80,40 @@ const spec = {
   ]
 };
 
-const element =
-  window.ks.jsonToTag.buildSpecElement(spec);
-
-document.querySelector("#browser-output")
-  .replaceChildren(element);</pre>
+const element = buildSpecElement(spec);
+document.querySelector("#browser-output").replaceChildren(element);</pre>
       </div>
 
-      <h2>Browser Output</h2>
+      <h2>CDN vs Node.js Module</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>CDN (Browser)</th>
+            <th>Node.js / npm Module</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Setup</strong></td>
+            <td><code>&lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;</code>
+            </td>
+            <td><code>npm install @keshavsoft/json-to-tag</code></td>
+          </tr>
+          <tr>
+            <td><strong>API Access</strong></td>
+            <td><code>window.ks.jsonToTag.buildSpecElement(spec)</code></td>
+            <td><code>import { buildSpecElement } from "@keshavsoft/json-to-tag"</code></td>
+          </tr>
+          <tr>
+            <td><strong>Environment</strong></td>
+            <td>Pure HTML / browser pages (zero tooling)</td>
+            <td>Node.js, Vite, Webpack, Next.js, Bundlers</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Live Browser Output</h2>
       <div id="browser-output" class="ui">
         <div class="mini">
           <label style="display:block;font-weight:700;margin-bottom:6px">Name</label>
