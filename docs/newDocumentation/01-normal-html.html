@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>01 · Normal HTML — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin">
+      <div style="display: flex; align-items: center; gap: 8px; margin-right: auto; flex-wrap: wrap;">
+        <a class="brand" href="index.html" style="margin-right: 0;">json-to-tag / docs</a>
+        <span style="color: #2a476e; font-weight: 400;">/</span>
+        <span style="color: var(--a); font-size: 12px; font-weight: 800; letter-spacing: .08em;">01 · NORMAL HTML</span>
+      </div>
+      <div class="navlinks">
+        <a href="Documentation.html">Docs Overview</a>
+        <a href="02-vanilla-javascript.html">Next →</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+      <h1>Write direct markup for the browser.</h1>
+      <p class="lead">
+        This is the baseline approach: writing traditional HTML markup that the browser parses directly into native DOM elements.
+      </p>
+
+      <h2>1 · HTML Source</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        Raw HTML markup written in a standard <code>.html</code> file or template.
+      </p>
+      <div class="code">
+        <pre>&lt;div id="test-content"&gt;
+  &lt;label&gt;Name&lt;/label&gt;
+  &lt;p&gt;Test Content&lt;/p&gt;
+&lt;/div&gt;</pre>
+      </div>
+
+      <h2>2 · Browser Output</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        What the user visually sees when the browser renders this markup:
+      </p>
+      <div class="ui">
+        <div class="mini">
+          <label style="display:block;font-weight:700;margin-bottom:6px">Name</label>
+          <p style="margin:0">Test Content</p>
+        </div>
+      </div>
+
+      <h2>3 · Resulting DOM Tree</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        The native hierarchy created in memory by the browser's C++ HTML parser:
+      </p>
+      <div class="tree">div#test-content
+  ├─ label → "Name"
+  └─ p → "Test Content"</div>
+
+      <h2>How it works</h2>
+      <div class="callout" style="margin-top: 14px;">
+        <strong>Browser Execution:</strong> The browser streams HTML characters, tokenizes opening and closing tags, creates native DOM node objects (such as <code>HTMLDivElement</code>, <code>HTMLLabelElement</code>, and <code>HTMLParagraphElement</code>), and appends them into the live document tree.
+      </div>
+
+      <p style="margin-top: 32px; font-weight: 600;">
+        <a href="02-vanilla-javascript.html">Next: see how to build this exact same UI in Vanilla JavaScript →</a>
+      </p>
+      <p><a href="Documentation.html">← Back to Documentation Overview</a></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+</body>
+
+</html>

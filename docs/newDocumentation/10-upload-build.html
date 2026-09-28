@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Upload JSON &amp; Build DOM — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"></script>
+  <style>
+    :root {
+      --page-bg: #ffffff;
+      --page-text: #0f172a;
+      --page-muted: #475569;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --card-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+      --notice-bg: #f8fafc;
+      --notice-border: #e2e8f0;
+      --notice-code-bg: #eef2f6;
+      --notice-code-color: #0369a1;
+      --input-bg: #f8fafc;
+      --input-border: #cbd5e1;
+      --input-text: #0f172a;
+      --browser-frame-border: #cbd5e1;
+      --browser-chrome-bg: #f1f5f9;
+      --browser-chrome-border: #e2e8f0;
+      --browser-tab-bg: #ffffff;
+      --browser-tab-text: #0f172a;
+      --browser-tab-border: #cbd5e1;
+      --browser-nav-bg: #ffffff;
+      --browser-nav-icons: #64748b;
+      --browser-address-bg: #f8fafc;
+      --browser-address-border: #e2e8f0;
+      --browser-address-text: #334155;
+      --browser-status-bg: #f8fafc;
+      --browser-status-border: #e2e8f0;
+      --browser-status-text: #64748b;
+      --btn-clear-bg: #f1f5f9;
+      --btn-clear-border: #cbd5e1;
+      --btn-clear-text: #475569;
+      --pill-bg: #f1f5f9;
+      --pill-border: #e2e8f0;
+      --pill-text: #64748b;
+      --footer-border: #e2e8f0;
+      --footer-text: #64748b;
+      --footer-link: #0284c7;
+    }
+
+    body.dark-theme {
+      --page-bg: #07111f;
+      --page-text: #eaf2ff;
+      --page-muted: #9eb1ca;
+      --card-bg: #071322;
+      --card-border: #1a3658;
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      --notice-bg: #081728;
+      --notice-border: #1a3a5f;
+      --notice-code-bg: #040c16;
+      --notice-code-color: #64d7ff;
+      --input-bg: #050e18;
+      --input-border: #1f3f66;
+      --input-text: #e2e8f0;
+      --browser-frame-border: #233e62;
+      --browser-chrome-bg: #0a1727;
+      --browser-chrome-border: #1c3554;
+      --browser-tab-bg: #16273d;
+      --browser-tab-text: #cbd5e1;
+      --browser-tab-border: #223f66;
+      --browser-nav-bg: #101f33;
+      --browser-nav-icons: #5c7b9e;
+      --browser-address-bg: #081322;
+      --browser-address-border: #1d395d;
+      --browser-address-text: #94a3b8;
+      --browser-status-bg: #0d1a29;
+      --browser-status-border: #1c3554;
+      --browser-status-text: #9eb1ca;
+      --btn-clear-bg: #0d1e33;
+      --btn-clear-border: #244163;
+      --btn-clear-text: #9eb1ca;
+      --pill-bg: #0d1e33;
+      --pill-border: #203a5a;
+      --pill-text: #9eb1ca;
+      --footer-border: #203653;
+      --footer-text: #9eb1ca;
+      --footer-link: #64d7ff;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page-bg) !important;
+      color: var(--page-text);
+      font: 15px/1.7 system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    a {
+      color: var(--footer-link);
+      text-decoration: none;
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    main {
+      padding: 20px 0 40px;
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin: 4px 0 20px;
+    }
+
+    .demo-header h1 {
+      font-size: clamp(20px, 2.4vw, 26px);
+      line-height: 1.2;
+      letter-spacing: -.03em;
+      margin: 0;
+      white-space: nowrap;
+      color: var(--page-text);
+    }
+
+    .theme-toggle-btn {
+      background: var(--notice-bg);
+      border: 1px solid var(--card-border);
+      color: var(--page-text);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--notice-code-bg);
+      border-color: #0284c7;
+    }
+
+    /* Top File Upload Control Card - Single Line Layout */
+    .upload-control-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 18px;
+      margin-bottom: 22px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      transition: all 0.2s ease;
+    }
+
+    .upload-label {
+      display: inline-block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--page-text);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin: 0;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .file-input-field {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 7px;
+      padding: 5px 10px;
+      color: var(--input-text);
+      font-size: 13px;
+      font-family: inherit;
+      width: auto;
+      max-width: 240px;
+      box-sizing: border-box;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .file-input-field:hover,
+    .file-input-field:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
+      outline: none;
+    }
+
+    .file-input-field::file-selector-button {
+      background: #0284c7;
+      color: #ffffff;
+      border: 1px solid #0284c7;
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 8px;
+      transition: background 0.18s;
+      font-family: inherit;
+    }
+
+    .file-input-field::file-selector-button:hover {
+      background: #0369a1;
+    }
+
+    .sample-pills-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .sample-pills-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--page-muted);
+      margin-right: 2px;
+    }
+
+    .sample-pill-btn {
+      background: var(--notice-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0284c7;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .sample-pill-btn:hover {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0369a1;
+    }
+
+    .sample-pill-btn.active {
+      background: #0284c7;
+      border-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+    }
+
+    body.dark-theme .sample-pill-btn {
+      background: #0d1e33;
+      border-color: #1c3658;
+      color: #64d7ff;
+    }
+
+    body.dark-theme .sample-pill-btn:hover {
+      background: #142e4e;
+      border-color: #64d7ff;
+      color: #a5ecff;
+    }
+
+    body.dark-theme .sample-pill-btn.active {
+      background: #186fa5;
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(24, 111, 165, 0.35);
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 15px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      border: 1px solid transparent;
+      user-select: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .btn-build {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      border-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-build:hover:not(:disabled) {
+      background: linear-gradient(135deg, #0369a1, #075985);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-build:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-clear {
+      background: var(--btn-clear-bg);
+      border-color: var(--btn-clear-border);
+      color: var(--btn-clear-text);
+    }
+
+    .btn-clear:hover:not(:disabled) {
+      background: var(--notice-code-bg);
+      color: var(--page-text);
+      border-color: #94a3b8;
+    }
+
+    .btn-clear:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+
+
+    /* REALISTIC BROWSER WINDOW MOCKUP */
+    .browser-window {
+      background: #ffffff;
+      border: 1px solid var(--browser-frame-border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+    }
+
+    /* Browser Window Top Chrome */
+    .browser-chrome {
+      background: var(--browser-chrome-bg);
+      border-bottom: 1px solid var(--browser-chrome-border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .browser-tab-bar {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px 0;
+      gap: 16px;
+    }
+
+    .browser-traffic-dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .browser-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red {
+      background: #ff5f56;
+      border: 1px solid #e0443e;
+    }
+
+    .dot-yellow {
+      background: #ffbd2e;
+      border: 1px solid #dea123;
+    }
+
+    .dot-green {
+      background: #27c93f;
+      border: 1px solid #1aab29;
+    }
+
+    .browser-tab {
+      background: var(--browser-tab-bg);
+      color: var(--browser-tab-text);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 7px 7px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--browser-tab-border);
+      border-bottom: none;
+      max-width: 260px;
+    }
+
+    .browser-tab-close {
+      color: var(--page-muted);
+      font-size: 11px;
+      margin-left: auto;
+      cursor: pointer;
+    }
+
+    .browser-tab-close:hover {
+      color: var(--page-text);
+    }
+
+    /* Browser Navigation & Address Bar */
+    .browser-nav-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: var(--browser-nav-bg);
+      border-top: 1px solid var(--browser-chrome-border);
+    }
+
+    .browser-nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--browser-nav-icons);
+      font-size: 14px;
+      user-select: none;
+    }
+
+    .browser-nav-icons span {
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .browser-nav-icons span:hover {
+      color: var(--page-text);
+    }
+
+    .browser-address-bar {
+      flex: 1;
+      background: var(--browser-address-bg);
+      border: 1px solid var(--browser-address-border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--browser-address-text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .browser-lock-icon {
+      color: #16a34a;
+      font-size: 11px;
+    }
+
+    .browser-address-url {
+      color: var(--browser-address-text);
+    }
+
+    .browser-cdn-pill {
+      font-size: 10px;
+      font-weight: 700;
+      color: #0284c7;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      border-radius: 4px;
+      padding: 2px 7px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-left: auto;
+      font-family: system-ui, sans-serif;
+    }
+
+    /* BROWSER VIEWPORT (The Webpage Canvas) */
+    .browser-viewport {
+      background: #ffffff;
+      min-height: 480px;
+      padding: 36px 40px;
+      color: #0f172a;
+      overflow-y: auto;
+      box-sizing: border-box;
+      font-size: 15.5px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .browser-viewport {
+        padding: 20px;
+      }
+    }
+
+    .browser-empty-state {
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #64748b;
+      border: 2px dashed #e2e8f0;
+      border-radius: 12px;
+      padding: 32px 20px;
+      background: #f8fafc;
+    }
+
+    .empty-browser-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      color: #94a3b8;
+    }
+
+    .browser-empty-state h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .browser-empty-state p {
+      margin: 0;
+      font-size: 14px;
+      color: #64748b;
+      max-width: 420px;
+      line-height: 1.5;
+    }
+
+    /* Built Output Elements Styling */
+    .browser-viewport label {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .browser-viewport p {
+      font-size: 15px;
+      line-height: 1.55;
+      color: #334155;
+      margin: 0 0 12px;
+    }
+
+    .browser-viewport h1,
+    .browser-viewport h2,
+    .browser-viewport h3,
+    .browser-viewport h4 {
+      color: #0f2744;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .browser-viewport input,
+    .browser-viewport select,
+    .browser-viewport textarea {
+      font-size: 15px;
+      font-family: inherit;
+    }
+
+    .browser-viewport button {
+      font-size: 14.5px;
+      font-weight: 600;
+      font-family: inherit;
+    }
+
+    .browser-status-bar {
+      background: var(--browser-status-bg);
+      padding: 8px 16px;
+      font-size: 11px;
+      color: var(--browser-status-text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--browser-status-border);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    footer {
+      border-top: 1px solid var(--footer-border);
+      padding: 30px 0 40px;
+      font-size: 13px;
+      color: var(--footer-text);
+      margin-top: 20px;
+    }
+
+    footer a {
+      color: var(--footer-link);
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="wrap">
+      <div class="demo-header">
+        <h1>Upload JSON &amp; Build DOM</h1>
+        <button type="button" id="btn-theme-toggle" class="theme-toggle-btn" title="Toggle White / Dark Theme">
+          🌙 Dark Theme
+        </button>
+      </div>
+
+      <!-- FILE UPLOAD CONTROL BAR (ALL IN SINGLE LINE) -->
+      <div class="upload-control-card">
+        <label for="json-file-input" class="upload-label">
+          Upload JSON File:
+        </label>
+
+        <input type="file" id="json-file-input" accept=".json,application/json" class="file-input-field"
+          title="Select a JSON file">
+
+        <div class="sample-pills-wrap">
+          <span class="sample-pills-label">Samples:</span>
+          <button type="button" class="sample-pill-btn" data-sample="form">Form</button>
+          <!-- <button type="button" class="sample-pill-btn" data-sample="card">Card</button>
+          <button type="button" class="sample-pill-btn" data-sample="profile">Profile</button>
+          <button type="button" class="sample-pill-btn" data-sample="alert">Alert</button>
+          <button type="button" class="sample-pill-btn" data-sample="checklist">Checklist</button> -->
+        </div>
+
+        <button type="button" id="btn-build" class="btn-action btn-build" disabled title="Build DOM from uploaded JSON">
+          ▶ Build DOM
+        </button>
+        <button type="button" id="btn-clear" class="btn-action btn-clear" disabled title="Clear rendered DOM output">
+          ↺ Clear DOM
+        </button>
+      </div>
+
+      <!-- REALISTIC BROWSER WINDOW -->
+      <div class="browser-window">
+        <!-- Browser Window Chrome (Tabs & Titlebar) -->
+        <div class="browser-chrome">
+          <div class="browser-tab-bar">
+            <!-- Traffic light dots -->
+            <div class="browser-traffic-dots">
+              <span class="browser-dot dot-red"></span>
+              <span class="browser-dot dot-yellow"></span>
+              <span class="browser-dot dot-green"></span>
+            </div>
+
+            <!-- Active Tab -->
+            <div class="browser-tab">
+              <span>🌐</span>
+              <span id="browser-tab-title">Live DOM Viewport</span>
+              <span class="browser-tab-close">✕</span>
+            </div>
+          </div>
+
+          <!-- Browser Navigation & Address Bar -->
+          <div class="browser-nav-bar">
+            <div class="browser-nav-icons">
+              <span title="Back">⇦</span>
+              <span title="Forward">⇨</span>
+              <span id="btn-browser-refresh" title="Reload Viewport">↻</span>
+            </div>
+
+            <div class="browser-address-bar">
+              <span class="browser-lock-icon">🔒</span>
+              <span class="browser-address-url">http://127.0.0.1:5500/rendered-dom.html</span>
+              <span class="browser-cdn-pill">CDN Native DOM</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BROWSER VIEWPORT: PURE WHITE WEBPAGE CANVAS -->
+        <div class="browser-viewport" id="browser-viewport">
+          <div id="browser-output">
+            <div class="browser-empty-state">
+              <div class="empty-browser-icon">🌐</div>
+              <h3>Browser DOM Viewport</h3>
+              <p>
+                Choose a <code>.json</code> file in the input field above, then click <strong>"Build DOM with
+                  CDN"</strong> to attach and view the native HTML elements here.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Browser Status Bar -->
+        <div class="browser-status-bar">
+          <div id="browser-status-text">Target: <code>#browser-output</code> · Pure Native DOM Execution</div>
+          <div id="browser-timing-text">Ready</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      json-to-tag • Upload &amp; Build
+      <span>·</span>
+      <a href="09-interactive-live-build.html">09 · Interactive Demo</a>
+      <span>·</span>
+      <a href="Documentation.html">Documentation</a>
+      <span>·</span>
+      <a href="index.html">Home</a>
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // Sample specifications for quick one-click testing
+    const samples = {
+      form: {
+        name: "form-sample.json",
+        spec: {
+          tagName: "form",
+          attributes: { id: "demo-form", class: "interactive-form" },
+          children: [
+            {
+              tagName: "h3",
+              textContent: "Contact & Registration Form",
+              properties: { style: "margin: 0 0 12px; font-size: 20px; color: #0f2744; font-weight: 700;" }
+            },
+            {
+              tagName: "label",
+              textContent: "Full Name",
+              properties: { style: "display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #334155;" }
+            },
+            {
+              tagName: "input",
+              attributes: { type: "text", placeholder: "e.g. Sarah Connor" },
+              properties: { style: "width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 7px; background: #f8fafc; color: #1e293b; margin-bottom: 12px; box-sizing: border-box; font-size: 14.5px;" }
+            },
+            {
+              tagName: "label",
+              textContent: "Email Address",
+              properties: { style: "display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #334155;" }
+            },
+            {
+              tagName: "input",
+              attributes: { type: "email", placeholder: "sarah@example.com" },
+              properties: { style: "width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 7px; background: #f8fafc; color: #1e293b; margin-bottom: 16px; box-sizing: border-box; font-size: 14.5px;" }
+            },
+            {
+              tagName: "button",
+              textContent: "Submit Specification",
+              attributes: { type: "button" },
+              properties: { style: "background: #0284c7; color: #ffffff; border: none; padding: 10px 22px; border-radius: 7px; font-weight: 600; cursor: pointer; font-size: 14.5px;" }
+            }
+          ]
+        }
+      },
+      card: {
+        name: "card-sample.json",
+        spec: {
+          tagName: "div",
+          attributes: { class: "preview-card" },
+          properties: { style: "max-width: 580px; padding: 22px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 18px rgba(0,0,0,0.06);" },
+          children: [
+            {
+              tagName: "h3",
+              textContent: "Modern Component Card",
+              properties: { style: "margin: 0 0 10px; font-size: 20px; color: #0f2744; font-weight: 700;" }
+            },
+            {
+              tagName: "p",
+              textContent: "This component was constructed directly from JSON using native browser APIs and the json-to-tag CDN runtime.",
+              properties: { style: "margin: 0 0 16px; font-size: 15px; color: #475569; line-height: 1.6;" }
+            },
+            {
+              tagName: "span",
+              textContent: "Active Element",
+              properties: { style: "display: inline-block; padding: 4px 12px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 999px; font-size: 12px; font-weight: 700;" }
+            }
+          ]
+        }
+      },
+      profile: {
+        name: "profile-sample.json",
+        spec: {
+          tagName: "div",
+          attributes: { class: "profile-badge" },
+          properties: { style: "display: flex; align-items: center; gap: 16px; padding: 18px 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 540px;" },
+          children: [
+            {
+              tagName: "div",
+              textContent: "JS",
+              properties: { style: "width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; flex-shrink: 0;" }
+            },
+            {
+              tagName: "div",
+              children: [
+                {
+                  tagName: "h4",
+                  textContent: "Alex Developer",
+                  properties: { style: "margin: 0 0 4px; color: #0f2744; font-size: 17px; font-weight: 700;" }
+                },
+                {
+                  tagName: "p",
+                  textContent: "Senior Frontend Engineer • CDN Runtime v4",
+                  properties: { style: "margin: 0 0 4px; font-size: 13.5px; color: #475569;" }
+                },
+                {
+                  tagName: "span",
+                  textContent: "● Online",
+                  properties: { style: "font-size: 12px; color: #16a34a; font-weight: 700;" }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      alert: {
+        name: "alert-sample.json",
+        spec: {
+          tagName: "div",
+          properties: { style: "border-left: 4px solid #0284c7; background: #f0f9ff; padding: 16px 20px; border-radius: 0 10px 10px 0; border-top: 1px solid #bae6fd; border-right: 1px solid #bae6fd; border-bottom: 1px solid #bae6fd; max-width: 600px;" },
+          children: [
+            {
+              tagName: "h4",
+              textContent: "💡 Declarative Architecture",
+              properties: { style: "margin: 0 0 8px; color: #0369a1; font-size: 17px; font-weight: 700;" }
+            },
+            {
+              tagName: "p",
+              textContent: "json-to-tag compiles declarative JSON trees directly into native browser DOM elements without virtual DOM overhead, maintaining peak runtime performance.",
+              properties: { style: "margin: 0; font-size: 14.5px; line-height: 1.6; color: #334155;" }
+            }
+          ]
+        }
+      },
+      checklist: {
+        name: "checklist-sample.json",
+        spec: {
+          tagName: "div",
+          properties: { style: "max-width: 540px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px;" },
+          children: [
+            {
+              tagName: "h4",
+              textContent: "Feature Verification",
+              properties: { style: "margin: 0 0 12px; color: #0f2744; font-size: 17px; font-weight: 700;" }
+            },
+            {
+              tagName: "ul",
+              properties: { style: "list-style: none; padding: 0; margin: 0;" },
+              children: [
+                {
+                  tagName: "li",
+                  textContent: "✓ Zero dependencies & pure native DOM APIs",
+                  properties: { style: "padding: 8px 0; border-bottom: 1px solid #f1f5f9; color: #334155; font-size: 14px;" }
+                },
+                {
+                  tagName: "li",
+                  textContent: "✓ Lightweight CDN bundle (< 2KB gzip)",
+                  properties: { style: "padding: 8px 0; border-bottom: 1px solid #f1f5f9; color: #334155; font-size: 14px;" }
+                },
+                {
+                  tagName: "li",
+                  textContent: "✓ Dynamic JSON to DOM compilation in < 1ms",
+                  properties: { style: "padding: 8px 0; color: #0284c7; font-size: 14px; font-weight: 600;" }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    };
+
+    let currentParsedSpec = null;
+    let currentFileName = "";
+
+    // DOM Elements
+    const jsonFileInput = document.querySelector("#json-file-input");
+    const btnBuild = document.querySelector("#btn-build");
+    const btnClear = document.querySelector("#btn-clear");
+
+    const browserOutput = document.querySelector("#browser-output");
+    const browserTabTitle = document.querySelector("#browser-tab-title");
+    const browserStatusText = document.querySelector("#browser-status-text");
+    const browserTimingText = document.querySelector("#browser-timing-text");
+    const btnBrowserRefresh = document.querySelector("#btn-browser-refresh");
+
+    const emptyStateMarkup = `
+      <div class="browser-empty-state">
+        <div class="empty-browser-icon">🌐</div>
+        <h3>Browser DOM Viewport</h3>
+        <p>
+          Choose a <code>.json</code> file or click any sample above, then view the compiled native HTML elements live here.
+        </p>
+      </div>
+    `;
+
+    // Dynamic builder resolver
+    async function getBuilder() {
+      if (window.ks?.jsonToTag?.buildSpecElement) {
+        return window.ks.jsonToTag.buildSpecElement;
+      }
+      try {
+        const mod = await import("../dist/v4/min.js");
+        return mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+      } catch {
+        const mod = await import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js");
+        return mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+      }
+    }
+
+    // Process JSON string
+    function loadJson(text, name = "uploaded.json") {
+      try {
+        const parsed = JSON.parse(text);
+        currentParsedSpec = parsed;
+        currentFileName = name;
+
+        btnBuild.disabled = false;
+        browserTabTitle.textContent = name;
+
+        // Automatically build and display in the browser viewport
+        buildDom();
+      } catch (err) {
+        currentParsedSpec = null;
+        btnBuild.disabled = true;
+
+        browserOutput.innerHTML = `
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 20px; color: #991b1b;">
+            <h3 style="margin: 0 0 8px; color: #991b1b;">JSON Syntax Error</h3>
+            <p style="margin: 0; font-size: 14px; font-family: monospace;">${err.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    // Build DOM
+    async function buildDom() {
+      if (!currentParsedSpec) return;
+
+      btnBuild.disabled = true;
+      browserTimingText.textContent = "Building DOM...";
+
+      const build = await getBuilder();
+
+      try {
+        const t0 = performance.now();
+        const element = build(currentParsedSpec);
+        const t1 = performance.now();
+        const duration = (t1 - t0).toFixed(2);
+
+        browserOutput.replaceChildren();
+
+        if (element instanceof Node) {
+          browserOutput.appendChild(element);
+        } else if (Array.isArray(element)) {
+          element.forEach(node => {
+            if (node instanceof Node) browserOutput.appendChild(node);
+          });
+        }
+
+        const count = browserOutput.querySelectorAll("*").length;
+        browserTimingText.textContent = `✓ Built ${count} elements in ${duration}ms`;
+        browserStatusText.innerHTML = `Rendered <code>${currentFileName || "specification"}</code> via CDN`;
+
+        btnClear.disabled = false;
+        btnBuild.disabled = false;
+      } catch (err) {
+        console.error("Build failed:", err);
+        browserOutput.innerHTML = `
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 20px; color: #991b1b;">
+            <h3 style="margin: 0 0 8px; color: #991b1b;">Construction Error</h3>
+            <p style="margin: 0; font-size: 14px; font-family: monospace;">${err.message}</p>
+          </div>
+        `;
+        browserTimingText.textContent = "Build failed";
+        btnBuild.disabled = false;
+        btnClear.disabled = false;
+      }
+    }
+
+    // Clear DOM
+    function clearDom() {
+      browserOutput.innerHTML = emptyStateMarkup;
+      btnClear.disabled = true;
+      browserTabTitle.textContent = "Live DOM Viewport";
+      browserTimingText.textContent = "Cleared";
+      browserStatusText.innerHTML = `Target: <code>#browser-output</code> · Pure Native DOM Execution`;
+      document.querySelectorAll(".sample-pill-btn").forEach(b => b.classList.remove("active"));
+    }
+
+    // File input event
+    jsonFileInput.addEventListener("change", (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      document.querySelectorAll(".sample-pill-btn").forEach(b => b.classList.remove("active"));
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        loadJson(event.target.result, file.name);
+      };
+      reader.readAsText(file);
+    });
+
+    // Sample JSON loaders
+    document.querySelectorAll(".sample-pill-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-sample");
+        const item = samples[key];
+        if (!item) return;
+
+        document.querySelectorAll(".sample-pill-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const sampleText = JSON.stringify(item.spec, null, 2);
+        loadJson(sampleText, item.name);
+      });
+    });
+
+    // Action listeners
+    btnBuild.addEventListener("click", buildDom);
+    btnClear.addEventListener("click", clearDom);
+    btnBrowserRefresh.addEventListener("click", () => {
+      if (currentParsedSpec) buildDom();
+      else clearDom();
+    });
+
+    // Theme toggle (Default is White Background)
+    const btnThemeToggle = document.querySelector("#btn-theme-toggle");
+    if (btnThemeToggle) {
+      btnThemeToggle.addEventListener("click", () => {
+        const isDark = document.body.classList.toggle("dark-theme");
+        btnThemeToggle.textContent = isDark ? "☀️ White Theme" : "🌙 Dark Theme";
+      });
+    }
+  </script>
+</body>
+
+</html>

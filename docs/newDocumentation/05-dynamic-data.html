@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>05 · Dynamic Data &amp; Inputs — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"></script>
+  <style>
+    .spec-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 36px 0 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .spec-header-row h2 {
+      margin: 0;
+    }
+
+    .spec-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-spec-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0d1e33;
+      color: #64d7ff;
+      border: 1px solid #1f3f66;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      font-family: inherit;
+      user-select: none;
+    }
+
+    .btn-spec-action:hover {
+      background: #153254;
+      border-color: #64d7ff;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(100, 215, 255, 0.2);
+    }
+
+    .btn-spec-action.btn-download {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(24, 111, 165, 0.35);
+    }
+
+    .btn-spec-action.btn-download:hover {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 4px 14px rgba(31, 133, 196, 0.45);
+    }
+
+    .interactive-demo-card {
+      background: #06111e;
+      border: 1px solid #1c3554;
+      border-radius: 14px;
+      padding: 20px;
+      margin: 20px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .interactive-demo-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .demo-input-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #8bb5e0;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 6px;
+    }
+
+    .demo-input-group input {
+      width: 100%;
+      background: #091a2e;
+      border: 1px solid #20416b;
+      border-radius: 7px;
+      padding: 8px 12px;
+      color: #ffffff;
+      font-size: 14px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    .demo-input-group input:focus {
+      border-color: #64d7ff;
+    }
+
+    .live-render-box {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      color: #0f172a;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin">
+      <div style="display: flex; align-items: center; gap: 8px; margin-right: auto; flex-wrap: wrap;">
+        <a class="brand" href="index.html" style="margin-right: 0;">json-to-tag / docs</a>
+        <span style="color: #2a476e; font-weight: 400;">/</span>
+        <span style="color: var(--a); font-size: 12px; font-weight: 800; letter-spacing: .08em;">05 · DYNAMIC DATA</span>
+      </div>
+      <div class="navlinks">
+        <a href="04-cdn-build.html">← Previous</a>
+        <a href="06-children.html">Next →</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+      <h1>Render dynamic data and handle inputs.</h1>
+      <p class="lead">
+        In real-world applications, specifications are rarely static. You pass runtime data objects, render dynamic lists with array methods like <code>.map()</code>, and respond to user inputs.
+      </p>
+
+      <h2>1 · Pattern A: Injecting Data into Specifications</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        Use simple JavaScript factory functions that accept your data payload and return a specification object:
+      </p>
+      <div class="code">
+        <pre>// Factory function returning a JSON specification
+function createUserCardSpec(user) {
+  return {
+    tagName: "div",
+    classList: ["user-card"],
+    children: [
+      { tagName: "h3", textContent: user.name },
+      { tagName: "p", textContent: `Email: ${user.email}` },
+      { tagName: "span", textContent: `Role: ${user.role}` }
+    ]
+  };
+}
+
+// Data payload from API / database
+const userData = {
+  name: "Alex Developer",
+  email: "alex@example.com",
+  role: "Lead Architect"
+};
+
+// Build DOM element with dynamic data
+const cardElement = window.ks.jsonToTag.buildSpecElement(createUserCardSpec(userData));
+document.querySelector("#output-area").replaceChildren(cardElement);</pre>
+      </div>
+
+      <h2>2 · Pattern B: Rendering Lists of Data with .map()</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        Because <code>children</code> is a standard JavaScript array, you can use <code>.map()</code> to render collections cleanly:
+      </p>
+      <div class="code">
+        <pre>const items = [
+  { id: 101, title: "Database Migration", status: "Completed" },
+  { id: 102, title: "Authentication Flow", status: "In Progress" },
+  { id: 103, title: "CDN Integration", status: "Ready" }
+];
+
+const listSpec = {
+  tagName: "ul",
+  classList: ["task-list"],
+  children: items.map(item => ({
+    tagName: "li",
+    children: [
+      { tagName: "strong", textContent: `${item.title}: ` },
+      { tagName: "span", textContent: item.status }
+    ]
+  }))
+};
+
+const listElement = window.ks.jsonToTag.buildSpecElement(listSpec);</pre>
+      </div>
+
+      <div class="spec-header-row">
+        <h2>3 · Interactive Live Input Demonstration</h2>
+        <div class="spec-actions">
+          <button type="button" id="btn-copy-live-spec" class="btn-spec-action" title="Copy generated JSON specification">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy Spec</span>
+          </button>
+          <a id="btn-download-live-spec" class="btn-spec-action btn-download" title="Download current specification as .json file" download="05-dynamic-spec.json" href="#">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download JSON</span>
+          </a>
+        </div>
+      </div>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        Type below to pass inputs into the specification function and watch the CDN engine re-render the native DOM instantly:
+      </p>
+
+      <div class="interactive-demo-card">
+        <div class="demo-inputs">
+          <div class="demo-input-group">
+            <label for="input-name">User Name:</label>
+            <input type="text" id="input-name" value="Sree Developer">
+          </div>
+          <div class="demo-input-group">
+            <label for="input-email">Email Address:</label>
+            <input type="email" id="input-email" value="sree@example.com">
+          </div>
+          <div class="demo-input-group">
+            <label for="input-role">Job Title / Role:</label>
+            <input type="text" id="input-role" value="Fullstack Engineer">
+          </div>
+          <div style="font-size: 12px; color: var(--m);">
+            ● Dynamically compiles to native DOM on every keystroke
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 12px; font-weight: 700; color: var(--m); margin-bottom: 6px; text-transform: uppercase;">
+            Live Native DOM Output:
+          </div>
+          <div class="live-render-box" id="dynamic-output">
+            <!-- Rendered live via json-to-tag -->
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: 36px; font-weight: 600;">
+        <a href="06-children.html">Next: see how nested UI forms a Children Tree (06) →</a>
+      </p>
+      <p>
+        <a href="09-interactive-live-build.html">Or test full components in the Interactive Live Demo (09) →</a>
+      </p>
+      <p>
+        <a href="10-upload-build.html">Or upload your own JSON in the Upload &amp; Build tool (10) →</a>
+      </p>
+      <p><a href="04-cdn-build.html">← Back to 04 · CDN Build</a></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const inputName = document.querySelector("#input-name");
+    const inputEmail = document.querySelector("#input-email");
+    const inputRole = document.querySelector("#input-role");
+    const outputContainer = document.querySelector("#dynamic-output");
+    const downloadBtn = document.querySelector("#btn-download-live-spec");
+    const copyBtn = document.querySelector("#btn-copy-live-spec");
+
+    function getDynamicSpec() {
+      return {
+        tagName: "div",
+        attributes: { class: "user-badge-preview" },
+        properties: { style: "display: flex; flex-direction: column; gap: 8px;" },
+        children: [
+          {
+            tagName: "div",
+            properties: { style: "display: flex; align-items: center; gap: 12px;" },
+            children: [
+              {
+                tagName: "div",
+                textContent: (inputName.value.trim().charAt(0) || "U").toUpperCase(),
+                properties: { style: "width: 44px; height: 44px; border-radius: 50%; background: #0284c7; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px;" }
+              },
+              {
+                tagName: "div",
+                children: [
+                  {
+                    tagName: "h3",
+                    textContent: inputName.value || "Anonymous User",
+                    properties: { style: "margin: 0; font-size: 18px; color: #0f2744; font-weight: 700;" }
+                  },
+                  {
+                    tagName: "span",
+                    textContent: inputRole.value || "Developer",
+                    properties: { style: "font-size: 13px; color: #64748b; font-weight: 600;" }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            tagName: "p",
+            textContent: `✉ ${inputEmail.value || "no-email@example.com"}`,
+            properties: { style: "margin: 6px 0 0; font-size: 13.5px; color: #334155; padding-top: 8px; border-top: 1px solid #e2e8f0;" }
+          },
+          {
+            tagName: "div",
+            children: [
+              {
+                tagName: "span",
+                textContent: "● Real-time DOM Synced",
+                properties: { style: "display: inline-block; padding: 2px 8px; background: #ecfdf5; color: #059669; border-radius: 4px; font-size: 11px; font-weight: 700; margin-top: 4px;" }
+              }
+            ]
+          }
+        ]
+      };
+    }
+
+    async function renderLive() {
+      let builder = window.ks?.jsonToTag?.buildSpecElement;
+      if (!builder) {
+        try {
+          const mod = await import("../dist/v4/min.js");
+          builder = mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+        } catch {
+          const mod = await import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js");
+          builder = mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+        }
+      }
+
+      if (builder) {
+        const spec = getDynamicSpec();
+        const element = builder(spec);
+        outputContainer.replaceChildren(element);
+      }
+    }
+
+    [inputName, inputEmail, inputRole].forEach(input => {
+      input.addEventListener("input", renderLive);
+    });
+
+    renderLive();
+
+    // Download & Copy
+    if (downloadBtn) {
+      downloadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const spec = getDynamicSpec();
+        const jsonText = JSON.stringify(spec, null, 2);
+        const blob = new Blob([jsonText], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "05-dynamic-spec.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        const span = downloadBtn.querySelector("span");
+        if (span) {
+          const original = span.textContent;
+          span.textContent = "✓ Downloaded!";
+          setTimeout(() => { span.textContent = original; }, 2000);
+        }
+      });
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        const spec = getDynamicSpec();
+        const jsonText = JSON.stringify(spec, null, 2);
+        navigator.clipboard.writeText(jsonText).then(() => {
+          const span = copyBtn.querySelector("span");
+          if (span) {
+            const original = span.textContent;
+            span.textContent = "✓ Copied!";
+            setTimeout(() => { span.textContent = original; }, 2000);
+          }
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>

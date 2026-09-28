@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>02 · Vanilla JavaScript — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin">
+      <div style="display: flex; align-items: center; gap: 8px; margin-right: auto; flex-wrap: wrap;">
+        <a class="brand" href="index.html" style="margin-right: 0;">json-to-tag / docs</a>
+        <span style="color: #2a476e; font-weight: 400;">/</span>
+        <span style="color: var(--a); font-size: 12px; font-weight: 800; letter-spacing: .08em;">02 · VANILLA JAVASCRIPT</span>
+      </div>
+      <div class="navlinks">
+        <a href="01-normal-html.html">← Previous</a>
+        <a href="03-json-specification.html">Next →</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+      <h1>Create the same UI with plain JavaScript.</h1>
+      <p class="lead">
+        This second approach creates the exact same visual piece without HTML strings, using native browser DOM APIs like <code>document.createElement()</code>, <code>textContent</code>, and <code>append()</code>.
+      </p>
+
+      <h2>1 · JavaScript Build Code</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        Imperative JavaScript code that manually instantiates each node in memory:
+      </p>
+      <div class="code" style="position:relative">
+        <button id="copy-build" class="copy-btn">Copy code</button>
+        <pre id="build-code">// 1. Create the outer container element
+const wrapper = document.createElement("div");
+wrapper.id = "test-content";
+
+// 2. Create the child label
+const label = document.createElement("label");
+label.textContent = "Name";
+
+// 3. Create the child paragraph
+const text = document.createElement("p");
+text.textContent = "Test Content";
+
+// 4. Assemble the tree and mount into the page
+wrapper.append(label, text);
+document.querySelector("#browser-output").replaceChildren(wrapper);</pre>
+      </div>
+
+      <h2>2 · Live Browser Output</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        The element below was created dynamically by the script above executing live in your browser:
+      </p>
+      <div class="ui">
+        <div id="browser-output">
+          <!-- Populated live via script below -->
+        </div>
+      </div>
+
+      <h2>3 · Resulting DOM Tree</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        The resulting DOM structure is 100% identical to the normal HTML version:
+      </p>
+      <div class="tree">div#test-content
+  ├─ label → "Name"
+  └─ p → "Test Content"</div>
+
+      <h2>The Challenge with Manual DOM Construction</h2>
+      <div class="callout" style="margin-top: 14px;">
+        <strong>Imperative overhead:</strong> While vanilla JavaScript gives direct DOM control with no libraries, constructing nested UI trees requires repetitive calls to <code>createElement</code>, setting properties, adding event handlers, and appending children manually. It quickly becomes hard to maintain, cannot be serialized over a network, and cannot be cleanly stored in a database or JSON payload.
+      </div>
+
+      <p style="margin-top: 32px; font-weight: 600;">
+        <a href="03-json-specification.html">Next: see how json-to-tag models this as a clean, declarative JSON specification →</a>
+      </p>
+      <p><a href="01-normal-html.html">← Back to 01 · Normal HTML</a></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // Execute live vanilla JS DOM construction
+    const wrapper = document.createElement("div");
+    wrapper.id = "test-content";
+    wrapper.className = "mini";
+
+    const label = document.createElement("label");
+    label.style.display = "block";
+    label.style.fontWeight = "700";
+    label.style.marginBottom = "6px";
+    label.textContent = "Name";
+
+    const text = document.createElement("p");
+    text.style.margin = "0";
+    text.textContent = "Test Content";
+
+    wrapper.append(label, text);
+    document.querySelector("#browser-output").replaceChildren(wrapper);
+
+    // Copy button
+    const copyBtn = document.querySelector("#copy-build");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        const code = document.querySelector("#build-code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          copyBtn.textContent = "✓ Copied!";
+          setTimeout(() => { copyBtn.textContent = "Copy code"; }, 2000);
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>
