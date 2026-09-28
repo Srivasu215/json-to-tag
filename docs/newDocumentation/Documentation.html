@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Documentation — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .landing {
+      max-width: 1180px;
+      margin: auto;
+    }
+
+    .navlinks {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+    }
+
+    .navlinks a:hover,
+    .navlinks a.active {
+      color: var(--t);
+      font-weight: 700;
+    }
+
+    .section2 {
+      padding: 30px 0 20px;
+    }
+
+    .head2 {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .head2 h1,
+    .head2 h2 {
+      margin: 0;
+      font-size: 32px;
+      letter-spacing: -.03em;
+    }
+
+    .head2 p {
+      margin: 0;
+      color: var(--m);
+      font-size: 13px;
+    }
+
+    .docs2 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .doc2 {
+      padding: 16px;
+      border: 1px solid var(--l);
+      border-radius: 12px;
+      background: #0c192a;
+      color: var(--t);
+      transition: background .18s, border-color .18s, transform .18s;
+      text-decoration: none;
+    }
+
+    .doc2:hover {
+      text-decoration: none;
+      background: #10223a;
+      border-color: #2e5178;
+      transform: translateY(-2px);
+    }
+
+    .doc2 b {
+      display: block;
+      font-size: 13px;
+      color: var(--t);
+    }
+
+    .doc2 span {
+      font-size: 11px;
+      color: var(--m);
+    }
+
+    .cta2 {
+      margin: 30px 0 40px;
+      padding: 22px;
+      border: 1px solid #2c527a;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0d2035;
+    }
+
+    .cta2 b {
+      font-size: 16px;
+      display: block;
+    }
+
+    .cta2 p {
+      margin: 4px 0 0;
+      color: var(--m);
+      font-size: 13px;
+    }
+
+    .cta2 a {
+      padding: 9px 15px;
+      border: 1px solid #3a6b91;
+      border-radius: 8px;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: background .18s;
+    }
+
+    .cta2 a:hover {
+      background: #173553;
+      text-decoration: none;
+    }
+
+    @media(max-width:900px) {
+      .docs2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:550px) {
+      .docs2 {
+        grid-template-columns: 1fr;
+      }
+
+      .head2 {
+        display: block;
+      }
+
+      .head2 p {
+        margin-top: 6px;
+      }
+
+      .cta2 {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin">
+      <a class="brand" href="index.html">json-to-tag / docs</a>
+      <div class="navlinks">
+        <a href="index.html">Home</a>
+        <a href="Documentation.html" class="active">Documentation</a>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <div class="wrap landing">
+      <section class="section2" id="docs">
+        <div class="head2">
+          <h1>Documentation</h1>
+          <p>Open only the detail you need.</p>
+        </div>
+        <div class="docs2">
+          <a class="doc2" href="01-ui-model.html"><b>01 · UI Model</b><span>UI → specification</span></a>
+          <a class="doc2" href="02-spec-to-dom.html"><b>02 · Spec → DOM</b><span>Public API + dispatch</span></a>
+          <a class="doc2" href="03-element-builder.html"><b>03 · Builder</b><span>Six construction stages</span></a>
+          <a class="doc2" href="04-children.html"><b>04 · Children</b><span>Nested DOM tree</span></a>
+          <a class="doc2" href="05-browser-runtime.html"><b>05 · Runtime</b><span>CDN + browser API</span></a>
+          <a class="doc2" href="06-complete-example.html"><b>06 · Example</b><span>Complete UI</span></a>
+          <a class="doc2" href="07-debugging.html"><b>07 · Debugging</b><span>Find the broken stage</span></a>
+          <a class="doc2" href="08-reference.html"><b>08 · Reference</b><span>Fields + source map</span></a>
+          <a class="doc2" href="09-original-html.html"><b>09 · Original HTML</b><span>Direct HTML</span></a>
+          <a class="doc2" href="10-build-same-piece.html"><b>10 · CDN Build</b><span>Copy + live output</span></a>
+          <a class="doc2" href="11-vanilla-javascript.html"><b>11 · Vanilla JS</b><span>Native JavaScript</span></a>
+        </div>
+      </section>
+
+      <div class="cta2">
+        <div>
+          <b>See the build in action</b>
+          <p>Open the CDN example with live output and Copy code.</p>
+        </div>
+        <a href="10-build-same-piece.html">Open example →</a>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+</body>
+
+</html>
