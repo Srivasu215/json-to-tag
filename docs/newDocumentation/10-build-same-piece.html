@@ -11,7 +11,7 @@
 <body>
   <nav>
     <div class="wrap navin"><a class="brand" href="index.html">json-to-tag / docs</a>
-      <div class="navlinks"><a href="09-original-html.html">Previous</a><a href="index.html">Home</a></div>
+      <div class="navlinks"><a href="09-original-html.html">Previous</a><a href="12-interactive-live-build.html">Interactive Demo</a><a href="index.html">Home</a></div>
     </div>
   </nav>
   <main>
@@ -126,6 +126,16 @@ document.querySelector("#browser-output").replaceChildren(element);</pre>
         ├─ label → Name
         └─ p → Test Content</div>
 
+      <div class="callout" style="margin: 28px 0 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <strong>Looking for the Interactive Demo?</strong><br>
+          <span style="color: var(--m); font-size: 13px;">Test the empty-state DOM, click-to-build button, and live DOM inspector on the dedicated demo page.</span>
+        </div>
+        <a href="12-interactive-live-build.html" style="background: #186fa5; color: #fff; padding: 9px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; text-decoration: none; white-space: nowrap;">
+          Open Interactive Demo →
+        </a>
+      </div>
+
       <script>
         const spec = {
           tagName: "div",
@@ -140,17 +150,18 @@ document.querySelector("#browser-output").replaceChildren(element);</pre>
           ]
         };
 
-        function render() {
+        function render(buildFn) {
           const output = document.querySelector("#browser-output");
-          if (output && window.ks?.jsonToTag?.buildSpecElement) {
-            output.replaceChildren(window.ks.jsonToTag.buildSpecElement(spec));
+          const fn = buildFn || window.ks?.jsonToTag?.buildSpecElement;
+          if (output && fn) {
+            output.replaceChildren(fn(spec));
           }
         }
 
-        const script = document.createElement("script");
-        script.src = "https://keshavsoft.github.io/json-to-tag/dist/v4/min.js";
-        script.onload = render;
-        document.head.appendChild(script);
+        import("../dist/v4/min.js")
+          .catch(() => import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"))
+          .then(mod => render(mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement))
+          .catch(err => console.error("Could not load bundle:", err));
 
         document.querySelector("#copy-build").addEventListener("click", async () => {
           const code = document.querySelector("#build-code").textContent;
