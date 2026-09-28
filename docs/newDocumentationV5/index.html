@@ -13,33 +13,44 @@
     }
 
     .hero2 {
-      padding: 20px 0 6px;
+      padding: 40px 0 42px;
+      display: grid;
+      grid-template-columns: 1.4fr .6fr;
+      gap: 35px
     }
 
     .hero2 h1 {
-      font-size: clamp(26px, 3.2vw, 36px);
-      line-height: 1.15;
-      letter-spacing: -.03em;
-      margin: 0 0 8px;
+      font-size: clamp(44px, 6vw, 76px);
+      margin: 10px 0 16px
     }
 
     .hero2 p {
       color: var(--m);
-      font-size: 15px;
-      line-height: 1.5;
-      max-width: 720px;
-      margin: 0;
+      font-size: 18px;
+      max-width: 720px
+    }
+
+    .hero-note {
+      background: linear-gradient(145deg, #10243c, #0a1728);
+      border: 1px solid var(--l);
+      border-radius: 18px;
+      padding: 22px
+    }
+
+    .hero-note span {
+      color: var(--m);
+      font-size: 13px
     }
 
     .section2 {
-      padding: 10px 0 20px;
+      padding: 30px 0
     }
 
     .head2 {
       display: flex;
       justify-content: space-between;
       align-items: end;
-      margin-bottom: 12px;
+      margin-bottom: 16px
     }
 
     .head2 h2 {
@@ -140,6 +151,33 @@
       font-size: 13px
     }
 
+    .arch2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px
+    }
+
+    .archcard {
+      background: #0d1a2d;
+      border: 1px solid var(--l);
+      border-radius: 17px;
+      padding: 20px
+    }
+
+    .steps2 {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px
+    }
+
+    .step2 {
+      border: 1px solid #284765;
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 11px;
+      color: #ccecff
+    }
 
     .docs2 {
       display: grid;
@@ -194,7 +232,12 @@
     }
 
     @media(max-width:900px) {
-      .approaches {
+      .hero2 {
+        grid-template-columns: 1fr
+      }
+
+      .approaches,
+      .arch2 {
         grid-template-columns: 1fr
       }
 
@@ -216,12 +259,21 @@
 </head>
 
 <body>
+  <nav>
+    <div class="wrap navin"><a class="brand" href="index.html">json-to-tag / docs</a>
+      <div class="navlinks"><a href="#compare">Compare</a><a href="#flow">Architecture</a><a href="#docs">Docs</a></div>
+    </div>
+  </nav>
   <main>
     <div class="wrap landing">
       <section class="hero2">
-        <h1>Build the DOM from a specification.</h1>
-        <p>See the same small UI created three ways: original HTML, Vanilla JavaScript, and <code>json-to-tag</code>
-          through CDN.</p>
+        <div><span class="badge">Browser-first · CDN · v4</span>
+          <h1>Build the DOM<br>from a specification.</h1>
+          <p>See the same small UI created three ways: original HTML, Vanilla JavaScript, and <code>json-to-tag</code>
+            through CDN.</p>
+        </div>
+        <div class="hero-note"><strong>Documentation story</strong><br><span>HTML → UI structure → JSON specification →
+            CDN build → native DOM</span></div>
       </section>
 
       <section class="section2" id="compare">
@@ -314,6 +366,24 @@ window.ks.jsonToTag
           JSON and lets the CDN build the native DOM.</div>
       </section>
 
+      <section class="section2" id="flow">
+        <div class="head2">
+          <h2>How the CDN build works</h2>
+          <p>One simple path from data to DOM.</p>
+        </div>
+        <div class="arch2">
+          <div class="archcard"><b>Browser</b>
+            <div class="steps2"><span class="step2">CDN bundle</span><span>→</span><span
+                class="step2">window.ks.jsonToTag</span><span>→</span><span class="step2">buildSpecElement()</span>
+            </div>
+          </div>
+          <div class="archcard"><b>Engine</b>
+            <div class="steps2"><span class="step2">Specification</span><span>→</span><span
+                class="step2">Dispatch</span><span>→</span><span class="step2">Element Builder</span><span>→</span><span
+                class="step2">DOM</span></div>
+          </div>
+        </div>
+      </section>
 
       <section class="section2" id="docs">
         <div class="head2">
@@ -342,22 +412,28 @@ window.ks.jsonToTag
       </div>
     </div>
   </main>
-  <footer>
-    <div class="wrap">
-      json-to-tag • Browser-first documentation
-      <span>·</span>
+<footer>
+  <div class="wrap">
+    json-to-tag • Browser-first documentation
+    <span>·</span>
 
-      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
-        GitHub ↗
-      </a>
+    <a
+      href="https://github.com/keshavsoft/json-to-tag"
+      target="_blank"
+      rel="noopener noreferrer">
+      GitHub ↗
+    </a>
 
-      <span>·</span>
+    <span>·</span>
 
-      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
-        npm ↗
-      </a>
-    </div>
-  </footer>
+    <a
+      href="https://www.npmjs.com/package/@keshavsoft/json-to-tag"
+      target="_blank"
+      rel="noopener noreferrer">
+      npm ↗
+    </a>
+  </div>
+</footer>
   <script>
     (function () { const out = document.querySelector("#cdn-preview"); if (!out) return; const spec = { tagName: "div", children: [{ tagName: "label", textContent: "Name", properties: { style: "display:block;font-weight:700;font-size:12px;margin-bottom:5px" } }, { tagName: "p", textContent: "Test Content", properties: { style: "margin:0;font-size:12px;color:#6e86a2" } }] }; function render() { if (window.ks?.jsonToTag?.buildSpecElement) out.replaceChildren(window.ks.jsonToTag.buildSpecElement(spec)) } if (window.ks?.jsonToTag?.buildSpecElement) render(); else { const s = document.createElement("script"); s.src = "https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"; s.onload = render; document.head.appendChild(s) } })();
   </script>
