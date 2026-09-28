@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Interactive Live Build Demo — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="../dist/v4/min.js"></script>
+  <script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"></script>
+  <style>
+    .interactive-session {
+      background: #081424;
+      border: 1px solid var(--l);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0 32px;
+    }
+
+    .interactive-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      border: 1px solid transparent;
+    }
+
+    .btn-build {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(24, 111, 165, 0.3);
+    }
+
+    .btn-build:hover:not(:disabled) {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 6px 18px rgba(31, 133, 196, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-build:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-clear {
+      background: #0d1e33;
+      border-color: #244163;
+      color: var(--m);
+    }
+
+    .btn-clear:hover:not(:disabled) {
+      background: #142a45;
+      color: var(--t);
+      border-color: #3a628f;
+    }
+
+    .btn-clear:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .status-badge {
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .status-empty {
+      background: #101c2b;
+      border: 1px solid #23364c;
+      color: var(--m);
+    }
+
+    .status-built {
+      background: #082d20;
+      border: 1px solid #146c4b;
+      color: #4ade80;
+    }
+
+    .output-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 850px) {
+      .output-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pane-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #8bb5e0;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .placeholder-box {
+      border: 2px dashed #223c5b;
+      border-radius: 14px;
+      padding: 36px 20px;
+      text-align: center;
+      color: var(--m);
+      background: #06111e;
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .placeholder-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #486a91;
+    }
+
+    .placeholder-box p {
+      margin: 0 0 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #9cb5d1;
+    }
+
+    .placeholder-box small {
+      font-size: 12px;
+      color: #5c799a;
+    }
+
+    .built-card {
+      animation: fadeInScale 0.25s ease-out;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    @media (max-width: 768px) {
+      .steps-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-box {
+      background: var(--p);
+      border: 1px solid var(--l);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .step-num {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--a);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .step-box h4 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      color: var(--t);
+    }
+
+    .step-box p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--m);
+      line-height: 1.5;
+    }
+
+    /* JSON Code Editor & Upload Component */
+    .editor-card {
+      background: #06101c;
+      border: 1px solid var(--l);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 16px 0 28px;
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .editor-card.drag-active {
+      border-color: var(--a);
+      box-shadow: 0 0 25px rgba(100, 215, 255, 0.25);
+    }
+
+    .editor-toolbar {
+      background: #0b1a2d;
+      border-bottom: 1px solid var(--l);
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .editor-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--a);
+      background: #0d2a45;
+      border: 1px solid #1a5180;
+      padding: 4px 9px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .btn-tool {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--t);
+      background: #13263d;
+      border: 1px solid #23456b;
+      transition: all 0.15s ease;
+      font-family: inherit;
+      user-select: none;
+    }
+
+    .btn-tool:hover {
+      background: #1a375a;
+      border-color: var(--a);
+    }
+
+    .btn-upload {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(24, 111, 165, 0.25);
+    }
+
+    .btn-upload:hover {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 4px 12px rgba(31, 133, 196, 0.35);
+    }
+
+    .preset-select {
+      background: #13263d;
+      color: var(--t);
+      border: 1px solid #23456b;
+      padding: 5px 10px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .preset-select:focus {
+      border-color: var(--a);
+    }
+
+    .json-status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .status-valid {
+      background: #082d20;
+      border: 1px solid #146c4b;
+      color: #4ade80;
+    }
+
+    .status-invalid {
+      background: #381014;
+      border: 1px solid #7a2228;
+      color: #ff858d;
+    }
+
+    .editor-body-wrap {
+      position: relative;
+    }
+
+    #spec-editor {
+      width: 100%;
+      min-height: 260px;
+      height: 290px;
+      background: #050e18;
+      color: #d4e5f7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 16px;
+      border: none;
+      resize: vertical;
+      outline: none;
+      box-sizing: border-box;
+      tab-size: 2;
+      display: block;
+    }
+
+    #spec-editor:focus {
+      background: #06111f;
+    }
+
+    .drop-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 17, 30, 0.94);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .editor-card.drag-active .drop-overlay {
+      display: flex;
+    }
+
+    .drop-message {
+      text-align: center;
+      color: var(--a);
+    }
+
+    .drop-message strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .drop-message small {
+      color: var(--m);
+      font-size: 12px;
+    }
+
+    .editor-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 14px;
+      background: #091524;
+      border-top: 1px solid var(--l);
+      font-size: 11px;
+      color: var(--m);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .file-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #64d7ff;
+    }
+
+    .quick-cdn-notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #081728;
+      border: 1px solid #1a3a5f;
+      border-radius: 9px;
+      padding: 8px 14px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      color: var(--m);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .quick-cdn-notice code {
+      color: var(--a);
+      font-size: 11px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin">
+      <a class="brand" href="index.html">json-to-tag / docs</a>
+      <div class="navlinks">
+        <a href="10-build-same-piece.html">10 · CDN Build</a>
+        <a href="Documentation.html">Documentation</a>
+        <a href="index.html">Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+      <span class="eyebrow">12 · INTERACTIVE DEMO</span>
+      <h1>Interactive Live Build Demo</h1>
+      <p class="lead">
+        Watch the CDN engine build native browser DOM elements in real time. The target DOM container is initially
+        empty. Click the button to execute the build and observe the live DOM output and tree inspector.
+      </p>
+
+      <div class="callout" style="margin: 20px 0 25px;">
+        <strong>How it works:</strong> The page loads
+        <code>https://keshavsoft.github.io/json-to-tag/dist/v4/min.js</code> from the CDN. Until you click
+        <strong>Build</strong>, the DOM container stays empty. Once triggered,
+        <code>window.ks.jsonToTag.buildSpecElement(spec)</code> compiles the JSON tree into native DOM nodes instantly.
+      </div>
+
+      <h2>Specification</h2>
+      <p style="margin: -6px 0 16px; color: var(--m); font-size: 13px;">
+        Edit the JSON specification directly, choose a preset, or upload any <code>.json</code> file from your computer. Click <strong>▶ Build DOM with CDN</strong> below to compile and mount it live.
+      </p>
+
+      <div class="quick-cdn-notice">
+        <div>
+          <span>CDN Runtime: </span>
+          <code>&lt;script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;</code>
+        </div>
+        <span style="font-size: 11px; color: #4ade80; display: inline-flex; align-items: center; gap: 4px;">● Runtime Active</span>
+      </div>
+
+      <div class="editor-card" id="editor-card">
+        <div class="editor-toolbar">
+          <div class="toolbar-group">
+            <span class="editor-tag">JSON Spec</span>
+
+            <label class="btn-tool btn-upload" title="Upload a JSON file from your computer">
+              <input type="file" id="json-file-input" accept=".json,application/json" style="display:none">
+              <span>📁 Upload JSON</span>
+            </label>
+
+            <label for="preset-select" style="font-size: 11px; color: var(--m); font-weight: 600; margin-left: 4px;">Preset:</label>
+            <select id="preset-select" class="preset-select" title="Choose a component preset">
+              <option value="card">Card (Label &amp; Text)</option>
+              <option value="form">Interactive Form</option>
+              <option value="profile">Profile Badge</option>
+              <option value="alert">Alert Notice</option>
+              <option value="checklist">Feature Checklist</option>
+            </select>
+          </div>
+
+          <div class="toolbar-group">
+            <span id="json-status" class="json-status-pill status-valid">✓ Valid JSON</span>
+            <button id="btn-format" class="btn-tool" title="Format and pretty-print JSON">⟳ Format</button>
+            <button id="btn-reset" class="btn-tool" title="Reset to default specification">↺ Reset</button>
+            <button id="btn-copy-json" class="btn-tool" title="Copy JSON specification">📋 Copy</button>
+          </div>
+        </div>
+
+        <div class="editor-body-wrap">
+          <textarea id="spec-editor" spellcheck="false" placeholder="Paste or type your JSON specification here..."></textarea>
+          <div class="drop-overlay">
+            <div class="drop-message">
+              <div style="font-size: 34px; margin-bottom: 6px;">📥</div>
+              <strong>Drop your JSON file here</strong>
+              <small>File will be loaded into the editor automatically</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-footer">
+          <div id="file-info" class="file-badge">Default demo specification loaded</div>
+          <div id="editor-stats">Lines: 18 · Chars: 420</div>
+        </div>
+      </div>
+
+      <h2>Interactive Stage</h2>
+      <div class="interactive-session">
+        <div class="interactive-controls">
+          <button id="btn-build" class="btn-action btn-build">
+            ▶ Build DOM with CDN
+          </button>
+          <button id="btn-clear" class="btn-action btn-clear" disabled>
+            ↺ Clear DOM
+          </button>
+          <span id="status-indicator" class="status-badge status-empty">
+            ● DOM Target is Empty
+          </span>
+        </div>
+
+        <div class="output-grid">
+          <div>
+            <div class="pane-title">Live Browser Output (DOM Target)</div>
+            <div id="browser-output">
+              <div class="placeholder-box">
+                <div class="placeholder-icon">⬚</div>
+                <p>DOM target is currently empty</p>
+                <small>Click "▶ Build DOM with CDN" above to construct and attach native DOM elements</small>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="pane-title">DOM Inspector</div>
+            <div id="dom-tree-view" class="tree">#browser-output (empty - waiting for build)</div>
+          </div>
+        </div>
+      </div>
+
+      <h2>Execution Pipeline</h2>
+      <div class="steps-row">
+        <div class="step-box">
+          <span class="step-num">Step 01</span>
+          <h4>JSON Specification</h4>
+          <p>A pure, serializable JavaScript object describes tag names, attributes, content, and nested children.</p>
+        </div>
+        <div class="step-box">
+          <span class="step-num">Step 02</span>
+          <h4>CDN Compilation</h4>
+          <p><code>buildSpecElement(spec)</code> executes the 6 construction stages in the browser using native APIs.
+          </p>
+        </div>
+        <div class="step-box">
+          <span class="step-num">Step 03</span>
+          <h4>Live DOM Insertion</h4>
+          <p>The resulting <code>HTMLElement</code> is mounted into <code>#browser-output</code>, ready for CSS styling
+            and user interaction.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const presets = {
+      card: {
+        tagName: "div",
+        attributes: { id: "test-content" },
+        children: [
+          {
+            tagName: "label",
+            textContent: "Name",
+            properties: { style: "display:block;font-weight:700;margin-bottom:6px;color:#64d7ff" }
+          },
+          {
+            tagName: "p",
+            textContent: "Test Content",
+            properties: { style: "margin:0;font-size:15px;color:#eaf2ff" }
+          }
+        ]
+      },
+      form: {
+        tagName: "form",
+        attributes: { id: "demo-form", class: "interactive-form" },
+        children: [
+          {
+            tagName: "h4",
+            textContent: "Contact Us",
+            properties: { style: "margin:0 0 10px;font-size:16px;color:#64d7ff" }
+          },
+          {
+            tagName: "label",
+            textContent: "Email Address",
+            properties: { style: "display:block;font-size:12px;font-weight:700;margin-bottom:6px;color:#9eb1ca" }
+          },
+          {
+            tagName: "input",
+            attributes: { type: "email", placeholder: "user@example.com" },
+            properties: { style: "width:100%;padding:9px 12px;border:1px solid #284765;border-radius:8px;background:#06101c;color:#fff;margin-bottom:12px;box-sizing:border-box" }
+          },
+          {
+            tagName: "button",
+            textContent: "Send Message",
+            attributes: { type: "button" },
+            properties: { style: "background:#186fa5;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:700;cursor:pointer" }
+          }
+        ]
+      },
+      profile: {
+        tagName: "div",
+        attributes: { class: "profile-badge" },
+        properties: { style: "display:flex;align-items:center;gap:14px;padding:12px 16px;background:#081c30;border:1px solid #1c456e;border-radius:12px" },
+        children: [
+          {
+            tagName: "div",
+            textContent: "JS",
+            properties: { style: "width:42px;height:42px;border-radius:50%;background:#186fa5;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px" }
+          },
+          {
+            tagName: "div",
+            children: [
+              {
+                tagName: "strong",
+                textContent: "Alex Developer",
+                properties: { style: "display:block;color:#eaf2ff;font-size:14px" }
+              },
+              {
+                tagName: "span",
+                textContent: "Active • CDN Runtime v4",
+                properties: { style: "font-size:12px;color:#4ade80" }
+              }
+            ]
+          }
+        ]
+      },
+      alert: {
+        tagName: "div",
+        properties: { style: "border-left:4px solid #64d7ff;background:#0d2338;padding:14px 18px;border-radius:0 10px 10px 0" },
+        children: [
+          {
+            tagName: "h4",
+            textContent: "💡 Declarative Architecture",
+            properties: { style: "margin:0 0 6px;color:#64d7ff;font-size:14px" }
+          },
+          {
+            tagName: "p",
+            textContent: "json-to-tag compiles declarative JSON trees directly into native browser DOM elements without virtual DOM overhead.",
+            properties: { style: "margin:0;font-size:13px;line-height:1.5;color:#c8d7e9" }
+          }
+        ]
+      },
+      checklist: {
+        tagName: "ul",
+        properties: { style: "list-style:none;padding:0;margin:0" },
+        children: [
+          {
+            tagName: "li",
+            textContent: "✓ Zero dependencies & pure native DOM APIs",
+            properties: { style: "padding:6px 0;border-bottom:1px solid #162c47;color:#9eb1ca;font-size:13px" }
+          },
+          {
+            tagName: "li",
+            textContent: "✓ Lightweight CDN bundle (< 2KB gzip)",
+            properties: { style: "padding:6px 0;border-bottom:1px solid #162c47;color:#9eb1ca;font-size:13px" }
+          },
+          {
+            tagName: "li",
+            textContent: "✓ Dynamic JSON to DOM compilation in < 1ms",
+            properties: { style: "padding:6px 0;color:#64d7ff;font-size:13px;font-weight:600" }
+          }
+        ]
+      }
+    };
+
+    const specEditor = document.querySelector("#spec-editor");
+    const jsonFileInput = document.querySelector("#json-file-input");
+    const presetSelect = document.querySelector("#preset-select");
+    const btnFormat = document.querySelector("#btn-format");
+    const btnReset = document.querySelector("#btn-reset");
+    const btnCopyJson = document.querySelector("#btn-copy-json");
+    const jsonStatus = document.querySelector("#json-status");
+    const fileInfo = document.querySelector("#file-info");
+    const editorStats = document.querySelector("#editor-stats");
+    const editorCard = document.querySelector("#editor-card");
+
+    const outputContainer = document.querySelector("#browser-output");
+    const treeView = document.querySelector("#dom-tree-view");
+    const btnBuild = document.querySelector("#btn-build");
+    const btnClear = document.querySelector("#btn-clear");
+    const statusBadge = document.querySelector("#status-indicator");
+
+    const placeholderMarkup = `
+      <div class="placeholder-box">
+        <div class="placeholder-icon">⬚</div>
+        <p>DOM target is currently empty</p>
+        <small>Click "▶ Build DOM with CDN" above to construct and attach native DOM elements</small>
+      </div>
+    `;
+
+    // Live validation & statistics update
+    function validateAndRenderStats() {
+      const val = specEditor.value.trim();
+      const lines = val ? val.split("\n").length : 0;
+      const chars = val.length;
+      editorStats.textContent = `Lines: ${lines} · Chars: ${chars}`;
+
+      if (!val) {
+        jsonStatus.className = "json-status-pill status-invalid";
+        jsonStatus.innerHTML = "⚠ Empty Spec";
+        return null;
+      }
+
+      try {
+        const parsed = JSON.parse(val);
+        jsonStatus.className = "json-status-pill status-valid";
+        jsonStatus.innerHTML = "✓ Valid JSON";
+        jsonStatus.title = "Valid JSON specification ready to compile";
+        return parsed;
+      } catch (err) {
+        jsonStatus.className = "json-status-pill status-invalid";
+        jsonStatus.innerHTML = "⚠ Syntax Error";
+        jsonStatus.title = err.message;
+        return null;
+      }
+    }
+
+    // Set editor value helper
+    function setEditorContent(data, label = "Default specification loaded") {
+      try {
+        const str = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+        specEditor.value = str;
+        fileInfo.innerHTML = label;
+        validateAndRenderStats();
+      } catch (err) {
+        console.error("Could not set editor content:", err);
+      }
+    }
+
+    // Initialize with default card preset
+    setEditorContent(presets.card, "Default card specification loaded");
+
+    // Editor tab indentation support
+    specEditor.addEventListener("keydown", (e) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const start = specEditor.selectionStart;
+        const end = specEditor.selectionEnd;
+        specEditor.value = specEditor.value.substring(0, start) + "  " + specEditor.value.substring(end);
+        specEditor.selectionStart = specEditor.selectionEnd = start + 2;
+        validateAndRenderStats();
+      }
+    });
+
+    specEditor.addEventListener("input", validateAndRenderStats);
+
+    // Preset selection change
+    presetSelect.addEventListener("change", (e) => {
+      const key = e.target.value;
+      if (presets[key]) {
+        const title = presetSelect.options[presetSelect.selectedIndex].text;
+        setEditorContent(presets[key], `Preset loaded: <strong>${title}</strong>`);
+      }
+    });
+
+    // Format JSON button
+    btnFormat.addEventListener("click", () => {
+      try {
+        const parsed = JSON.parse(specEditor.value);
+        specEditor.value = JSON.stringify(parsed, null, 2);
+        validateAndRenderStats();
+        btnFormat.textContent = "✓ Formatted";
+        setTimeout(() => btnFormat.textContent = "⟳ Format", 1200);
+      } catch (err) {
+        alert("Cannot format: Invalid JSON syntax.\n" + err.message);
+      }
+    });
+
+    // Reset button
+    btnReset.addEventListener("click", () => {
+      presetSelect.value = "card";
+      setEditorContent(presets.card, "Reset to default specification");
+      btnReset.textContent = "✓ Reset";
+      setTimeout(() => btnReset.textContent = "↺ Reset", 1200);
+    });
+
+    // Copy JSON button
+    btnCopyJson.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(specEditor.value);
+        btnCopyJson.textContent = "Copied!";
+        setTimeout(() => btnCopyJson.textContent = "📋 Copy", 1400);
+      } catch {
+        btnCopyJson.textContent = "Failed";
+        setTimeout(() => btnCopyJson.textContent = "📋 Copy", 1400);
+      }
+    });
+
+    // Load file content into editor
+    async function loadJsonFile(file) {
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        specEditor.value = JSON.stringify(parsed, null, 2);
+        fileInfo.innerHTML = `📄 Uploaded: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
+        validateAndRenderStats();
+        presetSelect.value = "";
+      } catch (err) {
+        alert("Failed to parse uploaded JSON file: " + err.message);
+        specEditor.value = await file.text();
+        fileInfo.innerHTML = `⚠ Uploaded with errors: <strong>${file.name}</strong>`;
+        validateAndRenderStats();
+      }
+    }
+
+    // File input change
+    jsonFileInput.addEventListener("change", (e) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        loadJsonFile(file);
+        jsonFileInput.value = ""; // reset so same file can be re-uploaded
+      }
+    });
+
+    // Drag and drop onto editor card
+    editorCard.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      editorCard.classList.add("drag-active");
+    });
+
+    editorCard.addEventListener("dragleave", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      editorCard.classList.remove("drag-active");
+    });
+
+    editorCard.addEventListener("drop", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      editorCard.classList.remove("drag-active");
+      const file = e.dataTransfer?.files?.[0];
+      if (file) loadJsonFile(file);
+    });
+
+    // Builder function resolution with local and CDN fallbacks
+    let builderFn = window.ks?.jsonToTag?.buildSpecElement;
+
+    function fallbackBuild(s) {
+      if (!s) return null;
+      if (Array.isArray(s)) {
+        return s.map(fallbackBuild).filter(Boolean);
+      }
+      if (!s.tagName) return null;
+      const el = document.createElement(s.tagName);
+      if (s.attributes) {
+        for (const [k, v] of Object.entries(s.attributes)) el.setAttribute(k, v);
+      }
+      if (s.properties) Object.assign(el, s.properties);
+      if (s.textContent != null) el.textContent = s.textContent;
+      if (Array.isArray(s.children)) {
+        s.children.forEach(c => {
+          const node = fallbackBuild(c);
+          if (node instanceof Node) el.appendChild(node);
+          else if (Array.isArray(node)) node.forEach(n => n instanceof Node && el.appendChild(n));
+        });
+      }
+      return el;
+    }
+
+    async function getBuilder() {
+      if (builderFn) return builderFn;
+      if (window.ks?.jsonToTag?.buildSpecElement) {
+        builderFn = window.ks.jsonToTag.buildSpecElement;
+        return builderFn;
+      }
+      try {
+        const mod = await import("../dist/v4/min.js");
+        builderFn = mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+        if (builderFn) return builderFn;
+      } catch (e) { }
+      try {
+        const mod = await import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js");
+        builderFn = mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+        if (builderFn) return builderFn;
+      } catch (err) { }
+      builderFn = fallbackBuild;
+      return builderFn;
+    }
+
+    // Preload bundle immediately on page load
+    getBuilder().catch(() => { });
+
+    // Dynamic recursive DOM inspector tree builder
+    function buildTreeDiagram(node, prefix = "") {
+      if (!node) return "";
+      let out = "";
+      const children = Array.from(node.children || []);
+      children.forEach((child, idx) => {
+        const isLastChild = idx === children.length - 1;
+        const connector = isLastChild ? "└─ " : "├─ ";
+        const childPrefix = isLastChild ? "   " : "│  ";
+
+        let label = child.tagName.toLowerCase();
+        if (child.id) label += `#${child.id}`;
+        if (child.classList?.length) {
+          const classes = Array.from(child.classList).filter(c => c !== "built-card");
+          if (classes.length) label += `.${classes.join(".")}`;
+        }
+
+        // Add text snippet if leaf node has text
+        if (child.children.length === 0 && child.textContent.trim()) {
+          const textSnippet = child.textContent.trim().replace(/\s+/g, " ");
+          label += ` → "${textSnippet.length > 26 ? textSnippet.slice(0, 23) + '...' : textSnippet}"`;
+        }
+
+        out += `${prefix}${connector}${label}\n`;
+        if (child.children.length > 0) {
+          out += buildTreeDiagram(child, prefix + childPrefix);
+        }
+      });
+      return out;
+    }
+
+    // Build DOM execution
+    async function buildDOM() {
+      const parsedSpec = validateAndRenderStats();
+      if (!parsedSpec) {
+        statusBadge.className = "status-badge status-empty";
+        statusBadge.innerHTML = "● Invalid JSON Spec";
+        alert("The JSON specification contains syntax errors. Please correct the JSON syntax before building.");
+        return;
+      }
+
+      btnBuild.disabled = true;
+      statusBadge.className = "status-badge status-empty";
+      statusBadge.innerHTML = "⏳ Compiling...";
+
+      const build = await getBuilder();
+
+      try {
+        const t0 = performance.now();
+        const element = build(parsedSpec);
+        const t1 = performance.now();
+        const duration = (t1 - t0).toFixed(2);
+
+        const card = document.createElement("div");
+        card.className = "ui built-card";
+
+        if (element instanceof Node) {
+          card.appendChild(element);
+        } else if (Array.isArray(element)) {
+          element.forEach(node => {
+            if (node instanceof Node) card.appendChild(node);
+          });
+        }
+
+        outputContainer.replaceChildren(card);
+
+        // Generate live dynamic tree view for DOM Inspector
+        const treeLines = buildTreeDiagram(card);
+        treeView.textContent = `#browser-output\n${treeLines}`.trim();
+
+        statusBadge.className = "status-badge status-built";
+        statusBadge.innerHTML = `✓ Built natively via CDN (${duration}ms)`;
+
+        btnClear.disabled = false;
+      } catch (err) {
+        console.error("Build failed:", err);
+        statusBadge.className = "status-badge status-empty";
+        statusBadge.innerHTML = "● Build error";
+        outputContainer.innerHTML = `<div style="color:#ff858d;padding:16px;background:#2d0e12;border:1px solid #7a2228;border-radius:8px"><strong>Build Error:</strong> ${err.message}</div>`;
+      } finally {
+        btnBuild.disabled = false;
+      }
+    }
+
+    function clearDOM() {
+      outputContainer.innerHTML = placeholderMarkup;
+      treeView.innerHTML = `#browser-output (empty - waiting for build)`;
+
+      statusBadge.className = "status-badge status-empty";
+      statusBadge.innerHTML = `● DOM Target is Empty`;
+
+      btnBuild.disabled = false;
+      btnClear.disabled = true;
+    }
+
+    btnBuild.addEventListener("click", buildDOM);
+    btnClear.addEventListener("click", clearDOM);
+  </script>
+</body>
+
+</html>

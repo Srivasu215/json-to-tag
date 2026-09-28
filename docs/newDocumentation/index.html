@@ -292,7 +292,25 @@ window.ks.jsonToTag
     </div>
   </footer>
   <script>
-    (function () { const out = document.querySelector("#cdn-preview"); if (!out) return; const spec = { tagName: "div", children: [{ tagName: "label", textContent: "Name", properties: { style: "display:block;font-weight:700;font-size:12px;margin-bottom:5px" } }, { tagName: "p", textContent: "Test Content", properties: { style: "margin:0;font-size:12px;color:#6e86a2" } }] }; function render() { if (window.ks?.jsonToTag?.buildSpecElement) out.replaceChildren(window.ks.jsonToTag.buildSpecElement(spec)) } if (window.ks?.jsonToTag?.buildSpecElement) render(); else { const s = document.createElement("script"); s.src = "https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"; s.onload = render; document.head.appendChild(s) } })();
+    (function () {
+      const out = document.querySelector("#cdn-preview");
+      if (!out) return;
+      const spec = {
+        tagName: "div",
+        children: [
+          { tagName: "label", textContent: "Name", properties: { style: "display:block;font-weight:700;font-size:12px;margin-bottom:5px" } },
+          { tagName: "p", textContent: "Test Content", properties: { style: "margin:0;font-size:12px;color:#6e86a2" } }
+        ]
+      };
+      function render(fn) {
+        const build = fn || window.ks?.jsonToTag?.buildSpecElement;
+        if (build) out.replaceChildren(build(spec));
+      }
+      import("../dist/v4/min.js")
+        .catch(() => import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"))
+        .then(mod => render(mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement))
+        .catch(err => console.error("Could not load preview engine:", err));
+    })();
   </script>
 </body>
 
