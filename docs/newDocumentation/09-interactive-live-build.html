@@ -1,0 +1,1352 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Interactive Live Build Demo — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="../dist/v4/min.js"></script>
+  <script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"></script>
+  <style>
+    .wrap {
+      max-width: 1400px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    main {
+      padding: 12px 0 32px;
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin: 4px 0 10px;
+    }
+
+    .demo-header h1 {
+      font-size: clamp(20px, 2.4vw, 26px);
+      line-height: 1.2;
+      letter-spacing: -.03em;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .demo-header .lead {
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 0;
+      color: var(--m);
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .quick-cdn-notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #081728;
+      border: 1px solid #1a3a5f;
+      border-radius: 8px;
+      padding: 5px 12px;
+      margin-bottom: 12px;
+      font-size: 11px;
+      color: var(--m);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .quick-cdn-notice code {
+      color: var(--a);
+      font-size: 11px;
+    }
+
+    /* Side-by-Side Playground Grid */
+    .split-playground {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: stretch;
+      margin: 6px 0 20px;
+    }
+
+    @media (max-width: 960px) {
+      .split-playground {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    .panel-card {
+      background: #06101c;
+      border: 1px solid var(--l);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      min-height: 490px;
+    }
+
+    .panel-card.drag-active {
+      border-color: var(--a);
+      box-shadow: 0 0 25px rgba(100, 215, 255, 0.25);
+    }
+
+    .panel-header {
+      background: #0b1a2d;
+      border-bottom: 1px solid var(--l);
+      padding: 8px 12px;
+      min-height: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      box-sizing: border-box;
+    }
+
+    .panel-header-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .editor-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--a);
+      background: #0d2a45;
+      border: 1px solid #1a5180;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .stage-tag {
+      color: #4ade80;
+      background: #07261a;
+      border-color: #125e3d;
+    }
+
+    .btn-tool {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--t);
+      background: #13263d;
+      border: 1px solid #23456b;
+      transition: all 0.15s ease;
+      font-family: inherit;
+      user-select: none;
+    }
+
+    .btn-tool:hover {
+      background: #1a375a;
+      border-color: var(--a);
+    }
+
+    .preset-select {
+      background: #13263d;
+      color: var(--t);
+      border: 1px solid #23456b;
+      padding: 4px 8px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .preset-select:focus {
+      border-color: var(--a);
+    }
+
+    .json-status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .status-valid {
+      background: #082d20;
+      border: 1px solid #146c4b;
+      color: #4ade80;
+    }
+
+    .status-invalid {
+      background: #381014;
+      border: 1px solid #7a2228;
+      color: #ff858d;
+    }
+
+    .editor-body-wrap {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 410px;
+      min-height: 380px;
+    }
+
+    .editor-workspace {
+      display: flex;
+      flex: 1;
+      height: 100%;
+      min-height: 100%;
+      background: #050e18;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .editor-gutter {
+      width: 52px;
+      min-width: 52px;
+      background: #071322;
+      border-right: 1px solid #162c47;
+      padding: 14px 4px 14px 2px;
+      user-select: none;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+      line-height: 25px;
+      color: #486585;
+    }
+
+    .gutter-row {
+      height: 25px;
+      line-height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 3px;
+      box-sizing: border-box;
+    }
+
+    .gutter-num {
+      font-size: 12px;
+      color: #55789f;
+      min-width: 22px;
+      text-align: right;
+    }
+
+    .gutter-fold-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      font-size: 9px;
+      line-height: 1;
+      cursor: pointer;
+      color: #64d7ff;
+      border-radius: 3px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .gutter-fold-btn:hover {
+      background: #14355a;
+      color: #ffffff;
+      transform: scale(1.15);
+    }
+
+    .gutter-fold-placeholder {
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+    }
+
+    #spec-editor {
+      flex: 1;
+      height: 100%;
+      min-height: 100%;
+      background: #050e18;
+      color: #d4e5f7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 15.5px;
+      line-height: 25px;
+      padding: 14px 14px;
+      border: none;
+      resize: none;
+      outline: none;
+      box-sizing: border-box;
+      tab-size: 2;
+      display: block;
+      white-space: pre;
+      overflow: auto;
+    }
+
+    #spec-editor:focus {
+      background: #06111f;
+    }
+
+    .panel-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: #091524;
+      border-top: 1px solid var(--l);
+      font-size: 11px;
+      color: var(--m);
+      flex-wrap: wrap;
+      gap: 6px;
+      box-sizing: border-box;
+    }
+
+    .file-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #64d7ff;
+    }
+
+    /* Right Column: Live Output Stage */
+    .stage-card {
+      background: #06101c;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .btn-build {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 3px 10px rgba(24, 111, 165, 0.3);
+    }
+
+    .btn-build:hover:not(:disabled) {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 5px 14px rgba(31, 133, 196, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-build:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-clear {
+      background: #0d1e33;
+      border-color: #244163;
+      color: var(--m);
+    }
+
+    .btn-clear:hover:not(:disabled) {
+      background: #142a45;
+      color: var(--t);
+      border-color: #3a628f;
+    }
+
+    .btn-clear:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .status-badge {
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .status-empty {
+      background: #101c2b;
+      border: 1px solid #23364c;
+      color: var(--m);
+    }
+
+    .status-built {
+      background: #082d20;
+      border: 1px solid #146c4b;
+      color: #4ade80;
+    }
+
+    .stage-output-wrap {
+      flex: 1;
+      height: 410px;
+      min-height: 380px;
+      overflow-y: auto;
+      padding: 16px;
+      background: #ffffff;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stage-output-wrap::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    .stage-output-wrap::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+
+    .stage-output-wrap::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .stage-output-wrap::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    #spec-editor::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    #spec-editor::-webkit-scrollbar-track {
+      background: #050e18;
+    }
+
+    #spec-editor::-webkit-scrollbar-thumb {
+      background: #1b3554;
+      border-radius: 4px;
+    }
+
+    #spec-editor::-webkit-scrollbar-thumb:hover {
+      background: #274d7a;
+    }
+
+    .stage-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .pane-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin: 0;
+    }
+
+    .stage-badge-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: #0369a1;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      border-radius: 4px;
+      padding: 2px 7px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    #browser-output {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+    }
+
+    .placeholder-box {
+      flex: 1;
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 28px 16px;
+      text-align: center;
+      color: #64748b;
+      background: #f8fafc;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .placeholder-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #94a3b8;
+    }
+
+    .placeholder-box p {
+      margin: 0 0 6px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .placeholder-box small {
+      font-size: 13px;
+      color: #64748b;
+      max-width: 320px;
+      line-height: 1.4;
+    }
+
+    .built-card,
+    .preview2 {
+      background: #ffffff;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 18px 20px;
+      width: 100%;
+      box-sizing: border-box;
+      animation: fadeInScale 0.25s ease-out;
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .built-card label,
+    .preview2 label {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+
+    .built-card p,
+    .preview2 p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #334155;
+    }
+
+    .built-card h1,
+    .built-card h2,
+    .built-card h3,
+    .built-card h4 {
+      color: #0f2744;
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .built-card input,
+    .built-card select,
+    .built-card textarea {
+      font-size: 15px;
+    }
+
+    .built-card button {
+      font-size: 14.5px;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="wrap">
+      <div class="demo-header">
+        <h1>Interactive Live Build Demo</h1>
+        <p class="lead">
+          Edit your JSON specification or choose a preset on the left, and build native browser DOM elements live on the
+          right.
+        </p>
+      </div>
+
+      <div class="quick-cdn-notice">
+        <div>
+          <span>CDN Runtime: </span>
+          <code>&lt;script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;</code>
+        </div>
+        <span style="font-size: 11px; color: #4ade80; display: inline-flex; align-items: center; gap: 4px;">● Runtime
+          Active</span>
+      </div>
+
+      <!-- Side-by-side Playground -->
+      <div class="split-playground">
+        <!-- LEFT PANEL: JSON Specification Editor -->
+        <div class="panel-card" id="editor-card">
+          <div class="panel-header">
+            <div class="panel-header-group">
+              <label for="preset-select" style="font-size: 11px; color: var(--m); font-weight: 600;">Preset:</label>
+              <select id="preset-select" class="preset-select" title="Choose a component preset">
+                <option value="card">Card (Label &amp; Text)</option>
+                <option value="form">Interactive Form</option>
+                <option value="profile">Profile Badge</option>
+                <option value="alert">Alert Notice</option>
+                <option value="checklist">Feature Checklist</option>
+              </select>
+            </div>
+
+            <div class="panel-header-group">
+              <span id="json-status" class="json-status-pill status-valid">✓ Valid JSON</span>
+              <button id="btn-toggle-fold" class="btn-tool" title="Collapse or expand all nested JSON blocks">⊟ Collapse
+                All</button>
+              <button id="btn-format" class="btn-tool" title="Format and pretty-print JSON">⟳ Format</button>
+              <button id="btn-reset" class="btn-tool" title="Reset to default specification">↺ Reset</button>
+              <button id="btn-copy-json" class="btn-tool" title="Copy JSON specification">📋 Copy</button>
+            </div>
+          </div>
+
+          <div class="editor-body-wrap">
+            <div class="editor-workspace">
+              <div class="editor-gutter" id="editor-gutter" aria-hidden="true"></div>
+              <textarea id="spec-editor" spellcheck="false"
+                placeholder="Paste or type your JSON specification here..."></textarea>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div id="file-info" class="file-badge">Preset: <strong>Card (Label &amp; Text)</strong></div>
+            <div id="editor-stats">Lines: 12 · Chars: 178</div>
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL: Live Browser DOM Rendering Stage -->
+        <div class="panel-card stage-card">
+          <div class="panel-header">
+            <div class="panel-header-group">
+              <button id="btn-build" class="btn-action btn-build" title="Compile JSON tree into native DOM elements">
+                ▶ Build DOM with CDN
+              </button>
+              <button id="btn-clear" class="btn-action btn-clear" disabled title="Clear rendered DOM output">
+                ↺ Clear DOM
+              </button>
+            </div>
+
+            <div class="panel-header-group">
+              <span id="status-indicator" class="status-badge status-empty">
+                ● DOM Target is Empty
+              </span>
+            </div>
+          </div>
+
+          <div class="stage-output-wrap">
+            <div class="stage-title-bar">
+              <span class="pane-title">LIVE BROWSER OUTPUT (DOM TARGET)</span>
+              <span class="stage-badge-tag">Native DOM</span>
+            </div>
+            <div id="browser-output">
+              <div class="placeholder-box">
+                <div class="placeholder-icon">⬚</div>
+                <p>DOM target is currently empty</p>
+                <small>Click "▶ Build DOM with CDN" above to construct and attach native DOM elements</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="file-badge" id="output-meta">Target: <code>#browser-output</code></div>
+            <div id="output-render-info">Pure Browser Native Execution</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      json-to-tag • Interactive Live Build
+      <span>·</span>
+      <a href="10-upload-build.html">10 · Upload &amp; Build</a>
+      <span>·</span>
+      <a href="Documentation.html">Documentation</a>
+      <span>·</span>
+      <a href="index.html">Home</a>
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const presets = {
+      card: {
+        tagName: "div",
+        attributes: { id: "test-content" },
+        children: [
+          {
+            tagName: "label",
+            textContent: "Name"
+          },
+          {
+            tagName: "p",
+            textContent: "Test Content"
+          }
+        ]
+      },
+      form: {
+        tagName: "form",
+        attributes: { id: "demo-form", class: "interactive-form" },
+        children: [
+          {
+            tagName: "h4",
+            textContent: "Contact Us",
+            properties: { style: "margin:0 0 12px;font-size:18px;color:#0f2744;font-weight:700" }
+          },
+          {
+            tagName: "label",
+            textContent: "Email Address",
+            properties: { style: "display:block;font-size:14.5px;font-weight:600;margin-bottom:8px;color:#334155" }
+          },
+          {
+            tagName: "input",
+            attributes: { type: "email", placeholder: "user@example.com" },
+            properties: { style: "width:100%;padding:10px 14px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#1e293b;margin-bottom:14px;box-sizing:border-box;font-size:15px" }
+          },
+          {
+            tagName: "button",
+            textContent: "Send Message",
+            attributes: { type: "button" },
+            properties: { style: "background:#186fa5;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;font-size:14.5px" }
+          }
+        ]
+      },
+      profile: {
+        tagName: "div",
+        attributes: { class: "profile-badge" },
+        properties: { style: "display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px" },
+        children: [
+          {
+            tagName: "div",
+            textContent: "JS",
+            properties: { style: "width:48px;height:48px;border-radius:50%;background:#186fa5;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px" }
+          },
+          {
+            tagName: "div",
+            children: [
+              {
+                tagName: "strong",
+                textContent: "Alex Developer",
+                properties: { style: "display:block;color:#0f2744;font-size:16px;margin-bottom:2px" }
+              },
+              {
+                tagName: "span",
+                textContent: "Active • CDN Runtime v4",
+                properties: { style: "font-size:13.5px;color:#16a34a;font-weight:600" }
+              }
+            ]
+          }
+        ]
+      },
+      alert: {
+        tagName: "div",
+        properties: { style: "border-left:4px solid #186fa5;background:#f0f7fc;padding:14px 18px;border-radius:0 8px 8px 0;border-top:1px solid #dcebf7;border-right:1px solid #dcebf7;border-bottom:1px solid #dcebf7" },
+        children: [
+          {
+            tagName: "h4",
+            textContent: "💡 Declarative Architecture",
+            properties: { style: "margin:0 0 6px;color:#0f4b73;font-size:16px;font-weight:700" }
+          },
+          {
+            tagName: "p",
+            textContent: "json-to-tag compiles declarative JSON trees directly into native browser DOM elements without virtual DOM overhead.",
+            properties: { style: "margin:0;font-size:14.5px;line-height:1.55;color:#334155" }
+          }
+        ]
+      },
+      checklist: {
+        tagName: "ul",
+        properties: { style: "list-style:none;padding:0;margin:0" },
+        children: [
+          {
+            tagName: "li",
+            textContent: "✓ Zero dependencies & pure native DOM APIs",
+            properties: { style: "padding:10px 0;border-bottom:1px solid #e2e8f0;color:#334155;font-size:14.5px" }
+          },
+          {
+            tagName: "li",
+            textContent: "✓ Lightweight CDN bundle (< 2KB gzip)",
+            properties: { style: "padding:10px 0;border-bottom:1px solid #e2e8f0;color:#334155;font-size:14.5px" }
+          },
+          {
+            tagName: "li",
+            textContent: "✓ Dynamic JSON to DOM compilation in < 1ms",
+            properties: { style: "padding:10px 0;color:#186fa5;font-size:14.5px;font-weight:600" }
+          }
+        ]
+      }
+    };
+
+    const specEditor = document.querySelector("#spec-editor");
+    const editorGutter = document.querySelector("#editor-gutter");
+    const jsonFileInput = document.querySelector("#json-file-input");
+    const presetSelect = document.querySelector("#preset-select");
+    const btnFormat = document.querySelector("#btn-format");
+    const btnReset = document.querySelector("#btn-reset");
+    const btnCopyJson = document.querySelector("#btn-copy-json");
+    const btnToggleFold = document.querySelector("#btn-toggle-fold");
+    const jsonStatus = document.querySelector("#json-status");
+    const fileInfo = document.querySelector("#file-info");
+    const editorStats = document.querySelector("#editor-stats");
+    const editorCard = document.querySelector("#editor-card");
+
+    const outputContainer = document.querySelector("#browser-output");
+    const btnBuild = document.querySelector("#btn-build");
+    const btnClear = document.querySelector("#btn-clear");
+    const statusBadge = document.querySelector("#status-indicator");
+
+    const placeholderMarkup = `
+      <div class="placeholder-box">
+        <div class="placeholder-icon">⬚</div>
+        <p>DOM target is currently empty</p>
+        <small>Click "▶ Build DOM with CDN" above to construct and attach native DOM elements</small>
+      </div>
+    `;
+
+    // Map storing folded placeholder line -> original block content
+    const foldedMap = new Map();
+    let isAllCollapsed = false;
+
+    // Helper: restore full JSON string with any collapsed blocks expanded
+    function getFullSpecText() {
+      let text = specEditor.value;
+      for (const [placeholder, original] of foldedMap.entries()) {
+        text = text.replaceAll(placeholder, original);
+      }
+      return text;
+    }
+
+    // Helper: find matching closing brace or bracket
+    function findBlockEnd(lines, startIdx) {
+      const startLine = lines[startIdx];
+      let openChar = null;
+      let closeChar = null;
+
+      if (startLine.includes("{")) {
+        openChar = "{";
+        closeChar = "}";
+      } else if (startLine.includes("[")) {
+        openChar = "[";
+        closeChar = "]";
+      } else {
+        return -1;
+      }
+
+      let depth = 0;
+      for (let i = startIdx; i < lines.length; i++) {
+        const line = lines[i];
+        for (let c = 0; c < line.length; c++) {
+          if (line[c] === openChar) depth++;
+          else if (line[c] === closeChar) {
+            depth--;
+            if (depth === 0) {
+              return i;
+            }
+          }
+        }
+      }
+      return -1;
+    }
+
+    // Render line numbers and fold indicators in gutter
+    function renderGutter() {
+      if (!editorGutter) return;
+      const text = specEditor.value;
+      const lines = text.split("\n");
+      const lineCount = lines.length;
+
+      let html = "";
+      for (let i = 0; i < lineCount; i++) {
+        const line = lines[i];
+        const lineNum = i + 1;
+        const isFolded = line.includes("/* ...\u200B");
+        const canFold = !isFolded && (line.includes("{") || line.includes("[")) && findBlockEnd(lines, i) > i;
+
+        let foldIcon = '<span class="gutter-fold-placeholder"></span>';
+        if (isFolded) {
+          foldIcon = `<button type="button" class="gutter-fold-btn" data-line="${i}" title="Expand code block">▶</button>`;
+        } else if (canFold) {
+          foldIcon = `<button type="button" class="gutter-fold-btn" data-line="${i}" title="Collapse code block">▼</button>`;
+        }
+
+        html += `<div class="gutter-row"><span class="gutter-num">${lineNum}</span>${foldIcon}</div>`;
+      }
+      editorGutter.innerHTML = html;
+      editorGutter.scrollTop = specEditor.scrollTop;
+    }
+
+    // Toggle collapse on a single line
+    function toggleFoldAtLine(lineIdx) {
+      const currentText = specEditor.value;
+      const lines = currentText.split("\n");
+      const targetLine = lines[lineIdx];
+      if (!targetLine) return;
+
+      // If already folded, expand it
+      if (targetLine.includes("/* ...\u200B")) {
+        const key = targetLine.trim();
+        const originalBlock = foldedMap.get(key);
+        if (originalBlock) {
+          lines.splice(lineIdx, 1, originalBlock);
+          foldedMap.delete(key);
+          specEditor.value = lines.join("\n");
+          if (foldedMap.size === 0) {
+            isAllCollapsed = false;
+            if (btnToggleFold) btnToggleFold.textContent = "⊟ Collapse All";
+          }
+          validateAndRenderStats();
+          renderGutter();
+        }
+        return;
+      }
+
+      // Otherwise collapse the block
+      const endIdx = findBlockEnd(lines, lineIdx);
+      if (endIdx <= lineIdx) return;
+
+      const blockLines = lines.slice(lineIdx, endIdx + 1);
+      const originalBlock = blockLines.join("\n");
+      const id = "f" + Math.random().toString(36).slice(2, 8);
+
+      const lastLine = lines[endIdx].trim();
+      const hasComma = lastLine.endsWith(",");
+      const comma = hasComma ? "," : "";
+
+      const openBrace = targetLine.indexOf("{");
+      const openBracket = targetLine.indexOf("[");
+
+      let collapsedLine = "";
+      if (openBrace !== -1 && (openBracket === -1 || openBrace < openBracket)) {
+        collapsedLine = `${targetLine.substring(0, openBrace + 1)} /* ...\u200B${id} */ }${comma}`;
+      } else if (openBracket !== -1) {
+        collapsedLine = `${targetLine.substring(0, openBracket + 1)} /* ...\u200B${id} */ ]${comma}`;
+      } else {
+        return;
+      }
+
+      foldedMap.set(collapsedLine.trim(), originalBlock);
+      lines.splice(lineIdx, endIdx - lineIdx + 1, collapsedLine);
+      specEditor.value = lines.join("\n");
+      validateAndRenderStats();
+      renderGutter();
+    }
+
+    // Expand all folded blocks
+    function unfoldAll() {
+      let text = specEditor.value;
+      for (const [placeholder, original] of foldedMap.entries()) {
+        text = text.replaceAll(placeholder, original);
+      }
+      foldedMap.clear();
+      isAllCollapsed = false;
+      if (btnToggleFold) btnToggleFold.textContent = "⊟ Collapse All";
+      specEditor.value = text;
+      validateAndRenderStats();
+      renderGutter();
+    }
+
+    // Collapse all level-1 nested blocks
+    function foldAll() {
+      unfoldAll();
+      const fullText = specEditor.value;
+      const lines = fullText.split("\n");
+
+      for (let i = lines.length - 1; i >= 1; i--) {
+        const line = lines[i];
+        if (/^  "[a-zA-Z0-9_\-]+":\s*(\{|\[)/.test(line)) {
+          const endIdx = findBlockEnd(lines, i);
+          if (endIdx > i) {
+            const blockLines = lines.slice(i, endIdx + 1);
+            const originalBlock = blockLines.join("\n");
+            const id = "f" + Math.random().toString(36).slice(2, 8);
+            const lastLine = lines[endIdx].trim();
+            const comma = lastLine.endsWith(",") ? "," : "";
+            const openBrace = line.indexOf("{");
+            const openBracket = line.indexOf("[");
+
+            let collapsedLine = "";
+            if (openBrace !== -1 && (openBracket === -1 || openBrace < openBracket)) {
+              collapsedLine = `${line.substring(0, openBrace + 1)} /* ...\u200B${id} */ }${comma}`;
+            } else if (openBracket !== -1) {
+              collapsedLine = `${line.substring(0, openBracket + 1)} /* ...\u200B${id} */ ]${comma}`;
+            }
+
+            if (collapsedLine) {
+              foldedMap.set(collapsedLine.trim(), originalBlock);
+              lines.splice(i, endIdx - i + 1, collapsedLine);
+            }
+          }
+        }
+      }
+
+      specEditor.value = lines.join("\n");
+      isAllCollapsed = true;
+      if (btnToggleFold) btnToggleFold.textContent = "⊞ Expand All";
+      validateAndRenderStats();
+      renderGutter();
+    }
+
+    // Live validation & statistics update
+    function validateAndRenderStats() {
+      const fullVal = getFullSpecText().trim();
+      const editorVal = specEditor.value;
+      const lines = editorVal ? editorVal.split("\n").length : 0;
+      const chars = editorVal.length;
+      editorStats.textContent = `Lines: ${lines} · Chars: ${chars}`;
+
+      if (!fullVal) {
+        jsonStatus.className = "json-status-pill status-invalid";
+        jsonStatus.innerHTML = "⚠ Empty Spec";
+        return null;
+      }
+
+      try {
+        const parsed = JSON.parse(fullVal);
+        jsonStatus.className = "json-status-pill status-valid";
+        if (foldedMap.size > 0) {
+          jsonStatus.innerHTML = `✓ Valid JSON (${foldedMap.size} folded)`;
+        } else {
+          jsonStatus.innerHTML = "✓ Valid JSON";
+        }
+        jsonStatus.title = "Valid JSON specification ready to compile";
+        return parsed;
+      } catch (err) {
+        jsonStatus.className = "json-status-pill status-invalid";
+        jsonStatus.innerHTML = "⚠ Syntax Error";
+        jsonStatus.title = err.message;
+        return null;
+      }
+    }
+
+    // Set editor value helper
+    function setEditorContent(data, label = "Preset loaded") {
+      try {
+        foldedMap.clear();
+        isAllCollapsed = false;
+        if (btnToggleFold) btnToggleFold.textContent = "⊟ Collapse All";
+
+        const str = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+        specEditor.value = str;
+        fileInfo.innerHTML = label;
+        validateAndRenderStats();
+        renderGutter();
+      } catch (err) {
+        console.error("Could not set editor content:", err);
+      }
+    }
+
+    // Initialize with default card preset
+    setEditorContent(presets.card, "Preset: <strong>Card (Label &amp; Text)</strong>");
+
+    // Editor tab indentation support
+    specEditor.addEventListener("keydown", (e) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const start = specEditor.selectionStart;
+        const end = specEditor.selectionEnd;
+        specEditor.value = specEditor.value.substring(0, start) + "  " + specEditor.value.substring(end);
+        specEditor.selectionStart = specEditor.selectionEnd = start + 2;
+        validateAndRenderStats();
+        renderGutter();
+      }
+    });
+
+    specEditor.addEventListener("input", () => {
+      validateAndRenderStats();
+      renderGutter();
+    });
+
+    specEditor.addEventListener("scroll", () => {
+      if (editorGutter) editorGutter.scrollTop = specEditor.scrollTop;
+    });
+
+    // Gutter fold button clicks
+    if (editorGutter) {
+      editorGutter.addEventListener("click", (e) => {
+        const btn = e.target.closest(".gutter-fold-btn");
+        if (!btn) return;
+        const lineIdx = parseInt(btn.getAttribute("data-line"), 10);
+        if (!isNaN(lineIdx)) {
+          toggleFoldAtLine(lineIdx);
+        }
+      });
+    }
+
+    // Toolbar Collapse All / Expand All button
+    if (btnToggleFold) {
+      btnToggleFold.addEventListener("click", () => {
+        if (isAllCollapsed || foldedMap.size > 0) {
+          unfoldAll();
+        } else {
+          foldAll();
+        }
+      });
+    }
+
+    // Preset selection change
+    presetSelect.addEventListener("change", (e) => {
+      const key = e.target.value;
+      if (presets[key]) {
+        const title = presetSelect.options[presetSelect.selectedIndex].text;
+        setEditorContent(presets[key], `Preset loaded: <strong>${title}</strong>`);
+      }
+    });
+
+    // Format JSON button
+    btnFormat.addEventListener("click", () => {
+      try {
+        const fullVal = getFullSpecText();
+        const parsed = JSON.parse(fullVal);
+        foldedMap.clear();
+        isAllCollapsed = false;
+        if (btnToggleFold) btnToggleFold.textContent = "⊟ Collapse All";
+
+        specEditor.value = JSON.stringify(parsed, null, 2);
+        validateAndRenderStats();
+        renderGutter();
+        btnFormat.textContent = "✓ Formatted";
+        setTimeout(() => btnFormat.textContent = "⟳ Format", 1200);
+      } catch (err) {
+        alert("Cannot format: Invalid JSON syntax.\n" + err.message);
+      }
+    });
+
+    // Reset button
+    btnReset.addEventListener("click", () => {
+      presetSelect.value = "card";
+      setEditorContent(presets.card, "Preset: <strong>Card (Label &amp; Text)</strong>");
+      btnReset.textContent = "✓ Reset";
+      setTimeout(() => btnReset.textContent = "↺ Reset", 1200);
+    });
+
+    // Copy JSON button
+    btnCopyJson.addEventListener("click", async () => {
+      try {
+        const fullVal = getFullSpecText();
+        await navigator.clipboard.writeText(fullVal);
+        btnCopyJson.textContent = "Copied!";
+        setTimeout(() => btnCopyJson.textContent = "📋 Copy", 1400);
+      } catch {
+        btnCopyJson.textContent = "Failed";
+        setTimeout(() => btnCopyJson.textContent = "📋 Copy", 1400);
+      }
+    });
+
+    // Load file content into editor helper
+    async function loadJsonFile(file) {
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        specEditor.value = JSON.stringify(parsed, null, 2);
+        fileInfo.innerHTML = `Loaded: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
+        validateAndRenderStats();
+        presetSelect.value = "";
+      } catch (err) {
+        alert("Failed to parse uploaded JSON file: " + err.message);
+        specEditor.value = await file.text();
+        fileInfo.innerHTML = `⚠ Loaded with errors: <strong>${file.name}</strong>`;
+        validateAndRenderStats();
+      }
+    }
+
+    // File input change (guarded)
+    if (jsonFileInput) {
+      jsonFileInput.addEventListener("change", (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+          loadJsonFile(file);
+          jsonFileInput.value = "";
+        }
+      });
+    }
+
+    // Drag and drop onto editor card
+    editorCard.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      editorCard.classList.add("drag-active");
+    });
+
+    editorCard.addEventListener("dragleave", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      editorCard.classList.remove("drag-active");
+    });
+
+    editorCard.addEventListener("drop", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      editorCard.classList.remove("drag-active");
+      const file = e.dataTransfer?.files?.[0];
+      if (file) loadJsonFile(file);
+    });
+
+    // Builder function resolution with local and CDN fallbacks
+    let builderFn = window.ks?.jsonToTag?.buildSpecElement;
+
+    function fallbackBuild(s) {
+      if (!s) return null;
+      if (Array.isArray(s)) {
+        return s.map(fallbackBuild).filter(Boolean);
+      }
+      if (!s.tagName) return null;
+      const el = document.createElement(s.tagName);
+      if (s.attributes) {
+        for (const [k, v] of Object.entries(s.attributes)) el.setAttribute(k, v);
+      }
+      if (s.properties) Object.assign(el, s.properties);
+      if (s.textContent != null) el.textContent = s.textContent;
+      if (Array.isArray(s.children)) {
+        s.children.forEach(c => {
+          const node = fallbackBuild(c);
+          if (node instanceof Node) el.appendChild(node);
+          else if (Array.isArray(node)) node.forEach(n => n instanceof Node && el.appendChild(n));
+        });
+      }
+      return el;
+    }
+
+    async function getBuilder() {
+      if (builderFn) return builderFn;
+      if (window.ks?.jsonToTag?.buildSpecElement) {
+        builderFn = window.ks.jsonToTag.buildSpecElement;
+        return builderFn;
+      }
+      try {
+        const mod = await import("../dist/v4/min.js");
+        builderFn = mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+        if (builderFn) return builderFn;
+      } catch (e) { }
+      try {
+        const mod = await import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js");
+        builderFn = mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+        if (builderFn) return builderFn;
+      } catch (err) { }
+      builderFn = fallbackBuild;
+      return builderFn;
+    }
+
+    // Preload bundle immediately on page load
+    getBuilder().catch(() => { });
+
+    // Build DOM execution
+    async function buildDOM() {
+      const parsedSpec = validateAndRenderStats();
+      if (!parsedSpec) {
+        statusBadge.className = "status-badge status-empty";
+        statusBadge.innerHTML = "● Invalid JSON Spec";
+        alert("The JSON specification contains syntax errors. Please correct the JSON syntax before building.");
+        return;
+      }
+
+      btnBuild.disabled = true;
+      statusBadge.className = "status-badge status-empty";
+      statusBadge.innerHTML = "⏳ Compiling...";
+
+      const build = await getBuilder();
+
+      try {
+        const t0 = performance.now();
+        const element = build(parsedSpec);
+        const t1 = performance.now();
+        const duration = (t1 - t0).toFixed(2);
+
+        const card = document.createElement("div");
+        card.className = "ui built-card preview2";
+
+        if (element instanceof Node) {
+          card.appendChild(element);
+        } else if (Array.isArray(element)) {
+          element.forEach(node => {
+            if (node instanceof Node) card.appendChild(node);
+          });
+        }
+
+        outputContainer.replaceChildren(card);
+
+        statusBadge.className = "status-badge status-built";
+        statusBadge.innerHTML = `✓ Built natively via CDN (${duration}ms)`;
+
+        const renderInfo = document.querySelector("#output-render-info");
+        if (renderInfo) {
+          const count = card.querySelectorAll("*").length;
+          renderInfo.textContent = `Rendered ${count} elements in ${duration}ms`;
+        }
+
+        btnClear.disabled = false;
+      } catch (err) {
+        console.error("Build failed:", err);
+        statusBadge.className = "status-badge status-empty";
+        statusBadge.innerHTML = "● Build error";
+        outputContainer.innerHTML = `<div style="color:#ff858d;padding:16px;background:#2d0e12;border:1px solid #7a2228;border-radius:8px"><strong>Build Error:</strong> ${err.message}</div>`;
+      } finally {
+        btnBuild.disabled = false;
+      }
+    }
+
+    function clearDOM() {
+      outputContainer.innerHTML = placeholderMarkup;
+
+      statusBadge.className = "status-badge status-empty";
+      statusBadge.innerHTML = `● DOM Target is Empty`;
+
+      const renderInfo = document.querySelector("#output-render-info");
+      if (renderInfo) {
+        renderInfo.textContent = "Pure Browser Native Execution";
+      }
+
+      btnBuild.disabled = false;
+      btnClear.disabled = true;
+    }
+
+    btnBuild.addEventListener("click", buildDOM);
+    btnClear.addEventListener("click", clearDOM);
+  </script>
+</body>
+
+</html>

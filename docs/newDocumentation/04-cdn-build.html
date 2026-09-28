@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>04 · CDN Build — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"></script>
+  <style>
+    .spec-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 36px 0 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .spec-header-row h2 {
+      margin: 0;
+    }
+
+    .spec-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-spec-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0d1e33;
+      color: #64d7ff;
+      border: 1px solid #1f3f66;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      font-family: inherit;
+      user-select: none;
+    }
+
+    .btn-spec-action:hover {
+      background: #153254;
+      border-color: #64d7ff;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(100, 215, 255, 0.2);
+    }
+
+    .btn-spec-action:active {
+      transform: translateY(0);
+    }
+
+    .btn-spec-action.btn-download {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(24, 111, 165, 0.35);
+    }
+
+    .btn-spec-action.btn-download:hover {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 4px 14px rgba(31, 133, 196, 0.45);
+    }
+
+    .live-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #081728;
+      border: 1px solid #1a3a5f;
+      border-radius: 8px;
+      padding: 8px 14px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--m);
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin">
+      <div style="display: flex; align-items: center; gap: 8px; margin-right: auto; flex-wrap: wrap;">
+        <a class="brand" href="index.html" style="margin-right: 0;">json-to-tag / docs</a>
+        <span style="color: #2a476e; font-weight: 400;">/</span>
+        <span style="color: var(--a); font-size: 12px; font-weight: 800; letter-spacing: .08em;">04 · CDN BUILD</span>
+      </div>
+      <div class="navlinks">
+        <a href="03-json-specification.html">← Previous</a>
+        <a href="05-dynamic-data.html">Next →</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+      <h1>Build native DOM from JSON via CDN.</h1>
+      <p class="lead">
+        Connect your JSON specification to the <code>json-to-tag</code> CDN engine. With zero Node.js and zero build steps, the browser compiles the JSON tree into native DOM elements.
+      </p>
+
+      <h2>1 · Complete HTML Document Example</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        A standalone, ready-to-run HTML file you can copy into your project:
+      </p>
+      <div class="code" style="position:relative">
+        <button id="copy-html" class="copy-btn">Copy code</button>
+        <pre id="html-snippet">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;json-to-tag CDN Demo&lt;/title&gt;
+  &lt;!-- 1. Include json-to-tag engine via CDN (Zero dependencies, &lt; 2KB) --&gt;
+  &lt;script src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- 2. Mount point for your constructed DOM element --&gt;
+  &lt;div id="browser-output"&gt;&lt;/div&gt;
+
+  &lt;script&gt;
+    // 3. Define the UI specification
+    const spec = {
+      tagName: "div",
+      attributes: { id: "test-content" },
+      children: [
+        { tagName: "label", textContent: "Name" },
+        { tagName: "p", textContent: "Test Content" }
+      ]
+    };
+
+    // 4. Call global builder exposed on window.ks.jsonToTag
+    const element = window.ks.jsonToTag.buildSpecElement(spec);
+
+    // 5. Mount the native DOM element into the page
+    document.querySelector("#browser-output").replaceChildren(element);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+
+      <div class="spec-header-row">
+        <h2>2 · Sample JSON Specification</h2>
+        <div class="spec-actions">
+          <button type="button" id="btn-copy-spec" class="btn-spec-action" title="Copy JSON specification">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy Spec</span>
+          </button>
+          <a id="btn-download-spec" class="btn-spec-action btn-download" title="Download specification as .json file" download="04-cdn-sample.json" href="data:application/json;charset=utf-8,%7B%22tagName%22%3A%22div%22%2C%22attributes%22%3A%7B%22id%22%3A%22test-content%22%7D%2C%22children%22%3A%5B%7B%22tagName%22%3A%22label%22%2C%22textContent%22%3A%22Name%22%7D%2C%7B%22tagName%22%3A%22p%22%2C%22textContent%22%3A%22Test%20Content%22%7D%5D%7D">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download Sample JSON</span>
+          </a>
+        </div>
+      </div>
+      <div class="code">
+        <pre id="spec-code">{
+  "tagName": "div",
+  "attributes": { "id": "test-content" },
+  "children": [
+    { "tagName": "label", "textContent": "Name" },
+    { "tagName": "p", "textContent": "Test Content" }
+  ]
+}</pre>
+      </div>
+
+      <h2>3 · Live Browser Output (CDN Engine)</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        Below is the real native DOM element built live in this browser window by calling <code>buildSpecElement(spec)</code>:
+      </p>
+      <div class="ui">
+        <div id="live-cdn-output">
+          <!-- Populated live by CDN build call -->
+        </div>
+      </div>
+      <div class="live-status-bar">
+        <span id="timing-badge">Compiling via CDN...</span>
+        <span style="color: #4ade80;">● Native DOM Mounted</span>
+      </div>
+
+      <h2>How the CDN Engine Operates</h2>
+      <div class="grid" style="margin-top: 14px;">
+        <div class="card">
+          <span class="num">STAGE 1</span>
+          <h3 style="margin: 8px 0 6px; font-size: 16px;">Include Bundle</h3>
+          <p>The CDN script executes in the global context, registering <code>window.ks.jsonToTag</code>.</p>
+        </div>
+        <div class="card">
+          <span class="num">STAGE 2</span>
+          <h3 style="margin: 8px 0 6px; font-size: 16px;">buildSpecElement</h3>
+          <p>Receives your JSON tree, validates tag names, applies attributes, and recursively builds children.</p>
+        </div>
+        <div class="card">
+          <span class="num">STAGE 3</span>
+          <h3 style="margin: 8px 0 6px; font-size: 16px;">Mount Element</h3>
+          <p>Returns an authentic <code>HTMLElement</code> ready to insert with <code>append()</code> or <code>replaceChildren()</code>.</p>
+        </div>
+      </div>
+
+      <p style="margin-top: 32px; font-weight: 600;">
+        <a href="05-dynamic-data.html">Next: see how to feed dynamic data and inputs into json-to-tag →</a>
+      </p>
+      <p><a href="03-json-specification.html">← Back to 03 · JSON Specification</a></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const sampleSpec = {
+      tagName: "div",
+      attributes: { id: "test-content", class: "mini" },
+      children: [
+        {
+          tagName: "label",
+          textContent: "Name",
+          properties: { style: "display:block;font-weight:700;margin-bottom:6px" }
+        },
+        {
+          tagName: "p",
+          textContent: "Test Content",
+          properties: { style: "margin:0" }
+        }
+      ]
+    };
+
+    // Live CDN execution
+    async function executeCdnBuild() {
+      const target = document.querySelector("#live-cdn-output");
+      const timingBadge = document.querySelector("#timing-badge");
+
+      let builder = window.ks?.jsonToTag?.buildSpecElement;
+      if (!builder) {
+        try {
+          const mod = await import("../dist/v4/min.js");
+          builder = mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+        } catch {
+          const mod = await import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js");
+          builder = mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+        }
+      }
+
+      if (builder) {
+        const t0 = performance.now();
+        const el = builder(sampleSpec);
+        const t1 = performance.now();
+        target.replaceChildren(el);
+        timingBadge.textContent = `✓ Built in ${(t1 - t0).toFixed(2)}ms via window.ks.jsonToTag`;
+      }
+    }
+
+    executeCdnBuild();
+
+    // Copy HTML snippet
+    const copyHtmlBtn = document.querySelector("#copy-html");
+    if (copyHtmlBtn) {
+      copyHtmlBtn.addEventListener("click", () => {
+        const code = document.querySelector("#html-snippet").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          copyHtmlBtn.textContent = "✓ Copied!";
+          setTimeout(() => { copyHtmlBtn.textContent = "Copy code"; }, 2000);
+        });
+      });
+    }
+
+    // Download Spec button
+    const downloadBtn = document.querySelector("#btn-download-spec");
+    const copySpecBtn = document.querySelector("#btn-copy-spec");
+
+    if (downloadBtn) {
+      downloadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const jsonText = JSON.stringify(sampleSpec, null, 2);
+        const blob = new Blob([jsonText], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const tempLink = document.createElement("a");
+        tempLink.href = url;
+        tempLink.download = "04-cdn-sample.json";
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+        URL.revokeObjectURL(url);
+
+        const span = downloadBtn.querySelector("span");
+        if (span) {
+          const original = span.textContent;
+          span.textContent = "✓ Downloaded!";
+          setTimeout(() => { span.textContent = original; }, 2000);
+        }
+      });
+    }
+
+    if (copySpecBtn) {
+      copySpecBtn.addEventListener("click", () => {
+        const jsonText = JSON.stringify(sampleSpec, null, 2);
+        navigator.clipboard.writeText(jsonText).then(() => {
+          const span = copySpecBtn.querySelector("span");
+          if (span) {
+            const original = span.textContent;
+            span.textContent = "✓ Copied!";
+            setTimeout(() => { span.textContent = original; }, 2000);
+          }
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>

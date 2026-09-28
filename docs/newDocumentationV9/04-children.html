@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Children — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .spec-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 48px 0 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .spec-header-row h2 {
+      margin: 0;
+    }
+
+    .spec-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-spec-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0d1e33;
+      color: #64d7ff;
+      border: 1px solid #1f3f66;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      font-family: inherit;
+      user-select: none;
+    }
+
+    .btn-spec-action:hover {
+      background: #153254;
+      border-color: #64d7ff;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(100, 215, 255, 0.2);
+    }
+
+    .btn-spec-action:active {
+      transform: translateY(0);
+    }
+
+    .btn-spec-action.btn-download {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(24, 111, 165, 0.35);
+    }
+
+    .btn-spec-action.btn-download:hover {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 4px 14px rgba(31, 133, 196, 0.45);
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin">
+      <div style="display: flex; align-items: center; gap: 8px; margin-right: auto; flex-wrap: wrap;">
+        <a class="brand" href="index.html" style="margin-right: 0;">json-to-tag / docs</a>
+        <span style="color: #2a476e; font-weight: 400;">/</span>
+        <span style="color: var(--a); font-size: 12px; font-weight: 800; letter-spacing: .08em;">04 · TREE</span>
+      </div>
+      <div class="navlinks"><a href="03-element-builder.html">Previous</a><a href="05-browser-runtime.html">Next</a>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <div class="wrap">
+      <h1>Nested UI becomes a DOM tree.</h1>
+      <p class="lead">A <code>children</code> array lets a parent specification contain more specifications. Each child
+        uses the same build model.</p>
+      <div class="tree">div.card
+        ├─ h3 → "Invoice"
+        ├─ p → "2 items"
+        └─ button → "Open"</div>
+      <div class="spec-header-row">
+        <h2>Specification</h2>
+        <div class="spec-actions">
+          <button type="button" id="btn-copy-spec" class="btn-spec-action" title="Copy JSON specification">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy</span>
+          </button>
+          <a id="btn-download-spec" class="btn-spec-action btn-download" title="Download specification as .json file" download="04-children-spec.json" href="data:application/json;charset=utf-8,%7B%22tagName%22%3A%22div%22%2C%22classList%22%3A%5B%22card%22%5D%2C%22children%22%3A%5B%7B%22tagName%22%3A%22h3%22%2C%22textContent%22%3A%22Invoice%22%7D%2C%7B%22tagName%22%3A%22p%22%2C%22textContent%22%3A%222%20items%22%7D%2C%7B%22tagName%22%3A%22button%22%2C%22textContent%22%3A%22Open%22%7D%5D%7D">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download JSON</span>
+          </a>
+        </div>
+      </div>
+      <div class="code">
+        <pre>{
+  "tagName":"div",
+  "classList":["card"],
+  "children":[
+    {"tagName":"h3","textContent":"Invoice"},
+    {"tagName":"p","textContent":"2 items"},
+    {"tagName":"button","textContent":"Open"}
+  ]
+}</pre>
+      </div>
+      <h2>Three operations</h2>
+      <div class="grid">
+        <div class="card"><b>Parent</b>
+          <p>Create the parent element.</p>
+        </div>
+        <div class="card"><b>Children</b>
+          <p>Build each child specification.</p>
+        </div>
+        <div class="card"><b>Connect</b>
+          <p>Append the resulting nodes.</p>
+        </div>
+      </div>
+      <h2>Source connection</h2>
+      <div class="code">
+        <pre>if ("children" in localSpec) {
+  localChildrenNodes = Array.isArray(localSpec.children) &&
+    localSpec.children.length > 0
+      ? buildChildrenNodes({inChildren: localSpec.children})
+      : [];
+  elementBuilt.append(...localChildrenNodes);
+}</pre>
+      </div>
+      <p class="callout">A child does not need a second renderer. It is another specification in the same tree.</p>
+      <p><a href="05-browser-runtime.html">Next: browser runtime →</a></p>
+    </div>
+  </main>
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+
+      <span>·</span>
+
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+  <script>
+    const specData = {
+      "tagName": "div",
+      "classList": ["card"],
+      "children": [
+        { "tagName": "h3", "textContent": "Invoice" },
+        { "tagName": "p", "textContent": "2 items" },
+        { "tagName": "button", "textContent": "Open" }
+      ]
+    };
+
+    const downloadBtn = document.querySelector("#btn-download-spec");
+    const copyBtn = document.querySelector("#btn-copy-spec");
+
+    if (downloadBtn) {
+      downloadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const jsonText = JSON.stringify(specData, null, 2);
+        const blob = new Blob([jsonText], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const tempLink = document.createElement("a");
+        tempLink.href = url;
+        tempLink.download = "04-children-spec.json";
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+        URL.revokeObjectURL(url);
+
+        const span = downloadBtn.querySelector("span");
+        if (span) {
+          const original = span.textContent;
+          span.textContent = "✓ Downloaded!";
+          setTimeout(() => { span.textContent = original; }, 2000);
+        }
+      });
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        const jsonText = JSON.stringify(specData, null, 2);
+        const onCopied = () => {
+          const span = copyBtn.querySelector("span");
+          if (span) {
+            const original = span.textContent;
+            span.textContent = "✓ Copied!";
+            setTimeout(() => { span.textContent = original; }, 2000);
+          }
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(jsonText).then(onCopied).catch(() => {
+            const ta = document.createElement("textarea");
+            ta.value = jsonText;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            onCopied();
+          });
+        } else {
+          const ta = document.createElement("textarea");
+          ta.value = jsonText;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          onCopied();
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

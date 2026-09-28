@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>03 · JSON Specification — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .spec-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 36px 0 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .spec-header-row h2 {
+      margin: 0;
+    }
+
+    .spec-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-spec-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0d1e33;
+      color: #64d7ff;
+      border: 1px solid #1f3f66;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      font-family: inherit;
+      user-select: none;
+    }
+
+    .btn-spec-action:hover {
+      background: #153254;
+      border-color: #64d7ff;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(100, 215, 255, 0.2);
+    }
+
+    .btn-spec-action:active {
+      transform: translateY(0);
+    }
+
+    .btn-spec-action.btn-download {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(24, 111, 165, 0.35);
+    }
+
+    .btn-spec-action.btn-download:hover {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 4px 14px rgba(31, 133, 196, 0.45);
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="wrap navin">
+      <div style="display: flex; align-items: center; gap: 8px; margin-right: auto; flex-wrap: wrap;">
+        <a class="brand" href="index.html" style="margin-right: 0;">json-to-tag / docs</a>
+        <span style="color: #2a476e; font-weight: 400;">/</span>
+        <span style="color: var(--a); font-size: 12px; font-weight: 800; letter-spacing: .08em;">03 · JSON SPECIFICATION</span>
+      </div>
+      <div class="navlinks">
+        <a href="02-vanilla-javascript.html">← Previous</a>
+        <a href="04-cdn-build.html">Next →</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+      <h1>Model UI as a declarative JSON tree.</h1>
+      <p class="lead">
+        Instead of writing imperative JavaScript commands, <code>json-to-tag</code> represents UI components as pure, serializable JSON specifications that any environment can generate, send, or store.
+      </p>
+
+      <div class="spec-header-row">
+        <h2>1 · The JSON Specification</h2>
+        <div class="spec-actions">
+          <button type="button" id="btn-copy-spec" class="btn-spec-action" title="Copy JSON specification">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy</span>
+          </button>
+          <a id="btn-download-spec" class="btn-spec-action btn-download" title="Download specification as .json file" download="03-ui-spec.json" href="data:application/json;charset=utf-8,%7B%22tagName%22%3A%22div%22%2C%22attributes%22%3A%7B%22id%22%3A%22test-content%22%7D%2C%22children%22%3A%5B%7B%22tagName%22%3A%22label%22%2C%22textContent%22%3A%22Name%22%7D%2C%7B%22tagName%22%3A%22p%22%2C%22textContent%22%3A%22Test%20Content%22%7D%5D%7D">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download JSON</span>
+          </a>
+        </div>
+      </div>
+      <div class="code">
+        <pre id="spec-code">{
+  "tagName": "div",
+  "attributes": { "id": "test-content" },
+  "children": [
+    { "tagName": "label", "textContent": "Name" },
+    { "tagName": "p", "textContent": "Test Content" }
+  ]
+}</pre>
+      </div>
+
+      <h2>2 · Key Specification Fields</h2>
+      <p style="color: var(--m); font-size: 13.5px; margin-top: -6px;">
+        Every specification node uses simple, standardized keys:
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <span class="num">01 · TAG</span>
+          <h3 style="margin: 8px 0 6px; font-size: 17px;">tagName</h3>
+          <p>The native HTML tag to instantiate (e.g. <code>"div"</code>, <code>"label"</code>, <code>"input"</code>, <code>"button"</code>).</p>
+        </div>
+        <div class="card">
+          <span class="num">02 · ATTRIBUTES</span>
+          <h3 style="margin: 8px 0 6px; font-size: 17px;">attributes</h3>
+          <p>Key-value map of standard HTML attributes like <code>id</code>, <code>class</code>, <code>placeholder</code>, or <code>type</code>.</p>
+        </div>
+        <div class="card">
+          <span class="num">03 · CHILDREN</span>
+          <h3 style="margin: 8px 0 6px; font-size: 17px;">children</h3>
+          <p>An array of nested specifications. Each child is built recursively using the exact same model.</p>
+        </div>
+      </div>
+
+      <h2>3 · The Architectural Shift</h2>
+      <div class="callout" style="margin-top: 14px;">
+        <strong>UI as Data:</strong> Instead of coupling your UI structure to client-side templates or heavy JSX compilers, your UI is now valid, standard JSON. It can be sent over HTTP APIs, generated dynamically on backend servers, stored in databases, or loaded from flat <code>.json</code> files.
+      </div>
+
+      <p style="margin-top: 32px; font-weight: 600;">
+        <a href="04-cdn-build.html">Next: see how to load json-to-tag in HTML via CDN and compile this specification live →</a>
+      </p>
+      <p><a href="02-vanilla-javascript.html">← Back to 02 · Vanilla JavaScript</a></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const specData = {
+      "tagName": "div",
+      "attributes": { "id": "test-content" },
+      "children": [
+        { "tagName": "label", "textContent": "Name" },
+        { "tagName": "p", "textContent": "Test Content" }
+      ]
+    };
+
+    const downloadBtn = document.querySelector("#btn-download-spec");
+    const copyBtn = document.querySelector("#btn-copy-spec");
+
+    if (downloadBtn) {
+      downloadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const jsonText = JSON.stringify(specData, null, 2);
+        const blob = new Blob([jsonText], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const tempLink = document.createElement("a");
+        tempLink.href = url;
+        tempLink.download = "03-ui-spec.json";
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+        URL.revokeObjectURL(url);
+
+        const span = downloadBtn.querySelector("span");
+        if (span) {
+          const original = span.textContent;
+          span.textContent = "✓ Downloaded!";
+          setTimeout(() => { span.textContent = original; }, 2000);
+        }
+      });
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        const jsonText = JSON.stringify(specData, null, 2);
+        const onCopied = () => {
+          const span = copyBtn.querySelector("span");
+          if (span) {
+            const original = span.textContent;
+            span.textContent = "✓ Copied!";
+            setTimeout(() => { span.textContent = original; }, 2000);
+          }
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(jsonText).then(onCopied).catch(() => {
+            const ta = document.createElement("textarea");
+            ta.value = jsonText;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            onCopied();
+          });
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
