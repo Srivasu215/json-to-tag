@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Upload JSON &amp; Build DOM — json-to-tag</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"></script>
+  <style>
+    .wrap {
+      max-width: 1280px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    main {
+      padding: 20px 0 40px;
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin: 4px 0 16px;
+    }
+
+    .demo-header h1 {
+      font-size: clamp(20px, 2.4vw, 26px);
+      line-height: 1.2;
+      letter-spacing: -.03em;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .demo-header .lead {
+      font-size: 13.5px;
+      line-height: 1.45;
+      margin: 0;
+      color: var(--m);
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .quick-cdn-notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #081728;
+      border: 1px solid #1a3a5f;
+      border-radius: 8px;
+      padding: 6px 14px;
+      margin-bottom: 20px;
+      font-size: 11px;
+      color: var(--m);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .quick-cdn-notice code {
+      background: #040c16;
+      color: #64d7ff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #132a44;
+      font-size: 11px;
+    }
+
+    /* Top File Upload Control Card */
+    .upload-control-card {
+      background: #071322;
+      border: 1px solid #1a3658;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .upload-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #8bb5e0;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 10px;
+    }
+
+    .file-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .file-input-field {
+      background: #050e18;
+      border: 1px solid #1f3f66;
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #e2e8f0;
+      font-size: 14px;
+      font-family: inherit;
+      width: 100%;
+      max-width: 480px;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .file-input-field:hover,
+    .file-input-field:focus {
+      border-color: #64d7ff;
+      box-shadow: 0 0 0 2px rgba(100, 215, 255, 0.15);
+      outline: none;
+    }
+
+    .file-input-field::file-selector-button {
+      background: #186fa5;
+      color: #ffffff;
+      border: 1px solid #388ac4;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 12px;
+      transition: background 0.18s;
+      font-family: inherit;
+    }
+
+    .file-input-field::file-selector-button:hover {
+      background: #1f85c4;
+    }
+
+    .sample-link {
+      background: transparent;
+      border: none;
+      color: #64d7ff;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 13px;
+      padding: 0;
+      font-family: inherit;
+    }
+
+    .sample-link:hover {
+      color: #a5ecff;
+    }
+
+    .file-hint {
+      font-size: 13px;
+      color: var(--m);
+    }
+
+    /* Action Buttons Row */
+    .action-buttons-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border-radius: 7px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .btn-build {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 3px 12px rgba(24, 111, 165, 0.35);
+    }
+
+    .btn-build:hover:not(:disabled) {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 5px 16px rgba(31, 133, 196, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-build:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-clear {
+      background: #0d1e33;
+      border-color: #244163;
+      color: var(--m);
+    }
+
+    .btn-clear:hover:not(:disabled) {
+      background: #142a45;
+      color: var(--t);
+      border-color: #3a628f;
+    }
+
+    .btn-clear:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .status-pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      background: #0d1e33;
+      border: 1px solid #203a5a;
+      color: var(--m);
+    }
+
+    .status-pill.valid {
+      background: #082d20;
+      border-color: #146c4b;
+      color: #4ade80;
+    }
+
+    .status-pill.invalid {
+      background: #361015;
+      border-color: #7a1d29;
+      color: #f87171;
+    }
+
+    /* REALISTIC BROWSER WINDOW MOCKUP */
+    .browser-window {
+      background: #142236;
+      border: 1px solid #233e62;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Browser Window Top Chrome */
+    .browser-chrome {
+      background: #0a1727;
+      border-bottom: 1px solid #1c3554;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .browser-tab-bar {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px 0;
+      gap: 16px;
+    }
+
+    .browser-traffic-dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .browser-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-red {
+      background: #ff5f56;
+      border: 1px solid #e0443e;
+    }
+
+    .dot-yellow {
+      background: #ffbd2e;
+      border: 1px solid #dea123;
+    }
+
+    .dot-green {
+      background: #27c93f;
+      border: 1px solid #1aab29;
+    }
+
+    .browser-tab {
+      background: #16273d;
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 7px 7px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #223f66;
+      border-bottom: none;
+      max-width: 260px;
+    }
+
+    .browser-tab-close {
+      color: #64748b;
+      font-size: 11px;
+      margin-left: auto;
+      cursor: pointer;
+    }
+
+    .browser-tab-close:hover {
+      color: #cbd5e1;
+    }
+
+    /* Browser Navigation & Address Bar */
+    .browser-nav-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: #101f33;
+      border-top: 1px solid #182e49;
+    }
+
+    .browser-nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #5c7b9e;
+      font-size: 14px;
+      user-select: none;
+    }
+
+    .browser-nav-icons span {
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .browser-nav-icons span:hover {
+      color: #cbd5e1;
+    }
+
+    .browser-address-bar {
+      flex: 1;
+      background: #081322;
+      border: 1px solid #1d395d;
+      border-radius: 7px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #64748b;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .browser-lock-icon {
+      color: #4ade80;
+      font-size: 11px;
+    }
+
+    .browser-address-url {
+      color: #94a3b8;
+    }
+
+    .browser-cdn-pill {
+      font-size: 10px;
+      font-weight: 700;
+      color: #0284c7;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      border-radius: 4px;
+      padding: 2px 7px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-left: auto;
+      font-family: system-ui, sans-serif;
+    }
+
+    /* BROWSER VIEWPORT (The Webpage Canvas) */
+    .browser-viewport {
+      background: #ffffff;
+      min-height: 480px;
+      padding: 36px 40px;
+      color: #0f172a;
+      overflow-y: auto;
+      box-sizing: border-box;
+      font-size: 15.5px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .browser-viewport {
+        padding: 20px;
+      }
+    }
+
+    .browser-empty-state {
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #64748b;
+      border: 2px dashed #e2e8f0;
+      border-radius: 12px;
+      padding: 32px 20px;
+      background: #f8fafc;
+    }
+
+    .empty-browser-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      color: #94a3b8;
+    }
+
+    .browser-empty-state h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .browser-empty-state p {
+      margin: 0;
+      font-size: 14px;
+      color: #64748b;
+      max-width: 420px;
+      line-height: 1.5;
+    }
+
+    /* Built Output Elements Styling */
+    .browser-viewport label {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .browser-viewport p {
+      font-size: 15px;
+      line-height: 1.55;
+      color: #334155;
+      margin: 0 0 12px;
+    }
+
+    .browser-viewport h1,
+    .browser-viewport h2,
+    .browser-viewport h3,
+    .browser-viewport h4 {
+      color: #0f2744;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .browser-viewport input,
+    .browser-viewport select,
+    .browser-viewport textarea {
+      font-size: 15px;
+      font-family: inherit;
+    }
+
+    .browser-viewport button {
+      font-size: 14.5px;
+      font-weight: 600;
+      font-family: inherit;
+    }
+
+    .browser-status-bar {
+      background: #0d1a29;
+      padding: 8px 16px;
+      font-size: 11px;
+      color: var(--m);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #1c3554;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="wrap">
+      <div class="demo-header">
+        <h1>Upload JSON &amp; Build DOM</h1>
+        <p class="lead">
+          Upload any JSON specification file to compile and render native browser DOM elements via CDN.
+        </p>
+      </div>
+
+      <div class="quick-cdn-notice">
+        <div>
+          <span>CDN Runtime: </span>
+          <code>&lt;script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"&gt;&lt;/script&gt;</code>
+        </div>
+        <span style="font-size: 11px; color: #4ade80; display: inline-flex; align-items: center; gap: 4px;">
+          ● Runtime Active
+        </span>
+      </div>
+
+      <!-- FILE UPLOAD INPUT FIELD SECTION -->
+      <div class="upload-control-card">
+        <label for="json-file-input" class="upload-label">
+          Upload JSON File:
+        </label>
+
+        <div class="file-input-wrapper">
+          <input type="file" id="json-file-input" accept=".json,application/json" class="file-input-field" title="Select a JSON file">
+          <span class="file-hint">or <button type="button" id="btn-load-sample" class="sample-link">load sample specification</button> to test</span>
+        </div>
+
+        <!-- Build DOM with CDN button is directly below -->
+        <div class="action-buttons-row">
+          <button type="button" id="btn-build" class="btn-action btn-build" disabled title="Build DOM from uploaded JSON">
+            ▶ Build DOM with CDN
+          </button>
+          <button type="button" id="btn-clear" class="btn-action btn-clear" disabled title="Clear rendered DOM output">
+            ↺ Clear DOM
+          </button>
+          <span id="status-pill" class="status-pill">
+            ● Waiting for JSON file
+          </span>
+        </div>
+      </div>
+
+      <!-- REALISTIC BROWSER WINDOW -->
+      <div class="browser-window">
+        <!-- Browser Window Chrome (Tabs & Titlebar) -->
+        <div class="browser-chrome">
+          <div class="browser-tab-bar">
+            <!-- Traffic light dots -->
+            <div class="browser-traffic-dots">
+              <span class="browser-dot dot-red"></span>
+              <span class="browser-dot dot-yellow"></span>
+              <span class="browser-dot dot-green"></span>
+            </div>
+
+            <!-- Active Tab -->
+            <div class="browser-tab">
+              <span>🌐</span>
+              <span id="browser-tab-title">Live DOM Viewport</span>
+              <span class="browser-tab-close">✕</span>
+            </div>
+          </div>
+
+          <!-- Browser Navigation & Address Bar -->
+          <div class="browser-nav-bar">
+            <div class="browser-nav-icons">
+              <span title="Back">⇦</span>
+              <span title="Forward">⇨</span>
+              <span id="btn-browser-refresh" title="Reload Viewport">↻</span>
+            </div>
+
+            <div class="browser-address-bar">
+              <span class="browser-lock-icon">🔒</span>
+              <span class="browser-address-url">http://127.0.0.1:5500/rendered-dom.html</span>
+              <span class="browser-cdn-pill">CDN Native DOM</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BROWSER VIEWPORT: PURE WHITE WEBPAGE CANVAS -->
+        <div class="browser-viewport" id="browser-viewport">
+          <div id="browser-output">
+            <div class="browser-empty-state">
+              <div class="empty-browser-icon">🌐</div>
+              <h3>Browser DOM Viewport</h3>
+              <p>
+                Choose a <code>.json</code> file in the input field above, then click <strong>"Build DOM with CDN"</strong> to attach and view the native HTML elements here.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Browser Status Bar -->
+        <div class="browser-status-bar">
+          <div id="browser-status-text">Target: <code>#browser-output</code> · Pure Native DOM Execution</div>
+          <div id="browser-timing-text">Ready</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      json-to-tag • Upload &amp; Build
+      <span>·</span>
+      <a href="12-interactive-live-build.html">12 · Interactive Demo</a>
+      <span>·</span>
+      <a href="Documentation.html">Documentation</a>
+      <span>·</span>
+      <a href="index.html">Home</a>
+      <span>·</span>
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      <span>·</span>
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // Sample specification for quick one-click testing
+    const sampleSpec = {
+      tagName: "div",
+      attributes: { id: "test-content", class: "preview-card" },
+      properties: { style: "max-width: 620px; padding: 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 18px rgba(0,0,0,0.06);" },
+      children: [
+        {
+          tagName: "h2",
+          textContent: "Sample UI Component",
+          properties: { style: "margin: 0 0 10px; font-size: 22px; color: #0f2744; font-weight: 700;" }
+        },
+        {
+          tagName: "p",
+          textContent: "This native DOM tree was constructed directly from an uploaded JSON specification using the json-to-tag CDN bundle.",
+          properties: { style: "margin: 0 0 18px; font-size: 15px; color: #475569; line-height: 1.6;" }
+        },
+        {
+          tagName: "label",
+          textContent: "Email Address",
+          properties: { style: "display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #1e293b;" }
+        },
+        {
+          tagName: "input",
+          attributes: { type: "email", placeholder: "developer@example.com" },
+          properties: { style: "width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; margin-bottom: 16px; box-sizing: border-box;" }
+        },
+        {
+          tagName: "button",
+          textContent: "Submit Specification",
+          attributes: { type: "button" },
+          properties: { style: "background: #186fa5; color: #ffffff; border: none; padding: 10px 22px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;" }
+        }
+      ]
+    };
+
+    let currentParsedSpec = null;
+    let currentFileName = "";
+
+    // DOM Elements
+    const jsonFileInput = document.querySelector("#json-file-input");
+    const btnLoadSample = document.querySelector("#btn-load-sample");
+    const btnBuild = document.querySelector("#btn-build");
+    const btnClear = document.querySelector("#btn-clear");
+    const statusPill = document.querySelector("#status-pill");
+
+    const browserOutput = document.querySelector("#browser-output");
+    const browserTabTitle = document.querySelector("#browser-tab-title");
+    const browserStatusText = document.querySelector("#browser-status-text");
+    const browserTimingText = document.querySelector("#browser-timing-text");
+    const btnBrowserRefresh = document.querySelector("#btn-browser-refresh");
+
+    const emptyStateMarkup = `
+      <div class="browser-empty-state">
+        <div class="empty-browser-icon">🌐</div>
+        <h3>Browser DOM Viewport</h3>
+        <p>
+          Choose a <code>.json</code> file in the input field above, then click <strong>"Build DOM with CDN"</strong> to attach and view the native HTML elements here.
+        </p>
+      </div>
+    `;
+
+    // Dynamic builder resolver
+    async function getBuilder() {
+      if (window.ks?.jsonToTag?.buildSpecElement) {
+        return window.ks.jsonToTag.buildSpecElement;
+      }
+      try {
+        const mod = await import("../dist/v4/min.js");
+        return mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+      } catch {
+        const mod = await import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js");
+        return mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement;
+      }
+    }
+
+    // Process JSON string
+    function loadJson(text, name = "uploaded.json") {
+      try {
+        const parsed = JSON.parse(text);
+        currentParsedSpec = parsed;
+        currentFileName = name;
+
+        statusPill.className = "status-pill valid";
+        statusPill.textContent = `✓ ${name} loaded`;
+        btnBuild.disabled = false;
+        browserTabTitle.textContent = name;
+
+        // Automatically build and display in the browser viewport
+        buildDom();
+      } catch (err) {
+        currentParsedSpec = null;
+        btnBuild.disabled = true;
+        statusPill.className = "status-pill invalid";
+        statusPill.textContent = "✕ Invalid JSON syntax";
+
+        browserOutput.innerHTML = `
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 20px; color: #991b1b;">
+            <h3 style="margin: 0 0 8px; color: #991b1b;">JSON Syntax Error</h3>
+            <p style="margin: 0; font-size: 14px; font-family: monospace;">${err.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    // Build DOM
+    async function buildDom() {
+      if (!currentParsedSpec) return;
+
+      btnBuild.disabled = true;
+      browserTimingText.textContent = "Building DOM...";
+
+      const build = await getBuilder();
+
+      try {
+        const t0 = performance.now();
+        const element = build(currentParsedSpec);
+        const t1 = performance.now();
+        const duration = (t1 - t0).toFixed(2);
+
+        browserOutput.replaceChildren();
+
+        if (element instanceof Node) {
+          browserOutput.appendChild(element);
+        } else if (Array.isArray(element)) {
+          element.forEach(node => {
+            if (node instanceof Node) browserOutput.appendChild(node);
+          });
+        }
+
+        const count = browserOutput.querySelectorAll("*").length;
+        browserTimingText.textContent = `✓ Built ${count} elements in ${duration}ms`;
+        browserStatusText.innerHTML = `Rendered <code>${currentFileName || "specification"}</code> via CDN`;
+        statusPill.className = "status-pill valid";
+        statusPill.textContent = `✓ Rendered in ${duration}ms`;
+
+        btnClear.disabled = false;
+        btnBuild.disabled = false;
+      } catch (err) {
+        console.error("Build failed:", err);
+        browserOutput.innerHTML = `
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 20px; color: #991b1b;">
+            <h3 style="margin: 0 0 8px; color: #991b1b;">Construction Error</h3>
+            <p style="margin: 0; font-size: 14px; font-family: monospace;">${err.message}</p>
+          </div>
+        `;
+        browserTimingText.textContent = "Build failed";
+        btnBuild.disabled = false;
+        btnClear.disabled = false;
+      }
+    }
+
+    // Clear DOM
+    function clearDom() {
+      browserOutput.innerHTML = emptyStateMarkup;
+      btnClear.disabled = true;
+      browserTabTitle.textContent = "Live DOM Viewport";
+      browserTimingText.textContent = "Cleared";
+      browserStatusText.innerHTML = `Target: <code>#browser-output</code> · Pure Native DOM Execution`;
+      if (!currentParsedSpec) {
+        statusPill.className = "status-pill";
+        statusPill.textContent = "● Waiting for JSON file";
+      }
+    }
+
+    // File input event
+    jsonFileInput.addEventListener("change", (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        loadJson(event.target.result, file.name);
+      };
+      reader.readAsText(file);
+    });
+
+    // Sample JSON loader
+    btnLoadSample.addEventListener("click", () => {
+      const sampleText = JSON.stringify(sampleSpec, null, 2);
+      loadJson(sampleText, "sample-spec.json");
+    });
+
+    // Action listeners
+    btnBuild.addEventListener("click", buildDom);
+    btnClear.addEventListener("click", clearDom);
+    btnBrowserRefresh.addEventListener("click", () => {
+      if (currentParsedSpec) buildDom();
+      else clearDom();
+    });
+  </script>
+</body>
+
+</html>
