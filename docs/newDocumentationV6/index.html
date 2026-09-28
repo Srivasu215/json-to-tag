@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>json-to-tag — Documentation</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .landing {
+      max-width: 1180px;
+      margin: auto
+    }
+
+    .hero2 {
+      padding: 20px 0 6px;
+    }
+
+    .hero2 h1 {
+      font-size: clamp(26px, 3.2vw, 36px);
+      line-height: 1.15;
+      letter-spacing: -.03em;
+      margin: 0 0 8px;
+    }
+
+    .hero2 p {
+      color: var(--m);
+      font-size: 15px;
+      line-height: 1.5;
+      max-width: 720px;
+      margin: 0;
+    }
+
+    .section2 {
+      padding: 10px 0 20px;
+    }
+
+    .head2 {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+
+    .head2 h2 {
+      margin: 0
+    }
+
+    .head2 p {
+      margin: 0;
+      color: var(--m);
+      font-size: 13px
+    }
+
+    .approaches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px
+    }
+
+    .approach {
+      background: #0d1a2d;
+      border: 1px solid var(--l);
+      border-radius: 17px;
+      overflow: hidden
+    }
+
+    .ahead {
+      padding: 17px;
+      border-bottom: 1px solid var(--l)
+    }
+
+    .num2 {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      color: var(--a)
+    }
+
+    .ahead h3 {
+      margin: 7px 0 2px
+    }
+
+    .sub2 {
+      font-size: 12px;
+      color: var(--m)
+    }
+
+    .acode {
+      padding: 15px;
+      background: #06101c;
+      min-height: 160px
+    }
+
+    .acode pre {
+      font-size: 11px;
+      line-height: 1.55;
+      overflow: auto
+    }
+
+    .aout {
+      padding: 15px;
+      background: #0b1829
+    }
+
+    .outlabel {
+      font-size: 10px;
+      color: #7fa5c9;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 8px
+    }
+
+    .preview2 {
+      background: #fff;
+      color: #152235;
+      border-radius: 9px;
+      padding: 13px
+    }
+
+    .preview2 label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 5px
+    }
+
+    .preview2 p {
+      margin: 0;
+      font-size: 12px;
+      color: #6e86a2
+    }
+
+    .note2 {
+      margin-top: 14px;
+      padding: 12px 15px;
+      border: 1px solid var(--l);
+      border-radius: 11px;
+      color: #c8d7e9;
+      font-size: 13px
+    }
+
+
+    .doc-nav-simple {
+      margin: 20px 0 8px;
+    }
+
+    .doc-nav-simple a {
+      color: var(--a);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .doc-nav-simple a:hover {
+      text-decoration: underline;
+    }
+
+    @media(max-width:900px) {
+      .approaches {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width:550px) {
+      .head2 {
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="wrap landing">
+      <section class="hero2">
+        <h1>Build the DOM from a specification.</h1>
+        <p>See the same small UI created three ways: original HTML, Vanilla JavaScript, and <code>json-to-tag</code>
+          through CDN.</p>
+      </section>
+
+      <section class="section2" id="compare">
+        <div class="head2">
+          <h2>One UI. Three approaches.</h2>
+          <p>Same browser output. Different construction method.</p>
+        </div>
+        <div class="approaches">
+          <article class="approach">
+            <div class="ahead"><span class="num2">01 · ORIGINAL HTML</span>
+              <h3>Write the markup</h3><span class="sub2">The browser parses HTML directly.</span>
+            </div>
+            <div class="acode">
+              <pre>&lt;div id="test-content"&gt;
+  &lt;label&gt;Name&lt;/label&gt;
+  &lt;p&gt;Test Content&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+
+
+
+
+
+</pre>
+            </div>
+            <div class="aout">
+              <div class="outlabel">Browser output</div>
+              <div class="preview2"><label>Name</label>
+                <p>Test Content</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="approach">
+            <div class="ahead"><span class="num2">02 · VANILLA JAVASCRIPT</span>
+              <h3>Create nodes manually</h3><span class="sub2">Native DOM APIs create each node.</span>
+            </div>
+            <div class="acode">
+              <pre>const div = document.createElement("div");
+const label = document.createElement("label");
+const text = document.createElement("p");
+
+label.textContent = "Name";
+text.textContent = "Test Content";
+
+div.append(label, text);
+
+
+
+
+</pre>
+            </div>
+            <div class="aout">
+              <div class="outlabel">Browser output</div>
+              <div class="preview2"><label>Name</label>
+                <p>Test Content</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="approach">
+            <div class="ahead"><span class="num2">03 · JSON-TO-TAG CDN</span>
+              <h3>Describe, then build</h3><span class="sub2">JSON describes the tree; CDN creates DOM.</span>
+            </div>
+            <div class="acode">
+              <pre>const spec = {
+  tagName: "div",
+  children: [
+    { tagName: "label",
+      textContent: "Name" },
+    { tagName: "p",
+      textContent: "Test Content" }
+  ]
+};
+
+window.ks.jsonToTag
+  .buildSpecElement(spec);</pre>
+            </div>
+            <div class="aout">
+              <div class="outlabel">Browser output</div>
+              <div class="preview2" id="cdn-preview"><label>Name</label>
+                <p>Test Content</p>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="note2"><b>Key idea:</b> the output is the same. The third approach moves the UI description into
+          JSON and lets the CDN build the native DOM.</div>
+      </section>
+
+
+      <div class="doc-nav-simple">
+        <a href="Documentation.html">Documentation →</a>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div class="wrap">
+      json-to-tag • Browser-first documentation
+      <span>·</span>
+
+      <a href="https://github.com/keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+
+      <span>·</span>
+
+      <a href="https://www.npmjs.com/package/@keshavsoft/json-to-tag" target="_blank" rel="noopener noreferrer">
+        npm ↗
+      </a>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      const out = document.querySelector("#cdn-preview");
+      if (!out) return;
+      const spec = {
+        tagName: "div",
+        children: [
+          { tagName: "label", textContent: "Name", properties: { style: "display:block;font-weight:700;font-size:12px;margin-bottom:5px" } },
+          { tagName: "p", textContent: "Test Content", properties: { style: "margin:0;font-size:12px;color:#6e86a2" } }
+        ]
+      };
+      function render(fn) {
+        const build = fn || window.ks?.jsonToTag?.buildSpecElement;
+        if (build) out.replaceChildren(build(spec));
+      }
+      import("../dist/v4/min.js")
+        .catch(() => import("https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"))
+        .then(mod => render(mod.buildSpecElement || window.ks?.jsonToTag?.buildSpecElement))
+        .catch(err => console.error("Could not load preview engine:", err));
+    })();
+  </script>
+</body>
+
+</html>
