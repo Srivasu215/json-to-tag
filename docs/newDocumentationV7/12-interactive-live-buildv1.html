@@ -9,108 +9,210 @@
   <script type="module" src="../dist/v4/min.js"></script>
   <script type="module" src="https://keshavsoft.github.io/json-to-tag/dist/v4/min.js"></script>
   <style>
-    .wrap {
-      max-width: 1400px;
-      margin: auto;
-      padding: 0 20px;
-    }
-
     main {
-      padding: 12px 0 32px;
+      padding: 14px 0 36px;
     }
 
-    .demo-header {
-      display: flex;
-      align-items: baseline;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin: 4px 0 10px;
-    }
-
-    .demo-header h1 {
-      font-size: clamp(20px, 2.4vw, 26px);
+    h1 {
+      font-size: clamp(22px, 2.8vw, 32px);
       line-height: 1.2;
       letter-spacing: -.03em;
-      margin: 0;
-      white-space: nowrap;
+      margin: 4px 0 6px;
     }
 
-    .demo-header .lead {
-      font-size: 13px;
-      line-height: 1.45;
-      margin: 0;
+    h2 {
+      font-size: 17px;
+      letter-spacing: -.02em;
+      margin: 16px 0 6px;
+    }
+
+    .lead {
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 0 10px;
+      max-width: 800px;
       color: var(--m);
-      flex: 1;
-      min-width: 280px;
     }
 
-    .quick-cdn-notice {
+    .interactive-session {
+      background: #081424;
+      border: 1px solid var(--l);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 8px 0 20px;
+    }
+
+    .interactive-controls {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      background: #081728;
-      border: 1px solid #1a3a5f;
-      border-radius: 8px;
-      padding: 5px 12px;
+      gap: 10px;
       margin-bottom: 12px;
-      font-size: 11px;
-      color: var(--m);
       flex-wrap: wrap;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      border: 1px solid transparent;
+    }
+
+    .btn-build {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(24, 111, 165, 0.3);
+    }
+
+    .btn-build:hover:not(:disabled) {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 6px 18px rgba(31, 133, 196, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-build:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-clear {
+      background: #0d1e33;
+      border-color: #244163;
+      color: var(--m);
+    }
+
+    .btn-clear:hover:not(:disabled) {
+      background: #142a45;
+      color: var(--t);
+      border-color: #3a628f;
+    }
+
+    .btn-clear:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .status-badge {
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
       gap: 6px;
+      font-weight: 600;
+      transition: all 0.2s ease;
     }
 
-    .quick-cdn-notice code {
-      color: var(--a);
+    .status-empty {
+      background: #101c2b;
+      border: 1px solid #23364c;
+      color: var(--m);
+    }
+
+    .status-built {
+      background: #082d20;
+      border: 1px solid #146c4b;
+      color: #4ade80;
+    }
+
+    .output-container-wrap {
+      width: 100%;
+    }
+
+    .pane-title {
       font-size: 11px;
+      font-weight: 800;
+      color: #8bb5e0;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
     }
 
-    /* Side-by-Side Playground Grid */
-    .split-playground {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 16px;
-      align-items: stretch;
-      margin: 6px 0 20px;
+    .placeholder-box {
+      border: 2px dashed #223c5b;
+      border-radius: 12px;
+      padding: 18px 14px;
+      text-align: center;
+      color: var(--m);
+      background: #06111e;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    @media (max-width: 960px) {
-      .split-playground {
-        grid-template-columns: 1fr;
-        gap: 16px;
+    .placeholder-icon {
+      font-size: 22px;
+      margin-bottom: 4px;
+      color: #486a91;
+    }
+
+    .placeholder-box p {
+      margin: 0 0 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #9cb5d1;
+    }
+
+    .placeholder-box small {
+      font-size: 12px;
+      color: #5c799a;
+    }
+
+    .built-card {
+      animation: fadeInScale 0.25s ease-out;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
       }
     }
 
-    .panel-card {
+    /* JSON Code Editor & Upload Component */
+    .editor-card {
       background: #06101c;
       border: 1px solid var(--l);
       border-radius: 12px;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      margin: 6px 0 14px;
       position: relative;
       transition: border-color 0.2s, box-shadow 0.2s;
-      min-height: 490px;
     }
 
-    .panel-card.drag-active {
+    .editor-card.drag-active {
       border-color: var(--a);
       box-shadow: 0 0 25px rgba(100, 215, 255, 0.25);
     }
 
-    .panel-header {
+    .editor-toolbar {
       background: #0b1a2d;
       border-bottom: 1px solid var(--l);
-      padding: 8px 12px;
-      min-height: 48px;
+      padding: 10px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
-      box-sizing: border-box;
     }
 
-    .panel-header-group {
+    .toolbar-group {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -123,23 +225,17 @@
       color: var(--a);
       background: #0d2a45;
       border: 1px solid #1a5180;
-      padding: 4px 8px;
+      padding: 4px 9px;
       border-radius: 6px;
       text-transform: uppercase;
       letter-spacing: .08em;
     }
 
-    .stage-tag {
-      color: #4ade80;
-      background: #07261a;
-      border-color: #125e3d;
-    }
-
     .btn-tool {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 5px 11px;
+      gap: 6px;
+      padding: 6px 12px;
       border-radius: 7px;
       font-size: 12px;
       font-weight: 600;
@@ -157,11 +253,23 @@
       border-color: var(--a);
     }
 
+    .btn-upload {
+      background: linear-gradient(135deg, #186fa5, #0f4b73);
+      border-color: #388ac4;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(24, 111, 165, 0.25);
+    }
+
+    .btn-upload:hover {
+      background: linear-gradient(135deg, #1f85c4, #145b8c);
+      box-shadow: 0 4px 12px rgba(31, 133, 196, 0.35);
+    }
+
     .preset-select {
       background: #13263d;
       color: var(--t);
       border: 1px solid #23456b;
-      padding: 4px 8px;
+      padding: 5px 10px;
       border-radius: 7px;
       font-size: 12px;
       font-weight: 600;
@@ -199,46 +307,74 @@
 
     .editor-body-wrap {
       position: relative;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
     }
 
     #spec-editor {
       width: 100%;
-      height: 410px;
-      min-height: 380px;
+      min-height: 180px;
+      height: 195px;
       background: #050e18;
       color: #d4e5f7;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 13px;
       line-height: 1.5;
-      padding: 14px;
+      padding: 12px 14px;
       border: none;
       resize: vertical;
       outline: none;
       box-sizing: border-box;
       tab-size: 2;
       display: block;
-      flex: 1;
     }
 
     #spec-editor:focus {
       background: #06111f;
     }
 
-    .panel-footer {
+    .drop-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 17, 30, 0.94);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .editor-card.drag-active .drop-overlay {
+      display: flex;
+    }
+
+    .drop-message {
+      text-align: center;
+      color: var(--a);
+    }
+
+    .drop-message strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .drop-message small {
+      color: var(--m);
+      font-size: 12px;
+    }
+
+    .editor-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 12px;
+      padding: 8px 14px;
       background: #091524;
       border-top: 1px solid var(--l);
       font-size: 11px;
       color: var(--m);
       flex-wrap: wrap;
       gap: 6px;
-      box-sizing: border-box;
     }
 
     .file-badge {
@@ -248,227 +384,24 @@
       color: #64d7ff;
     }
 
-    /* Right Column: Live Output Stage */
-    .stage-card {
-      background: #06101c;
-    }
-
-    .btn-action {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 7px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: inherit;
-      border: 1px solid transparent;
-      user-select: none;
-    }
-
-    .btn-build {
-      background: linear-gradient(135deg, #186fa5, #0f4b73);
-      border-color: #388ac4;
-      color: #ffffff;
-      box-shadow: 0 3px 10px rgba(24, 111, 165, 0.3);
-    }
-
-    .btn-build:hover:not(:disabled) {
-      background: linear-gradient(135deg, #1f85c4, #145b8c);
-      box-shadow: 0 5px 14px rgba(31, 133, 196, 0.4);
-      transform: translateY(-1px);
-    }
-
-    .btn-build:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .btn-clear {
-      background: #0d1e33;
-      border-color: #244163;
-      color: var(--m);
-    }
-
-    .btn-clear:hover:not(:disabled) {
-      background: #142a45;
-      color: var(--t);
-      border-color: #3a628f;
-    }
-
-    .btn-clear:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-    }
-
-    .status-badge {
-      font-size: 11px;
-      padding: 4px 12px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    .status-empty {
-      background: #101c2b;
-      border: 1px solid #23364c;
-      color: var(--m);
-    }
-
-    .status-built {
-      background: #082d20;
-      border: 1px solid #146c4b;
-      color: #4ade80;
-    }
-
-    .stage-output-wrap {
-      flex: 1;
-      height: 410px;
-      min-height: 380px;
-      overflow-y: auto;
-      padding: 14px;
-      background: #050e18;
-      box-sizing: border-box;
+    .quick-cdn-notice {
       display: flex;
-      flex-direction: column;
-    }
-
-    .stage-output-wrap::-webkit-scrollbar,
-    #spec-editor::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
-    }
-
-    .stage-output-wrap::-webkit-scrollbar-track,
-    #spec-editor::-webkit-scrollbar-track {
-      background: #050e18;
-    }
-
-    .stage-output-wrap::-webkit-scrollbar-thumb,
-    #spec-editor::-webkit-scrollbar-thumb {
-      background: #1b3554;
-      border-radius: 4px;
-    }
-
-    .stage-output-wrap::-webkit-scrollbar-thumb:hover,
-    #spec-editor::-webkit-scrollbar-thumb:hover {
-      background: #274d7a;
-    }
-
-    .stage-title-bar {
-      display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .pane-title {
-      font-size: 11px;
-      font-weight: 800;
-      color: #8bb5e0;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin: 0;
-    }
-
-    .stage-badge-tag {
-      font-size: 10px;
-      font-weight: 700;
-      color: #64d7ff;
-      background: #092138;
-      border: 1px solid #1a4269;
-      border-radius: 4px;
-      padding: 2px 7px;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-    }
-
-    #browser-output {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .placeholder-box {
-      flex: 1;
-      border: 2px dashed #1c3552;
-      border-radius: 10px;
-      padding: 24px 16px;
-      text-align: center;
-      color: var(--m);
-      background: #071322;
-      min-height: 260px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .placeholder-icon {
-      font-size: 26px;
+      background: #081728;
+      border: 1px solid #1a3a5f;
+      border-radius: 8px;
+      padding: 5px 12px;
       margin-bottom: 6px;
-      color: #486a91;
+      font-size: 11px;
+      color: var(--m);
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
-    .placeholder-box p {
-      margin: 0 0 6px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #9cb5d1;
-    }
-
-    .placeholder-box small {
-      font-size: 12px;
-      color: #5c799a;
-      max-width: 320px;
-      line-height: 1.4;
-    }
-
-    .built-card,
-    .preview2 {
-      background: #ffffff;
-      color: #152235;
-      border-radius: 9px;
-      padding: 14px 16px;
-      width: 100%;
-      box-sizing: border-box;
-      animation: fadeInScale 0.25s ease-out;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    .built-card label,
-    .preview2 label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 5px;
-      color: #152235;
-    }
-
-    .built-card p,
-    .preview2 p {
-      margin: 0;
-      font-size: 12px;
-      color: #6e86a2;
-    }
-
-    @keyframes fadeInScale {
-      from {
-        opacity: 0;
-        transform: scale(0.97);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+    .quick-cdn-notice code {
+      color: var(--a);
+      font-size: 11px;
     }
   </style>
 </head>
@@ -476,13 +409,9 @@
 <body>
   <nav>
     <div class="wrap navin">
-      <div style="display: flex; align-items: center; gap: 8px; margin-right: auto; flex-wrap: wrap;">
-        <a class="brand" href="index.html" style="margin-right: 0;">json-to-tag / docs</a>
-        <span style="color: #2a476e; font-weight: 400;">/</span>
-        <span style="color: var(--a); font-size: 12px; font-weight: 800; letter-spacing: .08em;">12 · INTERACTIVE DEMO</span>
-      </div>
+      <a class="brand" href="index.html">json-to-tag / docs</a>
       <div class="navlinks">
-        <a href="11-vanilla-javascript.html">Previous</a>
+        <a href="10-build-same-piece.html">10 · CDN Build</a>
         <a href="Documentation.html">Documentation</a>
         <a href="index.html">Home</a>
       </div>
@@ -491,12 +420,17 @@
 
   <main>
     <div class="wrap">
-      <div class="demo-header">
-        <h1>Interactive Live Build Demo</h1>
-        <p class="lead">
-          Edit your JSON specification or choose a preset on the left, and build native browser DOM elements live on the right.
-        </p>
-      </div>
+      <span class="eyebrow">12 · INTERACTIVE DEMO</span>
+      <h1>Interactive Live Build Demo</h1>
+      <p class="lead">
+        Watch the CDN engine build native browser DOM elements in real time. The target DOM container is initially
+        empty. Click the button to execute the build and observe the live browser output.
+      </p>
+      <h2>Specification</h2>
+      <p style="margin: 0 0 8px; color: var(--m); font-size: 13px;">
+        Edit the JSON specification directly, choose a preset, or upload any <code>.json</code> file from your computer.
+        Click <strong>▶ Build DOM with CDN</strong> below to compile and mount it live.
+      </p>
 
       <div class="quick-cdn-notice">
         <div>
@@ -507,78 +441,75 @@
           Active</span>
       </div>
 
-      <!-- Side-by-side Playground -->
-      <div class="split-playground">
-        <!-- LEFT PANEL: JSON Specification Editor -->
-        <div class="panel-card" id="editor-card">
-          <div class="panel-header">
-            <div class="panel-header-group">
-              <label for="preset-select"
-                style="font-size: 11px; color: var(--m); font-weight: 600;">Preset:</label>
-              <select id="preset-select" class="preset-select" title="Choose a component preset">
-                <option value="card">Card (Label &amp; Text)</option>
-                <option value="form">Interactive Form</option>
-                <option value="profile">Profile Badge</option>
-                <option value="alert">Alert Notice</option>
-                <option value="checklist">Feature Checklist</option>
-              </select>
-            </div>
+      <div class="editor-card" id="editor-card">
+        <div class="editor-toolbar">
+          <div class="toolbar-group">
+            <span class="editor-tag">JSON Spec</span>
 
-            <div class="panel-header-group">
-              <span id="json-status" class="json-status-pill status-valid">✓ Valid JSON</span>
-              <button id="btn-format" class="btn-tool" title="Format and pretty-print JSON">⟳ Format</button>
-              <button id="btn-reset" class="btn-tool" title="Reset to default specification">↺ Reset</button>
-              <button id="btn-copy-json" class="btn-tool" title="Copy JSON specification">📋 Copy</button>
-            </div>
+            <label class="btn-tool btn-upload" title="Upload a JSON file from your computer">
+              <input type="file" id="json-file-input" accept=".json,application/json" style="display:none">
+              <span>📁 Upload JSON</span>
+            </label>
+
+            <label for="preset-select"
+              style="font-size: 11px; color: var(--m); font-weight: 600; margin-left: 4px;">Preset:</label>
+            <select id="preset-select" class="preset-select" title="Choose a component preset">
+              <option value="card">Card (Label &amp; Text)</option>
+              <option value="form">Interactive Form</option>
+              <option value="profile">Profile Badge</option>
+              <option value="alert">Alert Notice</option>
+              <option value="checklist">Feature Checklist</option>
+            </select>
           </div>
 
-          <div class="editor-body-wrap">
-            <textarea id="spec-editor" spellcheck="false"
-              placeholder="Paste or type your JSON specification here..."></textarea>
-          </div>
-
-          <div class="panel-footer">
-            <div id="file-info" class="file-badge">Preset: <strong>Card (Label &amp; Text)</strong></div>
-            <div id="editor-stats">Lines: 12 · Chars: 178</div>
+          <div class="toolbar-group">
+            <span id="json-status" class="json-status-pill status-valid">✓ Valid JSON</span>
+            <button id="btn-format" class="btn-tool" title="Format and pretty-print JSON">⟳ Format</button>
+            <button id="btn-reset" class="btn-tool" title="Reset to default specification">↺ Reset</button>
+            <button id="btn-copy-json" class="btn-tool" title="Copy JSON specification">📋 Copy</button>
           </div>
         </div>
 
-        <!-- RIGHT PANEL: Live Browser DOM Rendering Stage -->
-        <div class="panel-card stage-card">
-          <div class="panel-header">
-            <div class="panel-header-group">
-              <button id="btn-build" class="btn-action btn-build" title="Compile JSON tree into native DOM elements">
-                ▶ Build DOM with CDN
-              </button>
-              <button id="btn-clear" class="btn-action btn-clear" disabled title="Clear rendered DOM output">
-                ↺ Clear DOM
-              </button>
-            </div>
-
-            <div class="panel-header-group">
-              <span id="status-indicator" class="status-badge status-empty">
-                ● DOM Target is Empty
-              </span>
+        <div class="editor-body-wrap">
+          <textarea id="spec-editor" spellcheck="false"
+            placeholder="Paste or type your JSON specification here..."></textarea>
+          <div class="drop-overlay">
+            <div class="drop-message">
+              <div style="font-size: 34px; margin-bottom: 6px;">📥</div>
+              <strong>Drop your JSON file here</strong>
+              <small>File will be loaded into the editor automatically</small>
             </div>
           </div>
+        </div>
 
-          <div class="stage-output-wrap">
-            <div class="stage-title-bar">
-              <span class="pane-title">LIVE BROWSER OUTPUT (DOM TARGET)</span>
-              <span class="stage-badge-tag">Native DOM</span>
-            </div>
-            <div id="browser-output">
-              <div class="placeholder-box">
-                <div class="placeholder-icon">⬚</div>
-                <p>DOM target is currently empty</p>
-                <small>Click "▶ Build DOM with CDN" above to construct and attach native DOM elements</small>
-              </div>
-            </div>
-          </div>
+        <div class="editor-footer">
+          <div id="file-info" class="file-badge">Default demo specification loaded</div>
+          <div id="editor-stats">Lines: 18 · Chars: 420</div>
+        </div>
+      </div>
 
-          <div class="panel-footer">
-            <div class="file-badge" id="output-meta">Target: <code>#browser-output</code></div>
-            <div id="output-render-info">Pure Browser Native Execution</div>
+      <h2>Interactive Stage</h2>
+      <div class="interactive-session">
+        <div class="interactive-controls">
+          <button id="btn-build" class="btn-action btn-build">
+            ▶ Build DOM with CDN
+          </button>
+          <button id="btn-clear" class="btn-action btn-clear" disabled>
+            ↺ Clear DOM
+          </button>
+          <span id="status-indicator" class="status-badge status-empty">
+            ● DOM Target is Empty
+          </span>
+        </div>
+
+        <div class="output-container-wrap">
+          <div class="pane-title">Live Browser Output (DOM Target)</div>
+          <div id="browser-output">
+            <div class="placeholder-box">
+              <div class="placeholder-icon">⬚</div>
+              <p>DOM target is currently empty</p>
+              <small>Click "▶ Build DOM with CDN" above to construct and attach native DOM elements</small>
+            </div>
           </div>
         </div>
       </div>
@@ -607,11 +538,13 @@
         children: [
           {
             tagName: "label",
-            textContent: "Name"
+            textContent: "Name",
+            properties: { style: "display:block;font-weight:700;margin-bottom:6px;color:#64d7ff" }
           },
           {
             tagName: "p",
-            textContent: "Test Content"
+            textContent: "Test Content",
+            properties: { style: "margin:0;font-size:15px;color:#eaf2ff" }
           }
         ]
       },
@@ -622,35 +555,35 @@
           {
             tagName: "h4",
             textContent: "Contact Us",
-            properties: { style: "margin:0 0 10px;font-size:15px;color:#0f2744;font-weight:700" }
+            properties: { style: "margin:0 0 10px;font-size:16px;color:#64d7ff" }
           },
           {
             tagName: "label",
             textContent: "Email Address",
-            properties: { style: "display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:#475569" }
+            properties: { style: "display:block;font-size:12px;font-weight:700;margin-bottom:6px;color:#9eb1ca" }
           },
           {
             tagName: "input",
             attributes: { type: "email", placeholder: "user@example.com" },
-            properties: { style: "width:100%;padding:8px 12px;border:1px solid #cbd5e1;border-radius:6px;background:#f8fafc;color:#1e293b;margin-bottom:12px;box-sizing:border-box;font-size:13px" }
+            properties: { style: "width:100%;padding:9px 12px;border:1px solid #284765;border-radius:8px;background:#06101c;color:#fff;margin-bottom:12px;box-sizing:border-box" }
           },
           {
             tagName: "button",
             textContent: "Send Message",
             attributes: { type: "button" },
-            properties: { style: "background:#186fa5;color:#fff;border:none;padding:8px 16px;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px" }
+            properties: { style: "background:#186fa5;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:700;cursor:pointer" }
           }
         ]
       },
       profile: {
         tagName: "div",
         attributes: { class: "profile-badge" },
-        properties: { style: "display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px" },
+        properties: { style: "display:flex;align-items:center;gap:14px;padding:12px 16px;background:#081c30;border:1px solid #1c456e;border-radius:12px" },
         children: [
           {
             tagName: "div",
             textContent: "JS",
-            properties: { style: "width:40px;height:40px;border-radius:50%;background:#186fa5;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px" }
+            properties: { style: "width:42px;height:42px;border-radius:50%;background:#186fa5;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px" }
           },
           {
             tagName: "div",
@@ -658,12 +591,12 @@
               {
                 tagName: "strong",
                 textContent: "Alex Developer",
-                properties: { style: "display:block;color:#0f2744;font-size:14px" }
+                properties: { style: "display:block;color:#eaf2ff;font-size:14px" }
               },
               {
                 tagName: "span",
                 textContent: "Active • CDN Runtime v4",
-                properties: { style: "font-size:12px;color:#16a34a;font-weight:600" }
+                properties: { style: "font-size:12px;color:#4ade80" }
               }
             ]
           }
@@ -671,17 +604,17 @@
       },
       alert: {
         tagName: "div",
-        properties: { style: "border-left:4px solid #186fa5;background:#f0f7fc;padding:12px 16px;border-radius:0 8px 8px 0;border-top:1px solid #dcebf7;border-right:1px solid #dcebf7;border-bottom:1px solid #dcebf7" },
+        properties: { style: "border-left:4px solid #64d7ff;background:#0d2338;padding:14px 18px;border-radius:0 10px 10px 0" },
         children: [
           {
             tagName: "h4",
             textContent: "💡 Declarative Architecture",
-            properties: { style: "margin:0 0 4px;color:#0f4b73;font-size:14px;font-weight:700" }
+            properties: { style: "margin:0 0 6px;color:#64d7ff;font-size:14px" }
           },
           {
             tagName: "p",
             textContent: "json-to-tag compiles declarative JSON trees directly into native browser DOM elements without virtual DOM overhead.",
-            properties: { style: "margin:0;font-size:13px;line-height:1.5;color:#334155" }
+            properties: { style: "margin:0;font-size:13px;line-height:1.5;color:#c8d7e9" }
           }
         ]
       },
@@ -692,17 +625,17 @@
           {
             tagName: "li",
             textContent: "✓ Zero dependencies & pure native DOM APIs",
-            properties: { style: "padding:8px 0;border-bottom:1px solid #e2e8f0;color:#334155;font-size:13px" }
+            properties: { style: "padding:6px 0;border-bottom:1px solid #162c47;color:#9eb1ca;font-size:13px" }
           },
           {
             tagName: "li",
             textContent: "✓ Lightweight CDN bundle (< 2KB gzip)",
-            properties: { style: "padding:8px 0;border-bottom:1px solid #e2e8f0;color:#334155;font-size:13px" }
+            properties: { style: "padding:6px 0;border-bottom:1px solid #162c47;color:#9eb1ca;font-size:13px" }
           },
           {
             tagName: "li",
             textContent: "✓ Dynamic JSON to DOM compilation in < 1ms",
-            properties: { style: "padding:8px 0;color:#186fa5;font-size:13px;font-weight:600" }
+            properties: { style: "padding:6px 0;color:#64d7ff;font-size:13px;font-weight:600" }
           }
         ]
       }
@@ -760,7 +693,7 @@
     }
 
     // Set editor value helper
-    function setEditorContent(data, label = "Preset loaded") {
+    function setEditorContent(data, label = "Default specification loaded") {
       try {
         const str = typeof data === "string" ? data : JSON.stringify(data, null, 2);
         specEditor.value = str;
@@ -772,7 +705,7 @@
     }
 
     // Initialize with default card preset
-    setEditorContent(presets.card, "Preset: <strong>Card (Label &amp; Text)</strong>");
+    setEditorContent(presets.card, "Default card specification loaded");
 
     // Editor tab indentation support
     specEditor.addEventListener("keydown", (e) => {
@@ -813,7 +746,7 @@
     // Reset button
     btnReset.addEventListener("click", () => {
       presetSelect.value = "card";
-      setEditorContent(presets.card, "Preset: <strong>Card (Label &amp; Text)</strong>");
+      setEditorContent(presets.card, "Reset to default specification");
       btnReset.textContent = "✓ Reset";
       setTimeout(() => btnReset.textContent = "↺ Reset", 1200);
     });
@@ -830,34 +763,32 @@
       }
     });
 
-    // Load file content into editor helper
+    // Load file content into editor
     async function loadJsonFile(file) {
       if (!file) return;
       try {
         const text = await file.text();
         const parsed = JSON.parse(text);
         specEditor.value = JSON.stringify(parsed, null, 2);
-        fileInfo.innerHTML = `Loaded: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
+        fileInfo.innerHTML = `📄 Uploaded: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
         validateAndRenderStats();
         presetSelect.value = "";
       } catch (err) {
         alert("Failed to parse uploaded JSON file: " + err.message);
         specEditor.value = await file.text();
-        fileInfo.innerHTML = `⚠ Loaded with errors: <strong>${file.name}</strong>`;
+        fileInfo.innerHTML = `⚠ Uploaded with errors: <strong>${file.name}</strong>`;
         validateAndRenderStats();
       }
     }
 
-    // File input change (guarded)
-    if (jsonFileInput) {
-      jsonFileInput.addEventListener("change", (e) => {
-        const file = e.target.files?.[0];
-        if (file) {
-          loadJsonFile(file);
-          jsonFileInput.value = "";
-        }
-      });
-    }
+    // File input change
+    jsonFileInput.addEventListener("change", (e) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        loadJsonFile(file);
+        jsonFileInput.value = ""; // reset so same file can be re-uploaded
+      }
+    });
 
     // Drag and drop onto editor card
     editorCard.addEventListener("dragover", (e) => {
@@ -951,7 +882,7 @@
         const duration = (t1 - t0).toFixed(2);
 
         const card = document.createElement("div");
-        card.className = "ui built-card preview2";
+        card.className = "ui built-card";
 
         if (element instanceof Node) {
           card.appendChild(element);
@@ -965,12 +896,6 @@
 
         statusBadge.className = "status-badge status-built";
         statusBadge.innerHTML = `✓ Built natively via CDN (${duration}ms)`;
-
-        const renderInfo = document.querySelector("#output-render-info");
-        if (renderInfo) {
-          const count = card.querySelectorAll("*").length;
-          renderInfo.textContent = `Rendered ${count} elements in ${duration}ms`;
-        }
 
         btnClear.disabled = false;
       } catch (err) {
@@ -988,11 +913,6 @@
 
       statusBadge.className = "status-badge status-empty";
       statusBadge.innerHTML = `● DOM Target is Empty`;
-
-      const renderInfo = document.querySelector("#output-render-info");
-      if (renderInfo) {
-        renderInfo.textContent = "Pure Browser Native Execution";
-      }
 
       btnBuild.disabled = false;
       btnClear.disabled = true;
